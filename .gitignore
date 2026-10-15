@@ -1,6 +1,32 @@
-__pycache__/
-*.pyc
+# Python virtual environments
 .venv/
+env/
+venv/
+ENV/
+
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local raw captures and large datasets
+data/raw/*
+!data/raw/.gitkeep
 data/processed/*
+!data/processed/.gitkeep
+
+# Local experiment runs (keep synthetic smoke test reference if needed)
 data/results/*
-!data/*/.gitkeep
+!data/results/.gitkeep
+
+# System & IDE artifacts
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

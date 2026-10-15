@@ -118,5 +118,5 @@ def save_report(report: dict, out_dir: str | Path) -> Path:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     p = out / "dataset_inspection.json"
-    p.write_text(json.dumps(report, indent=2))
+    p.write_text(json.dumps(report, indent=2), encoding="utf-8")
     return p

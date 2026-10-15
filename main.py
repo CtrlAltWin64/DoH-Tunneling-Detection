@@ -3,10 +3,11 @@
   python main.py inspect  [--raw-dir DIR]              look at the raw files first (no assumptions)
   python main.py build    [--raw-dir DIR] [--max-packets-per-file N]
                                                          PCAP -> flows (data/processed/flows.pkl)
-  python main.py run      --name NAME [--alpha 0.01] [--group-by flow|source_file] [--overwrite]
-                                                         Experiments 1-6 on data/processed/flows.pkl
+  python main.py run      --name NAME [--alpha 0.01] [--group-by flow|source_file]
+                           [--model rf|cnn_gru|both] [--overwrite]
+                                                         Experiments A/B/C on data/processed/flows.pkl
   python main.py all      --name NAME                   build + run
-  python main.py dry-run                                 full pipeline on SYNTHETIC data (code check only)
+  python main.py dry-run  [--name NAME]                  full pipeline on SYNTHETIC data (code check only)
 """
 from __future__ import annotations
 
@@ -37,12 +38,23 @@ def _cfg(args) -> Config:
         kw["max_packets_per_file"] = args.max_packets_per_file
     if getattr(args, "name", None):
         kw["experiment_name"] = args.name
+    if getattr(args, "model", None):
+        kw["model_type"] = args.model
+    # CNN-GRU overrides (optional)
+    if getattr(args, "cnn_epochs", None) is not None:
+        kw["cnn_epochs"] = args.cnn_epochs
+    if getattr(args, "cnn_device", None):
+        kw["cnn_device"] = args.cnn_device
     return replace(cfg, **kw)
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     sub = ap.add_subparsers(dest="cmd", required=True)
+
     for name in ("inspect", "build", "run", "all", "dry-run"):
         p = sub.add_parser(name)
         p.add_argument("--raw-dir")
@@ -52,6 +64,15 @@ def main(argv=None) -> int:
         p.add_argument("--seed", type=int)
         p.add_argument("--max-packets-per-file", type=int)
         p.add_argument("--overwrite", action="store_true")
+        p.add_argument(
+            "--model", choices=["rf", "cnn_gru", "both"], default=None,
+            help="Which model(s) to train: rf = Random Forest only (Experiment A), "
+                 "cnn_gru = CNN-GRU only (Experiments B/C), both = all (default)",
+        )
+        p.add_argument("--cnn-epochs", "--cnn_epochs", dest="cnn_epochs", type=int, help="Override CNN-GRU training epochs")
+        p.add_argument("--cnn-device", "--cnn_device", dest="cnn_device", choices=["auto", "cpu", "cuda"],
+                       help="Override CNN-GRU compute device")
+
     args = ap.parse_args(argv)
     cfg = _cfg(args)
 
@@ -74,10 +95,20 @@ def main(argv=None) -> int:
         run_experiment(flows, cfg, out, synthetic=False, overwrite=args.overwrite)
 
     if args.cmd == "dry-run":
-        print("*** SYNTHETIC DATA: this only checks that the code runs; it says nothing about DoH traffic ***")
+        print(
+            "*** SYNTHETIC DATA: this only checks that the code runs; "
+            "it says nothing about DoH traffic ***"
+        )
         flows = make_synthetic_flows(n_benign=600, n_malicious=600, seed=cfg.seed)
-        out = Path(cfg.results_dir) / (args.name or "dry_run_synthetic")
-        small = replace(cfg, rf_n_estimators=60, experiment_name=out.name)
+        out = Path(cfg.results_dir) / (args.name or "synthetic_smoke_test")
+        # Lightweight settings for synthetic smoke test
+        small = replace(
+            cfg,
+            rf_n_estimators=60,
+            cnn_epochs=5,           # fast training for smoke test
+            cnn_patience=3,
+            experiment_name=out.name,
+        )
         run_experiment(flows, small, out, synthetic=True, overwrite=True)
     return 0
 

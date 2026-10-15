@@ -79,10 +79,17 @@ def policy_outcomes(curves: FlowCurves, tau: float, col_idx=None) -> pd.DataFram
     observed = cps[j]
     bytes_obs = curves.bytes_cum[:, idx][rows, j]
     dur_obs = curves.dur[:, idx][rows, j]
+    # Distinguish early alert (< final checkpoint) vs terminal alert (= final checkpoint) vs unresolved
+    is_terminal = alert & (k_stop == len(idx) - 1)
+    is_early = alert & (k_stop < len(idx) - 1)
+    decision = np.where(is_early, "early_alert", np.where(is_terminal, "terminal_alert", "unresolved"))
     return pd.DataFrame({
         "flow_id": curves.flow_ids,
         "label": curves.y,
         "alert": alert,
+        "is_early": is_early,
+        "is_terminal": is_terminal,
+        "decision": decision,
         "alert_packets": np.where(alert, observed, np.nan),   # NaN = not detected by the limit
         "observed_packets": observed,                         # Tmax when undetected
         "latency_s": np.where(alert, dur_obs, np.nan),        # elapsed time to the alert packet

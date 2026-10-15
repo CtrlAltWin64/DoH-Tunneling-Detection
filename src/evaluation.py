@@ -62,9 +62,21 @@ def summarize(out: pd.DataFrame, tmax: int) -> dict:
     tp, fn = int((alert & mal).sum()), int((~alert & mal).sum())
     fp, tn = int((alert & ben).sum()), int((~alert & ben).sum())
     det = alert & mal
+    # Distinguish early detection (< tmax) vs terminal decision (= tmax)
+    if "is_early" in out.columns and "is_terminal" in out.columns:
+        tp_early = int((out["is_early"] & mal).sum())
+        tp_terminal = int((out["is_terminal"] & mal).sum())
+    else:
+        tp_early = int(((alert & mal) & (out["alert_packets"] < tmax)).sum())
+        tp_terminal = int(((alert & mal) & (out["alert_packets"] >= tmax)).sum())
+    n_mal = int(mal.sum())
+
     m = {
-        "n_flows": len(out), "n_malicious": int(mal.sum()), "n_benign": int(ben.sum()),
+        "n_flows": len(out), "n_malicious": n_mal, "n_benign": int(ben.sum()),
         "TP": tp, "FN": fn, "FP": fp, "TN": tn,
+        "TP_early": tp_early, "TP_terminal": tp_terminal,
+        "early_detection_rate": _div(tp_early, n_mal),
+        "terminal_detection_rate": _div(tp_terminal, n_mal),
         "precision": _div(tp, tp + fp),
         "recall": _div(tp, tp + fn),
         "f1": _div(2 * tp, 2 * tp + fp + fn),

@@ -1,139 +1,182 @@
 # Adaptive Stopping for Early Detection of Evasive DoH Tunneling
 
-Information Security mini-project — Anusuya M (240953480), Vemba Kumar R (240953502), Tailam Praneeth (240953532);
-guide: Sudhina Kumar GK; School of Computer Engineering, MIT Manipal.
+**Information Security Research Project**  
+Department of Computer Science & Engineering, MIT Manipal.  
+Guided by: Sudhina Kumar GK.
 
-This code answers one question **by measurement, not by assumption**: can adaptive per-flow stopping reduce
-detection latency, observation cost and pre-alert exposure at an acceptable FPR, compared with a fixed-window detector?
-A negative result is a valid outcome.
+---
 
-## Honest status (read this first)
+## 1. Executive Summary & Honest Experimental Status
 
-| Item | Status |
-|---|---|
-| Unit + integration tests (74, `unittest`) | **Run and passing** on synthetic data and on synthetic PCAP files written by the tests |
-| Full pipeline on SYNTHETIC flows (`dry-run`) | **Run successfully** — proves the code runs; says nothing about DoH |
-| PCAP → inspect → build → pipeline on SYNTHETIC PCAPs | **Run successfully** (`tests/test_pcap_end_to_end.py`) |
-| **Real CIRA-CIC-DoHBrw-2020 data** | **NOT run.** Nobody has executed this code on the real dataset yet. Expect to debug dataset-specific details (labels, folder names, DoH vs non-DoH traffic) |
-| Performance on very large PCAPs | Parser speed measured at ≈150k packets/s on synthetic input; real-file memory/time not tested |
+This project implements and evaluates an **Adaptive Sequential Stopping** framework for early detection of evasive DNS-over-HTTPS (DoH) tunneling and data exfiltration. The central research question investigated by measurement is:
 
-No experimental result about DoH exists in this repository. `data/results/` ships empty.
+> *Can adaptive sequential stopping on ordered packet prefixes detect evasive DoH tunnels earlier, reduce observation cost, and limit pre-alert data exposure under a strict 1% False Positive Rate (FPR) constraint, compared to standard fixed-window classifiers?*
 
-## A. Directory structure
+### Honest Validation Status
+
+| Dimension | Verification Status | Details |
+|---|---|---|
+| **Unit & Integration Tests** | **100 tests passing** (`pytest`) | Comprehensive coverage: model shapes, causal convolutions, masked batch normalization, variable-length batching, padding invariance, separate calibration, split leakage checks, sequential stopping, DEBD, and end-to-end pipeline. |
+| **Hybrid Model Architecture** | **Fully implemented & validated** | 1D-CNN + GRU with causal left-padded Conv1d, Masked BatchNorm, sequence packing, and linear head. |
+| **Probability Calibration** | **Methodologically corrected** | Platt scaling fitted on a strictly separated held-out calibration partition (`train_cal`), eliminating in-sample overconfidence. |
+| **Dataset Selection** | **Investigated & configured** | Targeted post-2022 dataset: **UFU-DoH-EXF** (DNS-360 Dataset, published SBSeg Sept 2026, AWS capture 2024–2026). Legacy support for CIRA-CIC-DoHBrw-2020 is preserved. |
+| **Real PCAP Execution** | **Not yet executed on real captures** | Raw PCAP files from UFU-DoH-EXF or CIRA-CIC-DoHBrw-2020 are not hosted in this local repository. The pipeline adapter, label rules, and flow parser are fully functional and tested on synthetic PCAPs. |
+| **Synthetic Smoke Test** | **Run successfully** | Full end-to-end execution on synthetic flows generating complete models, thresholds, tables, figures, and manifests under `data/results/synthetic_smoke_test/`. |
+
+---
+
+## 2. Dataset Investigation & Selection (Post-2022 Compliance)
+
+Academic requirements mandate a dataset collected or released **after 2022** and a modern hybrid model rather than Random Forest alone.
+
+### Primary Dataset: UFU-DoH-EXF (DNS-360 Dataset)
+* **Authors:** Cristiano L. M. Borges and Prof. Rodrigo S. Miani (Faculty of Computing, Federal University of Uberlândia – UFU, Brazil).
+* **Publication Venue & Date:** Proceedings of the *XXVI Simpósio Brasileiro de Cibersegurança (SBSeg)*, **September 2026**.
+* **Traffic Capture Period:** Captured between **2024 and 2026** in an Amazon Web Services (AWS) cloud testbed.
+* **Testbed Topology:** Deployed in AWS featuring a FortiGate virtual appliance router/chokepoint, an Ubuntu victim machine generating benign DoH traffic via the Tranco top-1M domain snapshot, and a Kali Linux attacker node executing controlled DoH exfiltration attacks.
+* **Traffic & Captures:** Over 1,048,575 DoH flows (TCP/443). Raw packet captures (`.pcap` and `.pcapng`) are stored in `data/PCAP/DoH/` using structured naming:
+  - `DoH_Benign_*.pcap` → Benign DoH traffic (top-1M domain lookups).
+  - `DoH_Exfiltration_*.pcap` → Malicious DoH data exfiltration tunnels.
+* **Reconstruction Feasibility:** Because full `.pcap`/`.pcapng` files are provided, true packet-level prefixes (packet lengths, inter-arrival times, directions) can be causally extracted.
+* **Capture-Group Splitting:** Each capture file represents an independent collection session, enabling `group_by="source_file"` capture-level splitting to prevent cross-capture session leakage.
+* **Local Storage Note:** Raw captures are hosted in the authors' research repository. They must be placed under `data/raw/` before executing real-data runs.
+
+### Legacy Dataset: CIRA-CIC-DoHBrw-2020
+* Captured in **2020** (pre-2022). Supported as an alternative baseline via path-keyword rules (`benign`, `malicious`, `non-doh`).
+
+---
+
+## 3. Architecture & Methodology
+
+### A. 1D-CNN + GRU Hybrid Classifier
+The sequence model processes ordered packet metadata prefixes:
+1. **Input:** Sequence matrix $(B, L, 8)$ of ordered packet metadata:
+   - `pkt_len`: IP total packet length.
+   - `direction`: Packet direction relative to flow initiator (+1 forward, -1 backward).
+   - `iat`: Inter-arrival time from previous packet (0 for first packet).
+   - `elapsed`: Elapsed time since flow start.
+   - `cum_pkts_fwd`, `cum_pkts_bwd`: Cumulative packet counts by direction.
+   - `cum_bytes_fwd`, `cum_bytes_bwd`: Cumulative byte counts by direction.
+2. **Causal 1D Convolutions:** Convolutions pad strictly on the left by $(K - 1)$ with zero right-padding. Packet $t$ never observes information from packet $t+1$, preserving strict temporal causality.
+3. **Masked Batch Normalization (`MaskedBatchNorm1d`):** Mean and variance are computed solely across valid sequence positions ($\sum_i L_i$). Padded positions are explicitly masked to zero, ensuring that a sequence's prediction is mathematically invariant to whether it is evaluated alone or batched alongside sequences of differing lengths.
+4. **GRU Temporal Aggregation:** 2-layer stacked GRU with `pack_padded_sequence` skipping padded steps. The hidden state from the last valid step $h_{L_i}$ is extracted.
+5. **Classification Head:** Linear layer projecting to scalar malicious logit.
+
+### B. Separate Probability Calibration
+Rather than calibrating on in-sample training predictions (which causes overconfidence), the training partition is split into:
+- **`train_fit` (75%):** Used exclusively for training the CNN-GRU weights.
+- **`train_cal` (25%):** Held-out flows scored by the trained model. A monotonic Platt scaling calibrator is fitted on these true out-of-sample scores.
+- **Outer Test Isolation:** Outer validation (`val`) is used solely for sequential threshold selection, and test (`test`) is evaluated only after all policies and thresholds are frozen.
+
+### C. Sequential Stopping Policy & 1% FPR Constraint
+At checkpoints $t \in \{10, 20, 30, 40\}$ packets:
+- An alert is declared at the *first* checkpoint $k$ where calibrated probability $p_k \ge \tau$.
+- If no checkpoint crosses $\tau$, the flow is unresolved/not detected and observed up to $t_{max} = 40$.
+- **FPR Target ($\alpha = 0.01$):** Complete sequential policy is swept on validation benign flows. The lowest feasible $\tau$ satisfying validation sequential $FPR \le \alpha$ is frozen.
+- **Confidence Bounds:** Clopper-Pearson exact 95% binomial confidence intervals are reported.
+
+### D. Short-Flow & Observation Metrics
+- **Eligible vs Full Population:** Experiments 3–6 compare fixed-window and adaptive policies on flows with $\ge 40$ packets to maintain identical comparison baselines. Short flows ($<40$ packets) excluded from the 40-packet comparison are reported in `dataset_stats.csv`.
+- **Early vs Terminal Decisions:** Decisions are explicitly partitioned into:
+  - `early_alert`: Alerted before the final checkpoint ($t \in \{10, 20, 30\}$).
+  - `terminal_alert`: Alerted only at the terminal checkpoint ($t = 40$).
+  - `unresolved`: Did not cross threshold by $t = 40$.
+- **DEBD (Data Exposed Before Detection):** Pre-alert byte exposure proxy: $100 \times \frac{B_{pre}}{B_{total}}$.
+
+---
+
+## 4. Repository Structure
 
 ```
-adaptive-doh-detection/
-├── README.md  requirements.txt  config.py  main.py
-├── data/{raw,processed,results}/
+GitRepo/
+├── .gitignore                     # Git ignore rules for caches, venvs, and captures
+├── config.py                      # Central configuration (UFU-DoH-EXF settings, alpha, seeds)
+├── main.py                        # CLI entry point (inspect, build, run, dry-run)
+├── requirements.txt               # Dependency specifications (numpy, torch, scikit-learn, etc.)
+├── README.md                      # Comprehensive project documentation
+├── data/
+│   ├── raw/                       # Place raw PCAP captures here
+│   ├── processed/                 # Generated flows.pkl and flows_report.json
+│   └── results/                   # Experiment output directories
+│       └── synthetic_smoke_test/  # Separated synthetic pipeline verification results
 ├── src/
-│   ├── inspect_dataset.py     look at the raw files before assuming anything
-│   ├── preprocessing.py       PCAP -> bidirectional flows (timestamp, IP length, direction); labels from path rules
-│   ├── feature_extraction.py  causal prefix features (documented in the file header)
-│   ├── prefix_generation.py   one row per (flow, checkpoint); no padding
-│   ├── dataset_split.py       60/20/20 split at FLOW (or source-file) level
-│   ├── train_baseline.py      shared Random Forest + per-flow weighting
-│   ├── calibration.py         flow-grouped out-of-fold Platt scaling (train only)
-│   ├── adaptive_detector.py   stopping policy, fixed-window policy, FPR-constrained threshold selection
-│   ├── evasion.py             offline low-and-slow / timing-jitter perturbation
-│   ├── evaluation.py          all metric definitions (precision, recall, F1, FPR, coverage, cost, latency, DEBD, CIs)
-│   ├── plots.py               the 7 required figures
-│   ├── pipeline.py            Experiments 1-6 in the leakage-safe order
-│   └── synthetic.py           synthetic data + tiny pcap writer (dry-run and tests only)
-└── tests/                     74 tests (unittest)
+│   ├── adaptive_detector.py       # Sequential stopping policy and threshold selection
+│   ├── calibration.py             # Monotonic Platt scaling for Random Forest
+│   ├── cnn_gru_calibration.py     # Out-of-sample Platt calibration for CNN-GRU
+│   ├── cnn_gru_model.py           # Causal CNN-GRU, Masked BatchNorm, SequenceNormalizer
+│   ├── cnn_gru_prefix.py          # Prefix scoring and prefix table construction for CNN-GRU
+│   ├── dataset_split.py           # Flow/capture splitting, train_fit/train_cal split, manifest
+│   ├── evaluation.py              # Metrics, confusion matrix, DEBD, Clopper-Pearson CIs
+│   ├── evasion.py                 # Offline timing perturbation (low-and-slow, jitter)
+│   ├── feature_extraction.py      # Causal RF prefix features
+│   ├── inspect_dataset.py         # PCAP folder inspection without prior assumptions
+│   ├── pipeline.py                # Full leakage-safe pipeline (Experiments A, B, C)
+│   ├── plots.py                   # Generation of publication-quality figures
+│   ├── prefix_generation.py       # RF prefix table generation
+│   ├── preprocessing.py           # PCAP decoding into bidirectional flows
+│   ├── synthetic.py               # Synthetic flow and PCAP fixture generator
+│   └── train_baseline.py          # Random Forest baseline trainer
+└── tests/                         # 100 automated unit & integration tests
+    ├── test_cnn_gru.py            # CNN-GRU shapes, causality, padding invariance, calibration
+    ├── test_evasion.py            # Timing perturbation properties
+    ├── test_metrics.py            # Confusion metrics, latency, DEBD, Clopper-Pearson
+    ├── test_pcap_end_to_end.py    # PCAP inspect -> build -> pipeline integration
+    ├── test_pipeline.py           # Leakage, threshold freezing, reproducibility
+    ├── test_prefixes.py           # Causal packet preprocessing and feature independence
+    ├── test_splitting.py          # Flow/capture splitting, disjointness, manifests
+    └── test_stopping_rule.py      # Threshold sweep, sequential FPR, first-crossing logic
 ```
 
-## C. Installation
+---
 
-```bash
+## 5. Execution Guide (Windows PowerShell)
+
+### Step 1: Environment Setup
+```powershell
+# Create and activate virtual environment
 python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt    # numpy, pandas, scikit-learn, scipy, matplotlib
+.\.venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install -r requirements.txt
 ```
-Developed and tested here with Python 3.13, numpy 2.5, pandas 3.0, scikit-learn 1.9, scipy 1.18, matplotlib 3.11.
-Scapy is **not** needed (a small classic-pcap parser is included). `pytest` is optional; the tests use `unittest`.
 
-## D. Dataset placement and configuration
-
-**What the official page states** (https://www.unb.ca/cic/datasets/dohbrw-2020.html, checked while writing this):
-CSV files generated with DoHMeter and raw PCAPs both exist; labels are Non-DoH, Benign-DoH (Chrome/Firefox) and
-Malicious-DoH (dns2tcp, DNSCat2, Iodine); the CSVs are "labeled flow-wise based on the IP addresses of the servers";
-traffic was captured between a DoH proxy and the DoH servers. The page does **not** list the PCAPs as a download or give a
-folder structure, and gives no flow-timeout value.
-
-**What that means for this project (the critical feasibility rule):**
-the CSV files are completed-flow statistics. They **cannot** be used to build packet prefixes, and full-flow statistics
-must not be passed off as "first 10 packets". Genuine prefixes need the **PCAPs**. If you only have CSVs, `inspect` will
-say so and `build` will stop; obtain the PCAPs from the dataset authors/mirror (not verified here which download contains them).
-Do not train this pipeline on the CSVs.
-
-Steps:
-1. Put the PCAP files anywhere under `data/raw/` (or set `DOH_RAW_DIR` / `--raw-dir`). Classic `.pcap` only; for pcapng run
-   `editcap -F pcap in.pcapng out.pcap`.
-2. `python main.py inspect` — prints folders, pcap headers, CSV columns, label-like columns and a verdict.
-3. Edit `config.py`:
-   * `pcap_label_rules` — **required, deliberately empty**. Example once you have seen your folder names:
-     `{"benign": "benign", "malicious": "malicious", "non-doh": "exclude"}` (keyword in the relative path → label; first match wins; unmatched files are skipped and listed).
-   * `doh_server_ips` — **strongly recommended**: the resolver IPs (AdGuard, Cloudflare, Google, Quad9 per the page). Without it,
-     every TCP/443 flow is kept, which may put non-DoH HTTPS flows into the benign class and contaminate it.
-   * `flow_idle_timeout_s` (default 120 s, *our* choice, not the dataset's), `drop_zero_payload_packets` (default False).
-4. Decide `group_by` (`flow` default; `source_file` is stricter — run both as a sensitivity check).
-
-## E. Commands
-
-```bash
-python -m unittest discover -s tests -t . -v         # 74 correctness tests (≈15 s)
-python main.py dry-run                                # SYNTHETIC end-to-end check; results in data/results/dry_run_synthetic
-python main.py inspect                                # real data: inspect first
-python main.py build                                  # PCAP -> data/processed/flows.pkl (+ flows_report.json)
-python main.py run --name exp_alpha1 --alpha 0.01     # Experiments 1-6
-python main.py all --name exp_alpha1                  # build + run
-python main.py build --max-packets-per-file 200000    # quick smoke test on big files
+### Step 2: Run Full Automated Test Suite
+```powershell
+python -m pytest tests/ -v
 ```
-`run` refuses to overwrite an existing experiment folder unless `--overwrite` is given.
+*Expected: 100 passed tests.*
 
-## F. Expected outputs (`data/results/<name>/`) and how to verify
+### Step 3: Run End-to-End Synthetic Smoke Test
+```powershell
+python main.py dry-run --model both --overwrite
+```
+*Executes Random Forest (Experiment A) and CNN-GRU (Experiments B/C) on synthetic flows. Results are written to `data/results/synthetic_smoke_test/`.*
 
-| File | Check |
-|---|---|
-| `thresholds.json` | written **before** test evaluation; τ per policy (adaptive, fixed_10/20/30/40), validation FP/FPR, `resolution_warning` |
-| `tables/dataset_stats.csv` | flows able to supply ≥10/20/30/40 packets, per label and partition — check class balance and how many flows are too short |
-| `tables/prefix_level_test.csv` | Experiment 2 (precision/recall/F1/FPR/AUC/Brier/ECE per prefix length) |
-| `tables/fixed_vs_adaptive_test.csv` (+`_validation`) | Experiments 3–5; `fpr_constraint_validation_vs_test.csv` has val/test FP counts, FPR, Clopper-Pearson bounds |
-| `tables/robustness_test.csv` | Experiment 6 |
-| `tables/calibration_validation.csv`, `threshold_sweep_val_*.csv` | diagnostics / plot data |
-| `figures/*.png` | prf_vs_prefix_length, val_fpr_vs_threshold, observation_cost, detection_latency, debd_comparison, detection_coverage, robustness |
-| `predictions_{val,test}.csv`, `split_assignment.csv` | per-flow probabilities/alerts; which partition each flow is in |
-| `run_record.json` | config, seed, versions, features, model, calibration (+fallbacks), frozen thresholds |
-| `summary.md` | all tables, measured values only |
+### Step 4: Real Dataset Execution (When PCAPs are Available)
+1. Download UFU-DoH-EXF PCAPs and place them into `data/raw/`.
+2. Inspect the raw capture files:
+   ```powershell
+   python main.py inspect --raw-dir data/raw
+   ```
+3. Extract bidirectional flows:
+   ```powershell
+   python main.py build --raw-dir data/raw
+   ```
+4. Run full experimental pipeline:
+   ```powershell
+   python main.py run --name exp_ufu_doh --alpha 0.01 --model both --group-by source_file --overwrite
+   ```
 
-Sanity checks to do on real data: (1) `dataset_stats` counts look plausible vs the dataset paper; (2) `run_record.json →
-robustness_normal_matches_main_test` is `true`; (3) validation FPR ≤ α for every policy **or** `never_alerts`/`val_satisfies_alpha` tells you it was infeasible;
-(4) prefix-level AUC should rise with prefix length — if AUC at 10 packets is already ≈1.0, suspect a leak (e.g. benign/malicious captured from different servers or ports, so that endpoint metadata is implicitly encoded in packet sizes) and investigate before trusting any result.
+---
 
-## Method decisions (and what they change)
+## 6. Generated Artifacts & Manifests
 
-* **Flow key / direction / length** — sorted TCP 5-tuple; +1 = direction of first packet seen; length = IP total length; retransmissions (end-seq ≤ highest seen) dropped; idle-timeout and SYN-after-FIN start new flows. Only TCP (DoH over HTTP/3 is not parsed).
-* **Features** — 18 causal features from packets 1..t only (sizes, directions, per-direction counts/bytes, IAT statistics, prefix duration). Absolute timestamps and flow totals are never features. Tested by scrambling post-t packets.
-* **Eligibility** — Experiments 3–6 use flows with ≥ 40 packets (the largest checkpoint) so both policies see the same flows. Flows shorter than 40 packets are **excluded from the comparison**; this is a selection effect, reported in `dataset_stats.csv`. Training also uses the shorter prefixes of shorter flows (≥10).
-* **Shared RF weighting** — rows from one flow are correlated and long flows contribute more rows. Each training flow gets equal total weight (`flow_weighting=True`); `rf_class_weight="balanced_subsample"` handles class imbalance.
-* **Calibration** — Platt scaling on **out-of-fold, flow-grouped** training predictions, per checkpoint. *Methodological safeguard found during testing:* with weak signal at short prefixes the fitted slope can become negative and **invert the evidence**; maps are therefore constrained to be non-decreasing (fallback: shared map → identity), recorded in `run_record.json`. A monotone map does not change the ranking at one checkpoint; it changes the meaning of τ and, with per-checkpoint maps, the cross-checkpoint trade-off.
-* **Threshold** — grid step 0.001; for each candidate the *complete sequential policy* is run on benign validation flows (a flow is an FP if it alerts at any checkpoint); the lowest feasible τ is chosen (lower τ ⇒ more alerts, earlier stops, so it dominates other feasible τ). Fixed-window detectors get their own τ under the same α. Frozen before the test set is touched. With few benign validation flows α=1 % cannot be resolved (`resolution_warning`); zero observed FPR is reported with an upper confidence bound, never as a guarantee. Choosing the lowest feasible τ sits right at the validation noise edge, so **test FPR can exceed α** — that is a measured outcome, report it.
-* **At equal τ the adaptive policy alerts on a superset of what fixed-40 alerts on**, so its validation FPR is ≥ fixed-40's; the adaptive τ is therefore ≥ the fixed-40 τ. Whether earlier stopping pays for that is exactly what the experiments measure.
-* **Metrics** — see `src/evaluation.py` header. Coverage equals recall at flow level (undetected malicious = FN). Non-detected flows are observed up to Tmax (cost 1). Latency exists only for detected flows. All-flow cost is dominated by benign flows that never alert; use the malicious-flow cost for the early-warning claim.
-* **DEBD** — a *proxy* for pre-alert malicious-traffic exposure, not stolen data: IP-level bytes, both directions, including the alert packet, retransmissions removed, denominator = all counted bytes of the flow in the capture, undetected malicious = 100 %. Reported as per-flow mean (undetected = 100 %), detected-only mean (biased toward easy flows; read next to coverage) and byte-weighted. Truncated captures overstate DEBD.
-* **Robustness** — offline timestamp perturbation of the **malicious test flows only** (benign flows untouched, so FPs at the frozen τ cannot change): low-and-slow = all IATs × factor; jitter = IAT × lognormal(σ) + U(0, a) with per-flow seeded RNG; every feature recomputed from the new timestamps; packet order, sizes and labels unchanged. This is a **simulation** — not real attack traffic, not proof of robustness, and models only timing changes. The model is never trained on perturbed flows. Time dilation also inflates absolute latency by construction.
-* **Related work** — this repository makes no novelty claim for DoH detection, Random Forests or early stopping. The synopsis cites WEDoHTool (early identification of DoH tunnel-tool traffic) as the closest prior direction; verify every reference yourselves before the report, and describe the combination as the *intended* contribution.
-
-## G. Known limitations / open issues
-
-* Never run on the real dataset; label rules, resolver IPs and directory layout are yours to supply and verify.
-* Whether the benign PCAPs contain only DoH is unverified; contaminating the benign class with non-DoH HTTPS flows would invalidate results.
-* The dataset's flows are generated by controlled tools and servers — good detection may reflect tool/server artefacts rather than behaviour (consider `group_by=source_file`).
-* The flow-level split does not remove correlation between flows from the same session/host.
-* Packet lengths are IP-level; an out-of-order (non-retransmitted) TCP segment may be mistaken for a retransmission and dropped.
-* Latency, DEBD and cost depend on the 10/20/30/40 checkpoint grid; finer checkpoints could change conclusions.
-* Single split and single seed: no variance estimate yet. For the paper, repeat over several seeds and report spread.
-* Threshold grid and RF settings are fixed defaults; no hyper-parameter tuning was done (and none on test).
-* Report/paper text is not generated here: write it after real results exist.
-#   A d a p t i v e - d o H - d e t e c t i o n  
- 
+Every experiment run generates:
+- **`split_manifest.json`:** Audit log of partitions, class counts, capture files, and verified 0 group overlap.
+- **`train_fit_cal_split.csv`:** Record of training flows assigned to model fitting vs calibration.
+- **`cnn_gru_best.pt`:** Trained model weights and fitted `SequenceNormalizer`.
+- **`thresholds.json` & `cnn_gru_thresholds.json`:** Frozen $\tau$ values, validation FPR, and resolution checks.
+- **`tables/`:** 24 CSV tables including `dataset_stats.csv`, `fixed_vs_adaptive_test.csv`, `robustness_test.csv`.
+- **`figures/`:** 19 figures including ROC curves, observation cost bars, DEBD comparisons, and robustness plots.
+- **`summary.md`:** Consolidated markdown report of measured values.

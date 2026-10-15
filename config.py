@@ -3,10 +3,10 @@
 Every experiment records ``asdict(Config)`` next to its results, so all
 choices (seed, checkpoints, FPR target, label rules, ...) are reproducible.
 
-The only dataset-specific settings you MUST review are in the "PCAP input"
-block (``pcap_label_rules``, ``doh_server_ips``). They are intentionally
-empty: they depend on the real folder layout, which is verified with
-``python main.py inspect`` rather than assumed.
+Dataset support:
+- Default dataset: UFU-DoH-EXF (DNS-360 Dataset, released 2026, AWS capture 2024-2026,
+  controlled DoH exfiltration vs benign Tranco queries on port 443).
+- Legacy/Alternative: CIRA-CIC-DoHBrw-2020.
 """
 from __future__ import annotations
 
@@ -25,19 +25,19 @@ class Config:
     results_dir: str = str(PROJECT_ROOT / "data" / "results")
     experiment_name: str = "exp_default"
 
-    # ---------------- PCAP input (MUST be reviewed for the real dataset) ----
+    # ---------------- Dataset & PCAP input ----------------------------------
+    # Target dataset: "ufu_doh_exf" (post-2022) or "cira_cic_dohbrw_2020"
+    dataset_name: str = "ufu_doh_exf"
+
     # Ordered mapping: path keyword -> "benign" | "malicious" | "exclude".
-    # A PCAP's path (relative to raw_dir, lower-cased) is matched against the
-    # keywords in order; the first hit wins. PCAPs matching nothing are skipped.
-    # Example (ONLY after checking your folder names with `main.py inspect`):
-    #   {"benign": "benign", "malicious": "malicious", "non-doh": "exclude"}
+    # Intentionally empty by default to force review via `main.py inspect`.
+    # Presets are available in DATASET_LABEL_RULES.
     pcap_label_rules: dict = field(default_factory=dict)
-    pcap_extensions: tuple = (".pcap",)
+    pcap_extensions: tuple = (".pcap", ".pcapng")
     # Keep only TCP flows that use this port (DoH = HTTPS on 443). None = no filter.
     doh_port: int | None = 443
-    # Optional allow-list of DoH resolver IPs. The dataset page says its CSVs are
-    # labelled by server IP, so supplying the resolver IPs here is the most
-    # reliable way to separate DoH from other HTTPS traffic. Empty = no filter.
+    # Optional allow-list of DoH resolver IPs. When specified, only flows
+    # communicating with these resolver IPs are included.
     doh_server_ips: list = field(default_factory=list)
     flow_idle_timeout_s: float = 120.0      # idle gap that ends a flow
     max_stored_packets: int = 200           # per-flow packet arrays are capped (totals are still counted)
@@ -50,20 +50,39 @@ class Config:
     # ---------------- split ----------------
     seed: int = 42
     # "flow": every flow is its own group (stratified flow-level split).
-    # "source_file": all flows of one PCAP stay together (stricter, tests generalisation
-    # across capture sessions; needs >= 5 PCAP files per class).
+    # "source_file": all flows of one PCAP stay together (stricter capture-level split;
+    # tests generalisation across capture sessions; needs >= 5 PCAP files per class).
     group_by: str = "flow"
 
-    # ---------------- model ----------------
+    # ---------------- model selection -------
+    # "rf"      : Experiment A -- Random Forest baseline
+    # "cnn_gru" : Experiments B/C -- 1D-CNN + GRU hybrid
+    # "both"    : trains and evaluates both models in the same run
+    model_type: str = "both"
+
+    # ---------------- Random Forest ---------
     rf_n_estimators: int = 200
     rf_min_samples_leaf: int = 3
     rf_class_weight: str | None = "balanced_subsample"
     flow_weighting: bool = True  # each flow contributes equal total weight (1/#prefixes of that flow)
 
+    # ---------------- CNN-GRU ---------------
+    cnn_conv_channels: int = 64       # output channels for both Conv1d layers
+    cnn_conv_kernel: int = 3          # kernel width; must be <= smallest checkpoint
+    cnn_gru_hidden: int = 64          # GRU hidden size
+    cnn_gru_layers: int = 2           # stacked GRU layers
+    cnn_dropout: float = 0.2          # dropout between GRU layers (only if gru_layers > 1)
+    cnn_epochs: int = 30              # max training epochs
+    cnn_patience: int = 7             # early-stopping patience (val-loss)
+    cnn_batch_size: int = 128         # mini-batch size
+    cnn_lr: float = 1e-3              # Adam learning rate
+    cnn_device: str = "auto"          # "auto", "cpu", or "cuda"
+
     # ---------------- calibration ----------------
     calibration: str = "sigmoid"           # "sigmoid" (Platt) or "none"
     calibration_per_checkpoint: bool = True
-    calibration_folds: int = 5             # flow-grouped, inside the training partition only
+    calibration_folds: int = 5             # flow-grouped, inside the training partition only (for RF)
+    calibration_split_ratio: float = 0.25  # fraction of training partition reserved for CNN-GRU calibration
 
     # ---------------- stopping / FPR ----------------
     alpha: float = 0.01                    # FPR target for the complete sequential policy
@@ -87,6 +106,12 @@ class Config:
             raise ValueError("group_by must be 'flow' or 'source_file'")
         if self.calibration not in ("sigmoid", "none"):
             raise ValueError("calibration must be 'sigmoid' or 'none'")
+        if self.model_type not in ("rf", "cnn_gru", "both"):
+            raise ValueError("model_type must be 'rf', 'cnn_gru', or 'both'")
+        if not 0.05 <= self.calibration_split_ratio <= 0.5:
+            raise ValueError("calibration_split_ratio must be between 0.05 and 0.5")
+        if self.dataset_name not in ("ufu_doh_exf", "cira_cic_dohbrw_2020", "custom"):
+            raise ValueError(f"Unknown dataset_name {self.dataset_name!r}")
         bad = {v for v in self.pcap_label_rules.values()} - {"benign", "malicious", "exclude"}
         if bad:
             raise ValueError(f"pcap_label_rules values must be benign/malicious/exclude, got {bad}")

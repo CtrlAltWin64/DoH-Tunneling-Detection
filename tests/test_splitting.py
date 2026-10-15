@@ -64,6 +64,29 @@ class FlowLevelSplit(unittest.TestCase):
         with self.assertRaises(ValueError):
             split_flows(m, "flow", 0)
 
+    def test_split_train_calibration_disjoint_and_both_classes(self):
+        from src.dataset_split import split_train_calibration
+        assign = split_train_calibration(self.meta, "flow", 42, cal_ratio=0.25)
+        self.assertEqual(set(assign), set(self.meta["flow_id"]))
+        parts = pd.Series(assign)
+        self.assertIn("train_fit", parts.values)
+        self.assertIn("train_cal", parts.values)
+        m = self.meta.assign(sub=self.meta["flow_id"].map(assign))
+        for sp in ("train_fit", "train_cal"):
+            self.assertEqual(m[m["sub"] == sp]["label"].nunique(), 2)
+
+    def test_create_split_manifest_reports_leakage_check(self):
+        from src.dataset_split import create_split_manifest
+        a = split_flows(self.meta, "flow", 7)
+        manifest = create_split_manifest(self.meta, a, "flow")
+        self.assertTrue(manifest["leakage_check"]["verified_disjoint"])
+        self.assertEqual(manifest["leakage_check"]["train_val_overlap"], 0)
+        self.assertEqual(manifest["leakage_check"]["train_test_overlap"], 0)
+        self.assertEqual(manifest["leakage_check"]["val_test_overlap"], 0)
+        self.assertIn("train", manifest["partitions"])
+        self.assertIn("val", manifest["partitions"])
+        self.assertIn("test", manifest["partitions"])
+
 
 if __name__ == "__main__":
     unittest.main()
