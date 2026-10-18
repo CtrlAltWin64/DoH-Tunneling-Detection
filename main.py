@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 import argparse
+import logging
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -38,6 +39,10 @@ def _cfg(args) -> Config:
         kw["max_packets_per_file"] = args.max_packets_per_file
     if getattr(args, "name", None):
         kw["experiment_name"] = args.name
+    for key in ("processed_dir", "results_dir", "checkpoints"):
+        value = getattr(args, key, None)
+        if value is not None:
+            kw[key] = tuple(value) if key == "checkpoints" else value
     if getattr(args, "model", None):
         kw["model_type"] = args.model
     # CNN-GRU overrides (optional)
@@ -61,6 +66,9 @@ def main(argv=None) -> int:
     for name in ("inspect", "build", "run", "all", "dry-run"):
         p = sub.add_parser(name)
         p.add_argument("--raw-dir")
+        p.add_argument("--processed-dir", help="Directory containing flows.pkl (or build destination)")
+        p.add_argument("--results-dir", help="Parent directory for new experiment outputs")
+        p.add_argument("--checkpoints", type=int, nargs="+", help="Increasing packet checkpoints, e.g. 10 20")
         p.add_argument("--name")
         p.add_argument("--alpha", type=float)
         p.add_argument("--group-by", choices=["flow", "source_file"])
@@ -77,7 +85,9 @@ def main(argv=None) -> int:
                        help="Override CNN-GRU compute device")
 
     args = ap.parse_args(argv)
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
     cfg = _cfg(args)
+    cfg.validate()
 
     if args.cmd == "inspect":
         rep = insp.inspect_dir(cfg.raw_dir)
@@ -108,11 +118,11 @@ def main(argv=None) -> int:
         small = replace(
             cfg,
             rf_n_estimators=60,
-            cnn_epochs=5,           # fast training for smoke test
+            cnn_epochs=args.cnn_epochs if args.cnn_epochs is not None else 5,
             cnn_patience=3,
             experiment_name=out.name,
         )
-        run_experiment(flows, small, out, synthetic=True, overwrite=True)
+        run_experiment(flows, small, out, synthetic=True, overwrite=args.overwrite)
     return 0
 
 

@@ -16,6 +16,7 @@ Strict experimental protocol:
 from __future__ import annotations
 
 import json
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -134,6 +135,16 @@ def split_train_calibration(
     # while preserving full capture isolation between train, val, and test.
     cal_group_col = "flow_id" if group_by == "flow" else group_by
     if not can_split_by_group:
+<<<<<<< HEAD
+=======
+        if group_by != "flow":
+            warnings.warn(
+                "Too few training captures for separate fit/calibration groups; "
+                "inner split uses disjoint flows within outer training captures. "
+                "Outer capture isolation is preserved, inner capture independence is not.",
+                RuntimeWarning,
+            )
+>>>>>>> 2de69ec (Improve adaptive DoH detection and evaluation)
         groups = meta["flow_id"]
         cal_group_col = "flow_id"
         n_splits = max(2, int(round(1.0 / cal_ratio))) if cal_ratio > 0 else 4

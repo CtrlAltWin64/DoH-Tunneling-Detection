@@ -14,9 +14,9 @@ Design decisions (all configurable in config.py):
   * Length    : IP total length (IP header + TCP header + payload; no Ethernet
                 header). Taken from the IP header, so snaplen truncation does
                 not shrink it.
-  * Retransmissions: a TCP segment with payload whose end sequence number is
-                <= the highest end sequence already seen in that direction is
-                dropped (counted in the report).
+  * Retransmissions: a TCP segment whose entire payload sequence range was
+                already observed in that direction is dropped. Unseen lower
+                ranges and partial overlaps are retained (no byte trimming).
   * Timestamps: if packets of a flow are not chronological they are stably
                 sorted; the number of such flows is reported.
   * Formats   : Both classic PCAP (.pcap) and modern PCAPNG (.pcapng) are parsed
@@ -60,7 +60,12 @@ class Flow:
 
 # --------------------------------------------------------------------------- pcap / pcapng reading
 class PcapReader:
-    """Streaming reader for classic PCAP and PCAPNG captures (zero external dependencies)."""
+    """Streaming capture reader; ``packet_linktype`` describes the latest yield.
+
+    Records retain the (timestamp, captured length, original length, bytes) API.
+    Timestamp-free PCAPNG blocks are rejected because timing features require
+    measured packet timestamps.
+    """
 
     def __init__(self, path: Path | str):
         self.path = Path(path)
@@ -99,7 +104,7 @@ class PcapReader:
             else:
                 raise PcapFormatError(f"{self.path}: invalid pcapng byte order magic {bom!r}")
             shb_len = struct.unpack(self.endian + "I", hdr[4:8])[0]
-            if shb_len < 12 or shb_len % 4 != 0:
+            if shb_len < 28 or shb_len % 4 != 0:
                 raise PcapFormatError(f"{self.path}: invalid pcapng section header length {shb_len}")
         else:
             raise PcapFormatError(f"{self.path}: not a classic pcap or pcapng file (magic={magic!r})")
@@ -114,36 +119,14 @@ class PcapReader:
                     f"(supported: 1=Ethernet, 12/101=raw IP, 113=Linux SLL, 276=Linux SLL2)"
                 )
         else:
-            # For PCAPNG, discover linktype from the first Interface Description Block (IDB, type 1)
-            self.linktype = 1  # default to Ethernet
-            with open(self.path, "rb") as f:
-                f.seek(shb_len)
-                while True:
-                    bhdr = f.read(8)
-                    if len(bhdr) < 8:
-                        break
-                    btype, blen = struct.unpack(self.endian + "II", bhdr)
-                    if blen < 12 or blen % 4 != 0:
-                        break
-                    body = f.read(blen - 12)
-                    _ = f.read(4)  # trailing length
-                    if btype == 1 and len(body) >= 8:  # IDB
-                        self.linktype = struct.unpack(self.endian + "H", body[:2])[0]
-                        if self.linktype not in (1, 12, 101, 113, 276):
-                            raise PcapFormatError(
-                                f"{self.path}: unsupported pcapng link type {self.linktype}"
-                            )
-                        # Check timestamp resolution option (code 9)
-                        opt_off = 8
-                        while opt_off + 4 <= len(body):
-                            ocode, olen = struct.unpack(self.endian + "HH", body[opt_off:opt_off + 4])
-                            if ocode == 0:
-                                break
-                            if ocode == 9 and olen >= 1 and opt_off + 4 < len(body):
-                                if body[opt_off + 4] == 9:
-                                    self.nano = True
-                            opt_off += 4 + olen + ((4 - (olen % 4)) % 4)
-                        break
+            # Retain first-interface metadata for callers inspecting the header.
+            self.linktype = 1
+            for btype, body in self._iter_pcapng_blocks():
+                if btype == 1:
+                    self.linktype, _, resol, _ = self._pcapng_interface(body)
+                    self.nano = resol == 1e-9
+                    break
+        self.packet_linktype = self.linktype
 
     def __iter__(self):
         if not self.is_pcapng:
@@ -170,8 +153,8 @@ class PcapReader:
                     return
                 yield sec + frac / div, caplen, origlen, data
 
-    def _iter_pcapng(self):
-        interfaces = []  # list of (linktype, snaplen, ts_resol)
+    def _iter_pcapng_blocks(self):
+        """Decode section byte order before interpreting a new SHB's length."""
         with open(self.path, "rb") as f:
             while True:
                 bhdr = f.read(8)
@@ -180,12 +163,25 @@ class PcapReader:
                 if len(bhdr) < 8:
                     self.truncated_file = True
                     return
+                prefix = b""
+                is_section = bhdr[:4] == b"\x0a\x0d\x0d\x0a"
+                if is_section:
+                    prefix = f.read(4)
+                    if len(prefix) < 4:
+                        self.truncated_file = True
+                        return
+                    if prefix == b"\x1a\x2b\x3c\x4d":
+                        self.endian = ">"
+                    elif prefix == b"\x4d\x3c\x2b\x1a":
+                        self.endian = "<"
+                    else:
+                        raise PcapFormatError(f"{self.path}: invalid section byte order magic")
                 btype, blen = struct.unpack(self.endian + "II", bhdr)
-                if blen < 12 or blen % 4 != 0:
+                if blen < (28 if is_section else 12) or blen % 4 != 0:
                     self.truncated_file = True
                     return
                 body_len = blen - 12
-                body = f.read(body_len)
+                body = prefix + f.read(body_len - len(prefix))
                 trailer = f.read(4)
                 if len(body) < body_len or len(trailer) < 4:
                     self.truncated_file = True
@@ -195,63 +191,61 @@ class PcapReader:
                     self.truncated_file = True
                     return
 
-                if btype == 0x0A0D0D0A:
-                    # Section Header Block: check if endianness changed
-                    if len(body) >= 4:
-                        bom = body[:4]
-                        if bom == b"\x1a\x2b\x3c\x4d":
-                            self.endian = ">"
-                        elif bom == b"\x4d\x3c\x2b\x1a":
-                            self.endian = "<"
-                    interfaces = []
-                elif btype == 1:
-                    # Interface Description Block
-                    if len(body) >= 8:
-                        lt = struct.unpack(self.endian + "H", body[:2])[0]
-                        sl = struct.unpack(self.endian + "I", body[4:8])[0]
-                        resol = 1e-6
-                        opt_off = 8
-                        while opt_off + 4 <= len(body):
-                            ocode, olen = struct.unpack(self.endian + "HH", body[opt_off:opt_off + 4])
-                            if ocode == 0:
-                                break
-                            if ocode == 9 and olen >= 1 and opt_off + 4 < len(body):
-                                r_val = body[opt_off + 4]
-                                if r_val & 0x80:
-                                    resol = 2.0 ** -(r_val & 0x7F)
-                                else:
-                                    resol = 10.0 ** -r_val
-                            opt_off += 4 + olen + ((4 - (olen % 4)) % 4)
-                        interfaces.append((lt, sl, resol))
-                elif btype == 6:
-                    # Enhanced Packet Block
-                    if len(body) < 20:
-                        self.truncated_file = True
-                        return
-                    if_id, ts_hi, ts_lo, caplen, origlen = struct.unpack(
-                        self.endian + "IIIII", body[:20]
-                    )
-                    resol = interfaces[if_id][2] if if_id < len(interfaces) else 1e-6
-                    raw_ts = (ts_hi << 32) | ts_lo
-                    ts = raw_ts * resol
-                    if len(body) < 20 + caplen:
-                        self.truncated_file = True
-                        return
-                    pkt_data = body[20:20 + caplen]
-                    yield ts, caplen, origlen, pkt_data
-                elif btype == 3:
-                    # Simple Packet Block
-                    if len(body) < 4:
-                        self.truncated_file = True
-                        return
-                    origlen = struct.unpack(self.endian + "I", body[:4])[0]
-                    snaplen = interfaces[0][1] if interfaces else origlen
-                    caplen = min(origlen, snaplen)
-                    if len(body) < 4 + caplen:
-                        self.truncated_file = True
-                        return
-                    pkt_data = body[4:4 + caplen]
-                    yield 0.0, caplen, origlen, pkt_data
+                yield btype, body
+
+    def _pcapng_interface(self, body):
+        if len(body) < 8:
+            raise PcapFormatError(f"{self.path}: truncated interface description")
+        linktype, _, snaplen = struct.unpack(self.endian + "HHI", body[:8])
+        if linktype not in (1, 12, 101, 113, 276):
+            raise PcapFormatError(f"{self.path}: unsupported pcapng link type {linktype}")
+        resolution, offset = 1e-6, 0
+        pos = 8
+        while pos + 4 <= len(body):
+            code, size = struct.unpack(self.endian + "HH", body[pos:pos + 4])
+            if code == 0:
+                break
+            value = body[pos + 4:pos + 4 + size]
+            if len(value) != size:
+                raise PcapFormatError(f"{self.path}: truncated interface option {code}")
+            if code == 9:
+                if size != 1:
+                    raise PcapFormatError(f"{self.path}: invalid if_tsresol option")
+                raw = value[0]
+                resolution = 2.0 ** -(raw & 0x7f) if raw & 0x80 else 10.0 ** -raw
+            elif code == 14:
+                if size != 8:
+                    raise PcapFormatError(f"{self.path}: invalid if_tsoffset option")
+                offset = struct.unpack(self.endian + "q", value)[0]
+            pos += 4 + size + (-size % 4)
+        return linktype, snaplen, resolution, offset
+
+    def _iter_pcapng(self):
+        interfaces = []
+        for btype, body in self._iter_pcapng_blocks():
+            if btype == 0x0A0D0D0A:
+                interfaces = []
+            elif btype == 1:
+                interfaces.append(self._pcapng_interface(body))
+            elif btype == 6:
+                if len(body) < 20:
+                    self.truncated_file = True
+                    return
+                if_id, ts_hi, ts_lo, caplen, origlen = struct.unpack(self.endian + "IIIII", body[:20])
+                if if_id >= len(interfaces):
+                    raise PcapFormatError(f"{self.path}: packet references unknown interface {if_id}")
+                linktype, _, resolution, offset = interfaces[if_id]
+                if len(body) < 20 + caplen:
+                    self.truncated_file = True
+                    return
+                self.packet_linktype = linktype
+                timestamp = ((ts_hi << 32) | ts_lo) * resolution + offset
+                yield timestamp, caplen, origlen, body[20:20 + caplen]
+            elif btype == 3:
+                raise PcapFormatError(
+                    f"{self.path}: Simple Packet Block has no timestamp; "
+                    "timing-dependent flow extraction requires timestamped packet blocks"
+                )
 
 
 def convert_pcapng_to_pcap(pcapng_path: str | Path, pcap_path: str | Path) -> Path:
@@ -260,11 +254,16 @@ def convert_pcapng_to_pcap(pcapng_path: str | Path, pcap_path: str | Path) -> Pa
     out_p = Path(pcap_path)
     out_p.parent.mkdir(parents=True, exist_ok=True)
     reader = PcapReader(in_p)
+    output_linktype = reader.linktype
     with open(out_p, "wb") as f:
         # Standard libpcap global header: magic, v2.4, thiszone=0, sigfigs=0, snaplen=65535, linktype
         f.write(struct.pack("<IHHiIII", 0xA1B2C3D4, 2, 4, 0, 0, 65535, reader.linktype))
         rec = struct.Struct("<IIII")
         for ts, caplen, origlen, data in reader:
+            if reader.packet_linktype != output_linktype:
+                raise PcapFormatError("classic PCAP conversion cannot represent mixed interface link types")
+            if ts < 0 or ts >= 2**32:
+                raise PcapFormatError("packet timestamp is outside classic PCAP's unsigned 32-bit seconds range")
             sec = int(ts)
             usec = int(round((ts - sec) * 1e6))
             if usec >= 1_000_000:
@@ -354,13 +353,14 @@ def parse_tcp_packet(data: bytes, linktype: int):
 # --------------------------------------------------------------------------- flow building
 class _State:
     __slots__ = ("init", "peer", "ts", "length", "dir", "n", "bytes", "high", "closed",
-                 "last_ts", "unordered")
+                 "last_ts", "unordered", "covered")
 
     def __init__(self, init, peer):
         self.init, self.peer = init, peer
         self.ts, self.length, self.dir = [], [], []
         self.n = self.bytes = 0
         self.high = [None, None]
+        self.covered = [[], []]
         self.closed = False
         self.last_ts = None
         self.unordered = False
@@ -388,7 +388,7 @@ def build_flows_from_pcap(path: Path, label: int, source_name: str, cfg, stats: 
         stats["packets_read"] += 1
         if caplen < origlen:
             stats["truncated_packets"] += 1
-        parsed, reason = parse_tcp_packet(data, reader.linktype)
+        parsed, reason = parse_tcp_packet(data, reader.packet_linktype)
         if parsed is None:
             stats["skipped_" + reason] += 1
             continue
@@ -420,12 +420,25 @@ def build_flows_from_pcap(path: Path, label: int, source_name: str, cfg, stats: 
 
         if payload > 0:  # retransmission / duplicate filter
             di = 0 if d == 1 else 1
-            end = (seq + payload) & 0xFFFFFFFF
             hi = st.high[di]
-            if hi is not None and ((hi - end) & 0xFFFFFFFF) < 0x80000000:
+            # Unwrap serial numbers near the highest observed end. As in TCP
+            # serial arithmetic, distances of >= 2**31 bytes are ambiguous.
+            start = seq if hi is None else hi + ((seq - hi + 2**31) % 2**32 - 2**31)
+            end = start + payload
+            ranges = st.covered[di]
+            if any(lo <= start and end <= high for lo, high in ranges):
                 stats["dropped_retransmissions"] += 1
                 continue
-            st.high[di] = end
+            # Merge adjacent/overlapping intervals, but retain a packet if any
+            # of its sequence range is new; IP-byte metrics do not trim overlaps.
+            merged = []
+            for lo, high in sorted(ranges + [(start, end)]):
+                if merged and lo <= merged[-1][1]:
+                    merged[-1] = (merged[-1][0], max(high, merged[-1][1]))
+                else:
+                    merged.append((lo, high))
+            st.covered[di] = merged
+            st.high[di] = end if hi is None else max(hi, end)
 
         if st.last_ts is not None and ts < st.last_ts:
             st.unordered = True
