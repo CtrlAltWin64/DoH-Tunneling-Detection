@@ -1,0 +1,646 @@
+{
+  "checks": [
+    {
+      "check": "unique_flow_ids",
+      "passed": true
+    },
+    {
+      "check": "finite_monotonic_timestamps",
+      "passed": true
+    },
+    {
+      "check": "split_ids_unique",
+      "passed": true
+    },
+    {
+      "check": "labels_match",
+      "passed": true
+    },
+    {
+      "check": "train_val_flow_disjoint",
+      "passed": true
+    },
+    {
+      "check": "train_test_flow_disjoint",
+      "passed": true
+    },
+    {
+      "check": "val_test_flow_disjoint",
+      "passed": true
+    },
+    {
+      "check": "rf_finite_probabilities",
+      "passed": true
+    },
+    {
+      "check": "rf_score_labels",
+      "passed": true
+    },
+    {
+      "check": "rf_test_membership",
+      "passed": true
+    },
+    {
+      "check": "rfvaladaptive_alerts",
+      "passed": true
+    },
+    {
+      "check": "rfvaladaptive_observations",
+      "passed": true
+    },
+    {
+      "check": "rfvaladaptive_TP",
+      "passed": true
+    },
+    {
+      "check": "rfvaladaptive_FP",
+      "passed": true
+    },
+    {
+      "check": "rfvaladaptive_TN",
+      "passed": true
+    },
+    {
+      "check": "rfvaladaptive_FN",
+      "passed": true
+    },
+    {
+      "check": "rfvaladaptive_precision",
+      "passed": true
+    },
+    {
+      "check": "rfvaladaptive_recall",
+      "passed": true
+    },
+    {
+      "check": "rfvaladaptive_f1",
+      "passed": true
+    },
+    {
+      "check": "rfvaladaptive_fpr",
+      "passed": true
+    },
+    {
+      "check": "rfadaptive_val_fpr",
+      "passed": true
+    },
+    {
+      "check": "rfadaptive_lowest_feasible",
+      "passed": true
+    },
+    {
+      "check": "rfadaptive_sweep_fp",
+      "passed": true
+    },
+    {
+      "check": "rftestadaptive_alerts",
+      "passed": true
+    },
+    {
+      "check": "rftestadaptive_observations",
+      "passed": true
+    },
+    {
+      "check": "rftestadaptive_TP",
+      "passed": true
+    },
+    {
+      "check": "rftestadaptive_FP",
+      "passed": true
+    },
+    {
+      "check": "rftestadaptive_TN",
+      "passed": true
+    },
+    {
+      "check": "rftestadaptive_FN",
+      "passed": true
+    },
+    {
+      "check": "rftestadaptive_precision",
+      "passed": true
+    },
+    {
+      "check": "rftestadaptive_recall",
+      "passed": true
+    },
+    {
+      "check": "rftestadaptive_f1",
+      "passed": true
+    },
+    {
+      "check": "rftestadaptive_fpr",
+      "passed": true
+    },
+    {
+      "check": "rfadaptive_common_population",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_alerts",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_observations",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_TP",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_FP",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_TN",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_FN",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_precision",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_recall",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_f1",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_fpr",
+      "passed": true
+    },
+    {
+      "check": "rffixed_10_val_fpr",
+      "passed": true
+    },
+    {
+      "check": "rffixed_10_lowest_feasible",
+      "passed": true
+    },
+    {
+      "check": "rffixed_10_sweep_fp",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_alerts",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_observations",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_TP",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_FP",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_TN",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_FN",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_precision",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_recall",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_f1",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_fpr",
+      "passed": true
+    },
+    {
+      "check": "rffixed_10_common_population",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_alerts",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_observations",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_TP",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_FP",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_TN",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_FN",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_precision",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_recall",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_f1",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_fpr",
+      "passed": true
+    },
+    {
+      "check": "rffixed_20_val_fpr",
+      "passed": true
+    },
+    {
+      "check": "rffixed_20_lowest_feasible",
+      "passed": true
+    },
+    {
+      "check": "rffixed_20_sweep_fp",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_alerts",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_observations",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_TP",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_FP",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_TN",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_FN",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_precision",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_recall",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_f1",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_fpr",
+      "passed": true
+    },
+    {
+      "check": "rffixed_20_common_population",
+      "passed": true
+    },
+    {
+      "check": "cnn_finite_probabilities",
+      "passed": true
+    },
+    {
+      "check": "cnn_score_labels",
+      "passed": true
+    },
+    {
+      "check": "cnn_test_membership",
+      "passed": true
+    },
+    {
+      "check": "cnnvaladaptive_alerts",
+      "passed": true
+    },
+    {
+      "check": "cnnvaladaptive_observations",
+      "passed": true
+    },
+    {
+      "check": "cnnvaladaptive_TP",
+      "passed": true
+    },
+    {
+      "check": "cnnvaladaptive_FP",
+      "passed": true
+    },
+    {
+      "check": "cnnvaladaptive_TN",
+      "passed": true
+    },
+    {
+      "check": "cnnvaladaptive_FN",
+      "passed": true
+    },
+    {
+      "check": "cnnvaladaptive_precision",
+      "passed": true
+    },
+    {
+      "check": "cnnvaladaptive_recall",
+      "passed": true
+    },
+    {
+      "check": "cnnvaladaptive_f1",
+      "passed": true
+    },
+    {
+      "check": "cnnvaladaptive_fpr",
+      "passed": true
+    },
+    {
+      "check": "cnnadaptive_val_fpr",
+      "passed": true
+    },
+    {
+      "check": "cnnadaptive_lowest_feasible",
+      "passed": true
+    },
+    {
+      "check": "cnnadaptive_sweep_fp",
+      "passed": true
+    },
+    {
+      "check": "cnntestadaptive_alerts",
+      "passed": true
+    },
+    {
+      "check": "cnntestadaptive_observations",
+      "passed": true
+    },
+    {
+      "check": "cnntestadaptive_TP",
+      "passed": true
+    },
+    {
+      "check": "cnntestadaptive_FP",
+      "passed": true
+    },
+    {
+      "check": "cnntestadaptive_TN",
+      "passed": true
+    },
+    {
+      "check": "cnntestadaptive_FN",
+      "passed": true
+    },
+    {
+      "check": "cnntestadaptive_precision",
+      "passed": true
+    },
+    {
+      "check": "cnntestadaptive_recall",
+      "passed": true
+    },
+    {
+      "check": "cnntestadaptive_f1",
+      "passed": true
+    },
+    {
+      "check": "cnntestadaptive_fpr",
+      "passed": true
+    },
+    {
+      "check": "cnnadaptive_common_population",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_alerts",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_observations",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_TP",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_FP",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_TN",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_FN",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_precision",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_recall",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_f1",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_fpr",
+      "passed": true
+    },
+    {
+      "check": "cnnfixed_10_val_fpr",
+      "passed": true
+    },
+    {
+      "check": "cnnfixed_10_lowest_feasible",
+      "passed": true
+    },
+    {
+      "check": "cnnfixed_10_sweep_fp",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_alerts",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_observations",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_TP",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_FP",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_TN",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_FN",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_precision",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_recall",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_f1",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_fpr",
+      "passed": true
+    },
+    {
+      "check": "cnnfixed_10_common_population",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_alerts",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_observations",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_TP",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_FP",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_TN",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_FN",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_precision",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_recall",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_f1",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_fpr",
+      "passed": true
+    },
+    {
+      "check": "cnnfixed_20_val_fpr",
+      "passed": true
+    },
+    {
+      "check": "cnnfixed_20_lowest_feasible",
+      "passed": true
+    },
+    {
+      "check": "cnnfixed_20_sweep_fp",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_alerts",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_observations",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_TP",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_FP",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_TN",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_FN",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_precision",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_recall",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_f1",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_fpr",
+      "passed": true
+    },
+    {
+      "check": "cnnfixed_20_common_population",
+      "passed": true
+    },
+    {
+      "check": "cnn_roles_only_training",
+      "passed": true
+    },
+    {
+      "check": "cnn_roles_disjoint",
+      "passed": true
+    },
+    {
+      "check": "pcapng_timing_formats_supported",
+      "passed": true
+    }
+  ],
+  "passed": 160,
+  "failed": 0
+}

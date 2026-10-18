@@ -1,0 +1,64 @@
+{
+  "group_by": "flow",
+  "seed": 42,
+  "total_flows": 139478,
+  "total_benign": 1380,
+  "total_malicious": 138098,
+  "total_groups": 139478,
+  "partitions": {
+    "train": {
+      "n_flows": 83686,
+      "n_benign": 828,
+      "n_malicious": 82858,
+      "n_groups": 83686,
+      "n_source_files": 7,
+      "source_files": [
+        "File01_DoH_Benign.pcapng",
+        "File02_DoH_Benign.pcapng",
+        "File03_DoH_Benign.pcapng",
+        "File04_DoH_Benign.pcapng",
+        "File06_DoH_Exfiltration.pcap",
+        "File07_DoH_Exfiltration.pcap",
+        "File10_DoH_Exfiltration.pcap"
+      ]
+    },
+    "val": {
+      "n_flows": 27896,
+      "n_benign": 276,
+      "n_malicious": 27620,
+      "n_groups": 27896,
+      "n_source_files": 7,
+      "source_files": [
+        "File01_DoH_Benign.pcapng",
+        "File02_DoH_Benign.pcapng",
+        "File03_DoH_Benign.pcapng",
+        "File04_DoH_Benign.pcapng",
+        "File06_DoH_Exfiltration.pcap",
+        "File07_DoH_Exfiltration.pcap",
+        "File10_DoH_Exfiltration.pcap"
+      ]
+    },
+    "test": {
+      "n_flows": 27896,
+      "n_benign": 276,
+      "n_malicious": 27620,
+      "n_groups": 27896,
+      "n_source_files": 7,
+      "source_files": [
+        "File01_DoH_Benign.pcapng",
+        "File02_DoH_Benign.pcapng",
+        "File03_DoH_Benign.pcapng",
+        "File04_DoH_Benign.pcapng",
+        "File06_DoH_Exfiltration.pcap",
+        "File07_DoH_Exfiltration.pcap",
+        "File10_DoH_Exfiltration.pcap"
+      ]
+    }
+  },
+  "leakage_check": {
+    "train_val_overlap": 0,
+    "train_test_overlap": 0,
+    "val_test_overlap": 0,
+    "verified_disjoint": true
+  }
+}

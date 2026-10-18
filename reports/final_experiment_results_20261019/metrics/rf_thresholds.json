@@ -1,0 +1,35 @@
+{
+  "adaptive": {
+    "alpha": 0.01,
+    "n_benign_val": 274,
+    "min_resolvable_fpr": 0.0036496350364963502,
+    "tau": 0.01,
+    "val_fp": 2,
+    "val_fpr": 0.0072992700729927005,
+    "val_coverage": 1.0,
+    "never_alerts": false,
+    "resolution_warning": false
+  },
+  "fixed_10": {
+    "alpha": 0.01,
+    "n_benign_val": 274,
+    "min_resolvable_fpr": 0.0036496350364963502,
+    "tau": 0.01,
+    "val_fp": 2,
+    "val_fpr": 0.0072992700729927005,
+    "val_coverage": 1.0,
+    "never_alerts": false,
+    "resolution_warning": false
+  },
+  "fixed_20": {
+    "alpha": 0.01,
+    "n_benign_val": 274,
+    "min_resolvable_fpr": 0.0036496350364963502,
+    "tau": 0.001,
+    "val_fp": 2,
+    "val_fpr": 0.0072992700729927005,
+    "val_coverage": 1.0,
+    "never_alerts": false,
+    "resolution_warning": false
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "common_prefix_signatures_shared_train_test": 629,
+  "flows_in_repeated_common_prefix_signatures": 20375,
+  "note": "Length/direction signatures omit timing. Repetition is a dependence/confounding diagnostic, not proof of duplicate capture content."
+}

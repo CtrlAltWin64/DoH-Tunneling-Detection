@@ -1,0 +1,19 @@
+{
+  "method": "sigmoid",
+  "per_checkpoint": true,
+  "fallbacks": [],
+  "shared_coef_intercept": [
+    1.53536066518519,
+    0.17150224550962145
+  ],
+  "per_checkpoint_coef_intercept": {
+    "10": [
+      1.445385083984338,
+      0.10792351467404242
+    ],
+    "20": [
+      2.1768380848142233,
+      0.6973982698055403
+    ]
+  }
+}

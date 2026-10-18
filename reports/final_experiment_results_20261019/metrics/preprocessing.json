@@ -1,0 +1,60 @@
+{
+  "File01_DoH_Benign.pcapng": {
+    "packets_read": 1477158,
+    "skipped_not_doh_port": 811377,
+    "skipped_malformed": 787,
+    "skipped_udp": 1342,
+    "skipped_non_ip": 950,
+    "skipped_non_tcp": 194,
+    "dropped_retransmissions": 3,
+    "flows_built": 411
+  },
+  "File02_DoH_Benign.pcapng": {
+    "packets_read": 739180,
+    "skipped_not_doh_port": 127853,
+    "skipped_malformed": 39,
+    "skipped_udp": 2333,
+    "skipped_non_ip": 1772,
+    "skipped_non_tcp": 310,
+    "dropped_retransmissions": 9,
+    "flows_with_out_of_order_timestamps_sorted": 2,
+    "flows_built": 575
+  },
+  "File03_DoH_Benign.pcapng": {
+    "packets_read": 976601,
+    "skipped_not_doh_port": 364931,
+    "skipped_udp": 2118,
+    "skipped_malformed": 151,
+    "skipped_non_ip": 1944,
+    "skipped_non_tcp": 294,
+    "dropped_retransmissions": 5,
+    "flows_built": 542
+  },
+  "File04_DoH_Benign.pcapng": {
+    "packets_read": 619784,
+    "skipped_not_doh_port": 7305,
+    "skipped_udp": 2271,
+    "skipped_malformed": 58,
+    "skipped_non_ip": 2856,
+    "skipped_non_tcp": 329,
+    "dropped_retransmissions": 18,
+    "flows_with_out_of_order_timestamps_sorted": 2,
+    "flows_built": 567
+  },
+  "File06_DoH_Exfiltration.pcap": {
+    "packets_read": 168967,
+    "flows_with_out_of_order_timestamps_sorted": 2,
+    "flows_built": 9742
+  },
+  "File07_DoH_Exfiltration.pcap": {
+    "packets_read": 272787,
+    "dropped_retransmissions": 8,
+    "flows_built": 15945
+  },
+  "File10_DoH_Exfiltration.pcap": {
+    "packets_read": 1931029,
+    "dropped_retransmissions": 24,
+    "flows_with_out_of_order_timestamps_sorted": 23,
+    "flows_built": 112411
+  }
+}

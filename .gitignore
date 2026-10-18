@@ -16,6 +16,9 @@ __pycache__/
 htmlcov/
 
 # Local raw captures and large datasets
+*.pcap
+*.pcapng
+*.cap
 data/raw/*
 !data/raw/.gitkeep
 data/processed/*
@@ -24,6 +27,21 @@ data/processed/*
 # Local experiment runs (keep synthetic smoke test reference if needed)
 data/results/*
 !data/results/.gitkeep
+
+# Independent local checkout, not a submodule
+/DoH-Tunneling-Detection/
+
+# Keep report scripts, aggregate evidence and figures; large bundles stay local
+/reports/final_experiment_results_*/processed/
+/reports/final_experiment_results_*/predictions/
+/reports/final_experiment_results_*/models/
+/reports/final_experiment_results_*/test_temp/
+/reports/final_experiment_results_*/*.log
+
+# Local environment settings and credentials
+.env
+.env.*
+!.env.example
 
 # System & IDE artifacts
 .DS_Store
