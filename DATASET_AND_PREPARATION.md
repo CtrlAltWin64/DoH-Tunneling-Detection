@@ -1,5 +1,11 @@
 # Dataset and preparation
 
+> Historical protocol note: the counts and five-group splitter restriction below
+> describe the frozen source used for the recorded experiment. The newly merged
+> code adds a three-fold capture-split fallback and changes preprocessing/model
+> persistence. Reproduce the historical run with its source snapshot; experiments
+> against the updated code must be reported separately.
+
 This document describes the actual 19 October 2026 experiment, superseding the
 older preparation notes. Earlier assertions about independence, attack tools,
 publication dates and licensing have not been independently authenticated.

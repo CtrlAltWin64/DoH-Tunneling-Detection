@@ -1,0 +1,38 @@
+test_normalizer_preserved_after_load (tests.test_cnn_gru.CheckpointSaveLoad.test_normalizer_preserved_after_load) ... ok
+test_save_and_load_roundtrip (tests.test_cnn_gru.CheckpointSaveLoad.test_save_and_load_roundtrip) ... ok
+test_checkpoint_lengths_10_20_30_40 (tests.test_cnn_gru.ModelShapes.test_checkpoint_lengths_10_20_30_40)
+Model processes all required checkpoint lengths cleanly. ... ok
+test_cpu_execution (tests.test_cnn_gru.ModelShapes.test_cpu_execution)
+CPU execution runs without error. ... ok
+test_forward_padded_batch (tests.test_cnn_gru.ModelShapes.test_forward_padded_batch)
+Batch with different sequence lengths; padded inputs should give per-sample logits. ... ok
+test_forward_single_sample (tests.test_cnn_gru.ModelShapes.test_forward_single_sample) ... ok
+test_invalid_lengths_and_empty_batches_rejected (tests.test_cnn_gru.ModelShapes.test_invalid_lengths_and_empty_batches_rejected)
+Model strictly validates input dimensions and sequence lengths. ... ok
+test_mixed_length_batch_invariance (tests.test_cnn_gru.ModelShapes.test_mixed_length_batch_invariance)
+Causal conv and masked normalization ensure a sequence's prediction is invariant to padding and other batch elements. ... ok
+test_output_is_scalar_per_sample (tests.test_cnn_gru.ModelShapes.test_output_is_scalar_per_sample) ... ok
+test_checkpoint_column_matches_requested_checkpoints (tests.test_cnn_gru.PrefixTableIntegration.test_checkpoint_column_matches_requested_checkpoints) ... ok
+test_flow_isolation_consistent_prefix (tests.test_cnn_gru.PrefixTableIntegration.test_flow_isolation_consistent_prefix)
+Scoring a single flow at t=10 should match the value in the prefix table. ... ok
+test_prefix_table_has_expected_columns (tests.test_cnn_gru.PrefixTableIntegration.test_prefix_table_has_expected_columns) ... ok
+test_raw_proba_cnn_returns_floats_in_0_1 (tests.test_cnn_gru.PrefixTableIntegration.test_raw_proba_cnn_returns_floats_in_0_1) ... ok
+test_calibration_subset_disjoint_from_fitting_subset (tests.test_cnn_gru.SeparateCalibrationTests.test_calibration_subset_disjoint_from_fitting_subset) ... ok
+test_build_sequence_dataset_filters_short_flows (tests.test_cnn_gru.SequenceBuilding.test_build_sequence_dataset_filters_short_flows) ... ok
+test_causal_future_packets_dont_affect_prefix (tests.test_cnn_gru.SequenceBuilding.test_causal_future_packets_dont_affect_prefix) ... ok
+test_feature_count_matches_constant (tests.test_cnn_gru.SequenceBuilding.test_feature_count_matches_constant) ... ok
+test_sequence_shape_equals_t (tests.test_cnn_gru.SequenceBuilding.test_sequence_shape_equals_t) ... ok
+test_constant_feature_does_not_crash (tests.test_cnn_gru.SequenceNormalizerTests.test_constant_feature_does_not_crash) ... ok
+test_fit_transform_zero_mean_unit_std (tests.test_cnn_gru.SequenceNormalizerTests.test_fit_transform_zero_mean_unit_std) ... ok
+test_state_dict_roundtrip (tests.test_cnn_gru.SequenceNormalizerTests.test_state_dict_roundtrip) ... ok
+test_unfitted_raises (tests.test_cnn_gru.SequenceNormalizerTests.test_unfitted_raises) ... ok
+test_inference_returns_probabilities_in_0_1 (tests.test_cnn_gru.TrainingSmokeTest.test_inference_returns_probabilities_in_0_1) ... ok
+test_train_returns_model_normalizer_history (tests.test_cnn_gru.TrainingSmokeTest.test_train_returns_model_normalizer_history) ... ok
+test_legacy_training_checkpoint_recovers_architecture (tests.test_cnn_persistence.TrainingArtifactPersistence.test_legacy_training_checkpoint_recovers_architecture) ... ok
+test_real_training_checkpoint_loads_and_reproduces_predictions (tests.test_cnn_persistence.TrainingArtifactPersistence.test_real_training_checkpoint_loads_and_reproduces_predictions) ... ok
+test_small_improvement_saved_without_resetting_patience (tests.test_cnn_persistence.TrainingArtifactPersistence.test_small_improvement_saved_without_resetting_patience) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 6.472s
+
+OK

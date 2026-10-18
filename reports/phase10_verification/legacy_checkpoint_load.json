@@ -1,0 +1,23 @@
+[
+  {
+    "checkpoint": "data\\results\\exp_ufu_real_cp10_20\\cnn_gru_best.pt",
+    "parameters": 64193,
+    "inference_rows": 8,
+    "finite_probabilities": true,
+    "inference_eval_mode": true
+  },
+  {
+    "checkpoint": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\cnn_gru_best.pt",
+    "parameters": 64193,
+    "inference_rows": 8,
+    "finite_probabilities": true,
+    "inference_eval_mode": true
+  },
+  {
+    "checkpoint": "data\\results\\member3_smoke_20261017\\cnn_gru_best.pt",
+    "parameters": 64193,
+    "inference_rows": 8,
+    "finite_probabilities": true,
+    "inference_eval_mode": true
+  }
+]

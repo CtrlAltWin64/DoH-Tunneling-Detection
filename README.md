@@ -91,8 +91,9 @@ The generic CLI offers `inspect`, `build`, `run`, `all`, and `dry-run`:
 ```
 
 Generic `build` intentionally requires explicit `pcap_label_rules` in `Config`.
-Generic `run` uses `(10,20,30,40)` by default and is **not** the command used for this
-real study. Use the saved study harness for its exact protocol.
+The incoming code now defaults to `(5,10,15,20)`; it is **not** the configuration
+used for the reported `(10,20)` study. Use the recorded source snapshot and study
+harness for exact reproduction, rather than assuming the updated source is identical.
 
 A clean clone includes aggregate reports, tables and figures, but not processed
 flows, per-flow predictions or fitted models. Regenerating reports from scores
@@ -110,8 +111,9 @@ requires restoring the local bundle or running extraction/training first.
 - `reports/final_experiment_results_20261019/`: study harness, source snapshot and evidence.
 
 The study harness separates CNN fitting, early stopping, calibration, threshold
-validation and test roles. The generic pipeline uses outer validation for CNN early
-stopping as well as threshold selection; the execution paths are not identical.
+validation and test roles. The incoming generic pipeline also separates early
+stopping inside training. The recorded study predates these incoming source changes;
+its source snapshot preserves the implementation actually evaluated.
 
 ## Next research steps
 
@@ -119,3 +121,23 @@ Obtain independent capture sessions and provenance, prespecify a policy for shor
 flows, evaluate genuinely slower attacks, and compare with the earliest fixed-window
 baseline under comparable FPR constraints. Publication claims require stronger
 independent evaluation and a careful novelty comparison with prior work.
+
+## Incoming work and experiment provenance
+
+The merged upstream code adds model persistence, parser changes, a `(5,10,15,20)`
+default schedule and a three-fold fallback for capture splitting when fewer than
+five groups per class exist. The five-group restriction documented in the recorded
+study refers to its historical source snapshot, not the updated splitter.
+
+The [incoming README](reports/upstream_readme_fc46862.md) reports a separate
+capture-isolated `paper_results_v2` experiment. Its raw predictions, split manifest
+and model artifacts are absent locally, so those reported figures are not combined
+with or treated as independent verification of the study summarized above.
+
+The incoming frontend and Graphify artifacts are preserved. They do not change the
+provenance of the saved research measurements. The 113-test count above belongs to
+the recorded study; the merged source has additional tests.
+
+For exact historical reproduction, use `source_snapshot/config.py` and
+`source_snapshot/src/` in an isolated workspace as described in the reproduction
+guide. Fresh runs against the merged implementation are new experiments.

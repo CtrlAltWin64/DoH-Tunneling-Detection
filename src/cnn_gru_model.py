@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import logging
 import math
+import json
 from pathlib import Path
 from typing import Optional
 
@@ -442,6 +443,14 @@ def train_cnn_gru(
     ).to(dev)
 
     pos_w = _pos_weight(train_labels_all, dev)
+    n_benign = int((train_labels_all == 0).sum())
+    n_malicious = int((train_labels_all == 1).sum())
+
+    logger.info(
+        "[CNN-GRU] Training sequences: "
+        f"benign={n_benign}, malicious={n_malicious}, "
+        f"malicious pos_weight={pos_w.item():.6f}"
+    )
     criterion = nn.BCEWithLogitsLoss(pos_weight=pos_w)
     optimizer = torch.optim.Adam(model.parameters(), lr=getattr(cfg, "cnn_lr", 1e-3))
 
@@ -449,6 +458,10 @@ def train_cnn_gru(
     patience = getattr(cfg, "cnn_patience", 7)
 
     best_val_loss = float("inf")
+    patience_best_loss = float("inf")
+    min_delta = getattr(cfg, "cnn_min_delta", 0.0)
+    if epochs < 1 or patience < 1 or min_delta < 0:
+        raise ValueError("cnn_epochs and cnn_patience must be positive; cnn_min_delta must be nonnegative")
     no_improve = 0
     history = {"train_loss": [], "val_loss": []}
 
@@ -490,16 +503,20 @@ def train_cnn_gru(
         history["train_loss"].append(train_loss)
         history["val_loss"].append(val_loss)
 
-        if val_loss < best_val_loss - 1e-6:
+        if val_loss < best_val_loss:
             best_val_loss = val_loss
+            save_model(model, normalizer, checkpoint_path,
+                       extra={"epoch": epoch, "val_loss": val_loss})
+            logger.debug(f"  epoch {epoch}: val_loss={val_loss:.8g} *** saved")
+
+        # Saving the true minimum and counting material patience improvements
+        # are separate: even a sub-min_delta improvement must remain loadable.
+        if val_loss < patience_best_loss - min_delta:
+            patience_best_loss = val_loss
             no_improve = 0
-            torch.save({"epoch": epoch, "model_state": model.state_dict(),
-                        "val_loss": val_loss, "normalizer": normalizer.state_dict()},
-                       checkpoint_path)
-            logger.debug(f"  epoch {epoch}: val_loss={val_loss:.5f} *** saved")
         else:
             no_improve += 1
-            logger.debug(f"  epoch {epoch}: train={train_loss:.5f} val={val_loss:.5f} (no improve {no_improve})")
+            logger.debug(f"  epoch {epoch}: train={train_loss:.8g} val={val_loss:.8g} (no material improvement {no_improve})")
             if no_improve >= patience:
                 logger.info(f"[CNN-GRU] early stopping at epoch {epoch} (patience={patience})")
                 break
@@ -510,6 +527,8 @@ def train_cnn_gru(
     normalizer = SequenceNormalizer.from_state_dict(ckpt["normalizer"])
     history["best_epoch"] = int(ckpt["epoch"])
     history["best_val_loss"] = float(ckpt["val_loss"])
+    history["epochs_trained"] = len(history["train_loss"])
+    history["patience_min_delta"] = float(min_delta)
     return model, normalizer, history
 
 
@@ -561,6 +580,7 @@ def score_flows_at_checkpoint(
 def save_model(model: CnnGruClassifier, normalizer: SequenceNormalizer,
                path: Path, extra: dict | None = None) -> None:
     payload = {
+        "schema_version": 1,
         "model_state": model.state_dict(),
         "normalizer": normalizer.state_dict(),
         "model_kwargs": {
@@ -578,10 +598,35 @@ def save_model(model: CnnGruClassifier, normalizer: SequenceNormalizer,
 
 
 def load_model(path: Path, device: str = "cpu") -> tuple[CnnGruClassifier, SequenceNormalizer]:
+    """Load current or legacy training checkpoints without modifying their files.
+
+    Legacy training artifacts omitted architecture metadata. Tensor dimensions
+    recover the architecture; dropout is read from the companion run record
+    when available (it is inactive in the returned inference model).
+    """
+    path = Path(path)
     payload = torch.load(path, map_location=device, weights_only=False)
-    kw = payload["model_kwargs"]
+    kw = payload.get("model_kwargs")
+    if kw is None:
+        state = payload["model_state"]
+        conv = state["conv1.weight"] if "conv1.weight" in state else state["conv.0.weight"]
+        layers = sum(k.startswith("gru.weight_ih_l") for k in state)
+        dropout = 0.0
+        record_path = path.parent / "run_record.json"
+        if record_path.exists():
+            config = json.loads(record_path.read_text(encoding="utf-8")).get("config", {})
+            dropout = float(config.get("cnn_dropout", 0.0))
+        kw = {
+            "n_features": int(conv.shape[1]),
+            "conv_channels": int(conv.shape[0]),
+            "conv_kernel": int(conv.shape[2]),
+            "gru_hidden": int(state["gru.weight_hh_l0"].shape[1]),
+            "gru_layers": layers,
+            "dropout": dropout,
+        }
     model = CnnGruClassifier(**kw)
     model.load_state_dict(payload["model_state"])
     model.to(device)
+    model.eval()
     normalizer = SequenceNormalizer.from_state_dict(payload["normalizer"])
     return model, normalizer

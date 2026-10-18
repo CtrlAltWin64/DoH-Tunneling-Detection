@@ -93,8 +93,9 @@ class Pipeline(unittest.TestCase):
         labs = rng.permutation([f.label for f in self.flows])
         shuffled = [replace(f, label=int(l)) for f, l in zip(self.flows, labs)]
         r = run_experiment(shuffled, CFG, self.base / "shuf", synthetic=True, log=quiet)
-        auc40 = float(r["prefix"].loc[r["prefix"]["checkpoint"] == 40, "auc"].iloc[0])
-        self.assertTrue(0.35 < auc40 < 0.65, auc40)
+        last_cp = CFG.checkpoints[-1]
+        auc_last = float(r["prefix"].loc[r["prefix"]["checkpoint"] == last_cp, "auc"].iloc[0])
+        self.assertTrue(0.35 < auc_last < 0.65, auc_last)
 
 
 class CalibrationLeakage(unittest.TestCase):

@@ -59,13 +59,13 @@ class Config:
     max_packets_per_file: int | None = None  # smoke-test limiter
 
     # ---------------- prefixes ----------------
-    checkpoints: tuple = (10, 20, 30, 40)
+    checkpoints: tuple = (5, 10, 15, 20)
 
     # ---------------- split ----------------
     seed: int = 42
     # "flow": every flow is its own group (stratified flow-level split).
     # "source_file": all flows of one PCAP stay together (stricter capture-level split;
-    # tests generalisation across capture sessions; needs >= 5 PCAP files per class).
+    # needs >= 3 captures per class; every resulting partition must contain both classes).
     group_by: str = "flow"
 
     # ---------------- model selection -------
@@ -88,6 +88,7 @@ class Config:
     cnn_dropout: float = 0.2          # dropout between GRU layers (only if gru_layers > 1)
     cnn_epochs: int = 30              # max training epochs
     cnn_patience: int = 7             # early-stopping patience (val-loss)
+    cnn_min_delta: float = 0.0        # patience improvement; every new minimum is still saved
     cnn_batch_size: int = 128         # mini-batch size
     cnn_lr: float = 1e-3              # Adam learning rate
     cnn_device: str = "auto"          # "auto", "cpu", or "cuda"
@@ -122,6 +123,8 @@ class Config:
             raise ValueError("calibration must be 'sigmoid' or 'none'")
         if self.model_type not in ("rf", "cnn_gru", "both"):
             raise ValueError("model_type must be 'rf', 'cnn_gru', or 'both'")
+        if self.cnn_epochs < 1 or self.cnn_patience < 1 or self.cnn_min_delta < 0:
+            raise ValueError("CNN epochs/patience must be positive and min_delta nonnegative")
         if not 0.05 <= self.calibration_split_ratio <= 0.5:
             raise ValueError("calibration_split_ratio must be between 0.05 and 0.5")
         if self.dataset_name not in ("ufu_doh_exf", "cira_cic_dohbrw_2020", "custom"):

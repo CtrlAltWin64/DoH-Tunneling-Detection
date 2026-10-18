@@ -16,6 +16,7 @@ Strict experimental protocol:
 from __future__ import annotations
 
 import json
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -48,15 +49,15 @@ def split_flows(flow_meta: pd.DataFrame, group_by: str, seed: int) -> dict[str, 
     groups = meta["flow_id"] if group_by == "flow" else meta["source_file"]
     y = meta["label"].to_numpy()
 
-    for lab in (0, 1):
-        n_groups = groups[y == lab].nunique()
-        if n_groups < 5:
-            raise ValueError(
-                f"class {lab} has only {n_groups} {group_by} group(s); at least 5 are needed for a "
-                f"60/20/20 split" + (" - use group_by='flow'" if group_by != "flow" else "")
-            )
+    min_groups = min(groups[y == 0].nunique(), groups[y == 1].nunique())
+    if min_groups < 3:
+        raise ValueError(
+            f"At least 3 {group_by} groups per class are needed for a train/val/test split (got {min_groups})"
+            + (" - use group_by='flow'" if group_by != "flow" else "")
+        )
 
-    skf = StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=seed)
+    n_splits = 5 if min_groups >= 5 else 3
+    skf = StratifiedGroupKFold(n_splits=n_splits, shuffle=True, random_state=seed)
     folds = [te for _, te in skf.split(np.zeros(len(meta)), y, groups)]
     assign = {}
     for k, idx in enumerate(folds):
@@ -120,16 +121,30 @@ def split_train_calibration(
 
     # Determine number of folds (default 4 folds -> 1 fold = 25% calibration)
     n_splits = max(2, int(round(1.0 / cal_ratio))) if cal_ratio > 0 else 4
+    can_split_by_group = True
     for lab in (0, 1):
         n_groups = groups[y == lab].nunique()
-        if n_groups < n_splits:
-            if n_groups >= 2:
-                n_splits = 2
-            else:
-                raise ValueError(
-                    f"class {lab} has only {n_groups} {group_by} group(s) in training data; "
-                    f"cannot split into separate model-fitting and calibration subsets"
-                )
+        if n_groups < 2:
+            can_split_by_group = False
+            break
+        elif n_groups < n_splits:
+            n_splits = 2
+
+    # If capture groups cannot be partitioned into fit/cal (e.g. only 1 capture for a class in train),
+    # fall back to flow_id within the training partition to prevent unstratified failure,
+    # while preserving full capture isolation between train, val, and test.
+    cal_group_col = "flow_id" if group_by == "flow" else group_by
+    if not can_split_by_group:
+        if group_by != "flow":
+            warnings.warn(
+                "Too few training captures for separate fit/calibration groups; "
+                "inner split uses disjoint flows within outer training captures. "
+                "Outer capture isolation is preserved, inner capture independence is not.",
+                RuntimeWarning,
+            )
+        groups = meta["flow_id"]
+        cal_group_col = "flow_id"
+        n_splits = max(2, int(round(1.0 / cal_ratio))) if cal_ratio > 0 else 4
 
     skf = StratifiedGroupKFold(n_splits=n_splits, shuffle=True, random_state=seed)
     folds = [te for _, te in skf.split(np.zeros(len(meta)), y, groups)]
@@ -142,9 +157,8 @@ def split_train_calibration(
         assign[fid] = "train_cal" if idx in cal_idx else "train_fit"
 
     meta["sub_part"] = meta["flow_id"].map(assign)
-    group_col = "flow_id" if group_by == "flow" else "source_file"
-    fit_groups = set(meta.loc[meta["sub_part"] == "train_fit", group_col])
-    cal_groups = set(meta.loc[meta["sub_part"] == "train_cal", group_col])
+    fit_groups = set(meta.loc[meta["sub_part"] == "train_fit", cal_group_col])
+    cal_groups = set(meta.loc[meta["sub_part"] == "train_cal", cal_group_col])
 
     if fit_groups & cal_groups:
         raise RuntimeError("Data leakage: overlapping groups between train_fit and train_cal")

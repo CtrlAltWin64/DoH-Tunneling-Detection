@@ -111,6 +111,31 @@ class Calibrator:
             str(k): [float(v.coef_[0, 0]), float(v.intercept_[0])] for k, v in self.models.items()}
         return d
 
+    @classmethod
+    def from_description(cls, description: dict) -> "Calibrator":
+        """Restore the exact Platt maps saved by describe(), without refitting."""
+        cal = cls(description["method"], description["per_checkpoint"])
+        if cal.method not in ("sigmoid", "none"):
+            raise ValueError(f"Unsupported calibration method: {cal.method}")
+        cal.fallbacks = list(description.get("fallbacks", []))
+
+        def restore(pair):
+            coef, intercept = map(float, pair)
+            if not np.isfinite([coef, intercept]).all() or coef <= 0:
+                raise ValueError("Saved Platt maps must be finite and increasing")
+            model = LogisticRegression()
+            model.classes_ = np.array([0, 1])
+            model.coef_ = np.array([[coef]])
+            model.intercept_ = np.array([intercept])
+            model.n_features_in_ = 1
+            return model
+
+        if "shared_coef_intercept" in description:
+            cal.shared = restore(description["shared_coef_intercept"])
+        cal.models = {int(t): restore(pair) for t, pair in
+                      description.get("per_checkpoint_coef_intercept", {}).items()}
+        return cal
+
 
 def fit_calibrator(train_df: pd.DataFrame, cfg) -> Calibrator:
     cal = Calibrator(cfg.calibration, cfg.calibration_per_checkpoint)

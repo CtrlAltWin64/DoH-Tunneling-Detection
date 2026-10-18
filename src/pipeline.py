@@ -35,7 +35,7 @@ from .evaluation import clopper_pearson, expected_calibration_error, prefix_metr
 from .evasion import low_and_slow, timing_jitter
 from .feature_extraction import FEATURE_NAMES
 from .prefix_generation import build_prefix_table, eligible_counts
-from .train_baseline import fit_rf, raw_proba
+from .train_baseline import fit_rf, raw_proba, save_rf_bundle
 
 logger = logging.getLogger(__name__)
 
@@ -96,7 +96,7 @@ def _run_cnn_gru_experiment(
     Returns dict with keys: thresholds, test_df, val_df, constraint_df, robustness_df, prefix_df
     """
     from .cnn_gru_calibration import fit_calibrator_cnn
-    from .cnn_gru_model import load_model, train_cnn_gru
+    from .cnn_gru_model import save_model, train_cnn_gru
     from .cnn_gru_prefix import build_cnn_prefix_table, raw_proba_cnn
     from .dataset_split import split_train_calibration
 
@@ -111,21 +111,43 @@ def _run_cnn_gru_experiment(
     train_assign = split_train_calibration(
         train_meta, group_by=cfg.group_by, seed=cfg.seed, cal_ratio=cfg.calibration_split_ratio
     )
+    # Keep outer validation exclusively for policy selection. Early stopping uses
+    # a second, disjoint subset of the outer training partition.
+    fit_meta = train_meta[train_meta["flow_id"].map(train_assign) == "train_fit"]
+    early_assign = split_train_calibration(
+        fit_meta, group_by=cfg.group_by, seed=cfg.seed + 1, cal_ratio=0.2
+    )
+    train_assign.update({fid: "train_early_stop" for fid, role in early_assign.items()
+                         if role == "train_cal"})
     train_fit_flows = [fl for fl in by_part["train"] if train_assign[fl.flow_id] == "train_fit"]
+    early_flows = [fl for fl in by_part["train"] if train_assign[fl.flow_id] == "train_early_stop"]
     train_cal_flows = [fl for fl in by_part["train"] if train_assign[fl.flow_id] == "train_cal"]
     train_meta["fit_or_cal"] = train_meta["flow_id"].map(train_assign)
     train_meta.to_csv(out / "train_fit_cal_split.csv", index=False)
+    roles = ("train_fit", "train_early_stop", "train_cal")
+    role_sources = {role: set(train_meta.loc[train_meta["fit_or_cal"] == role, "source_file"])
+                    for role in roles}
+    inner_manifest = {
+        "outer_group_by": cfg.group_by,
+        "seed_calibration": cfg.seed, "seed_early_stop": cfg.seed + 1,
+        "flow_disjoint": True,
+        "counts": {role: int((train_meta["fit_or_cal"] == role).sum()) for role in roles},
+        "capture_overlaps": {f"{a}__{b}": sorted(role_sources[a] & role_sources[b])
+                             for i, a in enumerate(roles) for b in roles[i + 1:]},
+    }
+    (out / "cnn_training_split.json").write_text(json.dumps(inner_manifest, indent=2), encoding="utf-8")
     log(
         f"[CNN-GRU] Partitioned training set: {len(train_fit_flows)} model-fitting flows, "
-        f"{len(train_cal_flows)} calibration flows (ratio={cfg.calibration_split_ratio})"
+        f"{len(early_flows)} early-stopping flows, {len(train_cal_flows)} calibration flows"
     )
 
     # Train or load CNN-GRU (on model-fitting flows only)
     log("[CNN-GRU] Training 1D-CNN + GRU on model-fitting flows ...")
     model, normalizer, history = train_cnn_gru(
-        train_fit_flows, by_part["val"], cps, cfg, ckpt_path, device=device
+        train_fit_flows, early_flows, cps, cfg, ckpt_path, device=device
     )
-    log(f"[CNN-GRU] Trained {history['best_epoch']} epochs; best val_loss={history['best_val_loss']:.5f}")
+    log(f"[CNN-GRU] Trained {history['epochs_trained']} epochs; best epoch={history['best_epoch']}; "
+        f"best early-stop loss={history['best_val_loss']:.8g}")
 
     # Save training history
     (out / "cnn_gru_train_history.json").write_text(json.dumps(history, indent=2), encoding="utf-8")
@@ -200,6 +222,10 @@ def _run_cnn_gru_experiment(
     thr_payload = {name: {k: v for k, v in s.items() if k != "sweep"} for name, s in sel.items()}
     (out / "cnn_gru_thresholds.json").write_text(json.dumps(thr_payload, indent=2), encoding="utf-8")
     log("[CNN-GRU] Thresholds frozen: " + ", ".join(f"{k}={v:.3f}" for k, v in frozen.items()))
+    save_model(model, normalizer, out / "cnn_gru_bundle.pt", extra={
+        "format_version": 1, "calibrator": cal.describe(), "config": asdict(cfg),
+        "thresholds": frozen, "history": history,
+    })
 
     # Evaluate frozen policies on val + test
     rows_test, rows_val, comp = [], [], []
@@ -316,7 +342,7 @@ def run_experiment(
     assign = split_flows(meta, cfg.group_by, cfg.seed)
     meta["partition"] = meta["flow_id"].map(assign)
     meta.to_csv(out / "split_assignment.csv", index=False)
-    split_manifest = create_split_manifest(meta, assign, cfg.group_by)
+    split_manifest = create_split_manifest(meta, assign, cfg.group_by, seed=cfg.seed)
     (out / "split_manifest.json").write_text(json.dumps(split_manifest, indent=2), encoding="utf-8")
     by_part = {p: [f for f in usable if assign[f.flow_id] == p] for p in ("train", "val", "test")}
 
@@ -420,6 +446,7 @@ def run_experiment(
         }
         (out / "thresholds.json").write_text(json.dumps(thr_rf_payload, indent=2), encoding="utf-8")
         log("[A] RF thresholds frozen: " + ", ".join(f"{k}={v:.3f}" for k, v in frozen_rf.items()))
+        save_rf_bundle(out / "rf_bundle.pkl", model_rf, calibrator_rf, cfg, thresholds=frozen_rf)
 
         # Frozen policy evaluation
         rows_test_rf, rows_val_rf, comp_rf = [], [], []
@@ -584,7 +611,10 @@ def run_experiment(
             "gru_hidden": cfg.cnn_gru_hidden,
             "gru_layers": cfg.cnn_gru_layers,
             "dropout": cfg.cnn_dropout,
-            "epochs_trained": result_cnn["history"].get("best_epoch"),
+            "epochs_trained": result_cnn["history"].get("epochs_trained"),
+            "best_epoch": result_cnn["history"].get("best_epoch"),
+            "early_stopping_partition": "train_early_stop",
+            "calibration_partition": "train_cal",
             "best_val_loss": result_cnn["history"].get("best_val_loss"),
             "device": _get_device(cfg),
             "frozen_thresholds": result_cnn["thresholds"],
