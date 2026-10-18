@@ -59,7 +59,7 @@ class Config:
     max_packets_per_file: int | None = None  # smoke-test limiter
 
     # ---------------- prefixes ----------------
-    checkpoints: tuple = (10, 20, 30, 40)
+    checkpoints: tuple = (5, 10, 15, 20)
 
     # ---------------- split ----------------
     seed: int = 42

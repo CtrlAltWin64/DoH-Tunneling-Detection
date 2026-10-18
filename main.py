@@ -45,7 +45,10 @@ def _cfg(args) -> Config:
         kw["cnn_epochs"] = args.cnn_epochs
     if getattr(args, "cnn_device", None):
         kw["cnn_device"] = args.cnn_device
-    return replace(cfg, **kw)
+    c = replace(cfg, **kw)
+    if not c.pcap_label_rules:
+        c = replace(c, pcap_label_rules=c.get_preset_label_rules())
+    return c
 
 
 def main(argv=None) -> int:

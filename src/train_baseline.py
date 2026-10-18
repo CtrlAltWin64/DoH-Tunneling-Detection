@@ -22,11 +22,15 @@ def flow_weights(flow_ids: pd.Series) -> np.ndarray:
     return w * (len(w) / w.sum())          # mean weight 1
 
 
+
 def make_rf(cfg) -> RandomForestClassifier:
     return RandomForestClassifier(
-        n_estimators=cfg.rf_n_estimators, min_samples_leaf=cfg.rf_min_samples_leaf,
-        class_weight=cfg.rf_class_weight, n_jobs=-1, random_state=cfg.seed)
-
+        n_estimators=cfg.rf_n_estimators,
+        min_samples_leaf=cfg.rf_min_samples_leaf,
+        class_weight="balanced_subsample",
+        n_jobs=-1,
+        random_state=cfg.seed,
+    )
 
 def fit_rf(train_df: pd.DataFrame, cfg) -> RandomForestClassifier:
     if train_df.empty:

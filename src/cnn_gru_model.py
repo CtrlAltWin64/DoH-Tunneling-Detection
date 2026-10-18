@@ -442,6 +442,14 @@ def train_cnn_gru(
     ).to(dev)
 
     pos_w = _pos_weight(train_labels_all, dev)
+    n_benign = int((train_labels_all == 0).sum())
+    n_malicious = int((train_labels_all == 1).sum())
+
+    logger.info(
+        "[CNN-GRU] Training sequences: "
+        f"benign={n_benign}, malicious={n_malicious}, "
+        f"malicious pos_weight={pos_w.item():.6f}"
+    )
     criterion = nn.BCEWithLogitsLoss(pos_weight=pos_w)
     optimizer = torch.optim.Adam(model.parameters(), lr=getattr(cfg, "cnn_lr", 1e-3))
 
@@ -490,7 +498,7 @@ def train_cnn_gru(
         history["train_loss"].append(train_loss)
         history["val_loss"].append(val_loss)
 
-        if val_loss < best_val_loss - 1e-6:
+        if val_loss < best_val_loss:
             best_val_loss = val_loss
             no_improve = 0
             torch.save({"epoch": epoch, "model_state": model.state_dict(),
