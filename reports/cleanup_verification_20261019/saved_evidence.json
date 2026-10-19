@@ -1,0 +1,3178 @@
+{
+  "created_utc": "2026-10-19T05:36:38.218144+00:00",
+  "workspace": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection",
+  "method": "Independent equations; no training, raw-capture reprocessing, or historical artifact writes. Floats compared at absolute 1e-8 plus relative 1e-10.",
+  "raw_captures": [
+    {
+      "path": "data\\raw\\Benign\\File01_DoH_Benign.pcapng",
+      "bytes": 364378452,
+      "sha256": "dbd442b161c574b9c96358eaff2d1a1c607110739e158650b547addf2d0feffc"
+    },
+    {
+      "path": "data\\raw\\Benign\\File04_DoH_Benign.pcapng",
+      "bytes": 209847788,
+      "sha256": "79b9f8306178c80f73e015eacd4662ba64cc2105698466cf653d51c318f92c25"
+    },
+    {
+      "path": "data\\raw\\Malicious\\File06_DoH_Exfiltration.pcap",
+      "bytes": 40634319,
+      "sha256": "2c8a984b5d0c7fc1b64ea1fd9cf22e4ec5ac14ccf6d38cf078b19a8ab4d22fb0"
+    },
+    {
+      "path": "data\\raw\\Malicious\\File07_DoH_Exfiltration.pcap",
+      "bytes": 66230439,
+      "sha256": "b1ac3ec1589248dfdf2f6b4fa39a52b813ecdcf8d24326d632356f11229de7c7"
+    },
+    {
+      "path": "data\\raw\\Malicious\\File10_DoH_Exfiltration.pcap",
+      "bytes": 467388156,
+      "sha256": "4893303e0fdc179e6df036cdde68250ccf6ed6947df02b5eeef9340c75fb5274"
+    }
+  ],
+  "flow_counts": {
+    "total": 139076,
+    "by_label": {
+      "0": 978,
+      "1": 138098
+    },
+    "by_source": {
+      "Benign/File01_DoH_Benign.pcapng": 411,
+      "Benign/File04_DoH_Benign.pcapng": 567,
+      "Malicious/File06_DoH_Exfiltration.pcap": 9742,
+      "Malicious/File07_DoH_Exfiltration.pcap": 15945,
+      "Malicious/File10_DoH_Exfiltration.pcap": 112411
+    }
+  },
+  "prefix_eligibility": {
+    "2": {
+      "0": 978,
+      "1": 138098
+    },
+    "4": {
+      "0": 661,
+      "1": 138098
+    },
+    "5": {
+      "0": 661,
+      "1": 138098
+    },
+    "8": {
+      "0": 659,
+      "1": 138098
+    },
+    "10": {
+      "0": 659,
+      "1": 138098
+    },
+    "15": {
+      "0": 658,
+      "1": 138094
+    },
+    "20": {
+      "0": 654,
+      "1": 20722
+    },
+    "30": {
+      "0": 465,
+      "1": 0
+    },
+    "40": {
+      "0": 435,
+      "1": 0
+    }
+  },
+  "experiments": {
+    "exp_ufu_real_20261018": {
+      "path": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\results\\exp_ufu_real_20261018",
+      "files": {
+        "csv": 2,
+        "png": 0,
+        "json": 1,
+        "pt": 0,
+        "table_csv": 1
+      },
+      "models": {},
+      "duplicate_figures": [],
+      "figure_provenance": [],
+      "full_score_reverification": false,
+      "split_partition_counts": {
+        "test": {
+          "total": 27752,
+          "benign": 132,
+          "malicious": 27620,
+          "sources": [
+            "Benign/File01_DoH_Benign.pcapng",
+            "Benign/File04_DoH_Benign.pcapng",
+            "Malicious/File06_DoH_Exfiltration.pcap",
+            "Malicious/File07_DoH_Exfiltration.pcap",
+            "Malicious/File10_DoH_Exfiltration.pcap"
+          ]
+        },
+        "train": {
+          "total": 83253,
+          "benign": 395,
+          "malicious": 82858,
+          "sources": [
+            "Benign/File01_DoH_Benign.pcapng",
+            "Benign/File04_DoH_Benign.pcapng",
+            "Malicious/File06_DoH_Exfiltration.pcap",
+            "Malicious/File07_DoH_Exfiltration.pcap",
+            "Malicious/File10_DoH_Exfiltration.pcap"
+          ]
+        },
+        "val": {
+          "total": 27752,
+          "benign": 132,
+          "malicious": 27620,
+          "sources": [
+            "Benign/File01_DoH_Benign.pcapng",
+            "Benign/File04_DoH_Benign.pcapng",
+            "Malicious/File06_DoH_Exfiltration.pcap",
+            "Malicious/File07_DoH_Exfiltration.pcap",
+            "Malicious/File10_DoH_Exfiltration.pcap"
+          ]
+        }
+      },
+      "sources_present_in_all_partitions": [
+        "Benign/File01_DoH_Benign.pcapng",
+        "Benign/File04_DoH_Benign.pcapng",
+        "Malicious/File06_DoH_Exfiltration.pcap",
+        "Malicious/File07_DoH_Exfiltration.pcap",
+        "Malicious/File10_DoH_Exfiltration.pcap"
+      ],
+      "status": "partial: no run_record, model scores, or figures"
+    },
+    "exp_ufu_real_cp10_20": {
+      "path": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\results\\exp_ufu_real_cp10_20",
+      "files": {
+        "csv": 26,
+        "png": 21,
+        "json": 5,
+        "pt": 1,
+        "table_csv": 20
+      },
+      "models": {
+        "rf": {
+          "frozen_thresholds": {
+            "adaptive": 0.13,
+            "fixed_10": 0.13,
+            "fixed_20": 0.021
+          },
+          "normal_metrics": {
+            "val": {
+              "adaptive": {
+                "n_flows": 4415,
+                "n_malicious": 4283,
+                "n_benign": 132,
+                "TP": 4283,
+                "FN": 0,
+                "FP": 1,
+                "TN": 131,
+                "TP_early": 4283,
+                "TP_terminal": 0,
+                "precision": 0.9997665732959851,
+                "recall": 1.0,
+                "f1": 0.999883273024396,
+                "fpr": 0.007575757575757576,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.296715741789354,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.5148357870894678,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 4283,
+                "fpr_ci95_low": 0.000191783182892289,
+                "fpr_ci95_high": 0.041485689811114654,
+                "fpr_upper95_one_sided": 0.035432715924432374,
+                "latency_mean_s": 0.005372872064248886,
+                "latency_median_s": 0.005282878875732422,
+                "debd_mean_all_pct": 63.14188893969108,
+                "debd_mean_detected_pct": 63.14188893969108,
+                "debd_byte_weighted_all_pct": 63.03773870413946
+              },
+              "fixed_10": {
+                "n_flows": 4415,
+                "n_malicious": 4283,
+                "n_benign": 132,
+                "TP": 4283,
+                "FN": 0,
+                "FP": 1,
+                "TN": 131,
+                "TP_early": 4283,
+                "TP_terminal": 0,
+                "precision": 0.9997665732959851,
+                "recall": 1.0,
+                "f1": 0.999883273024396,
+                "fpr": 0.007575757575757576,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.5,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 4283,
+                "fpr_ci95_low": 0.000191783182892289,
+                "fpr_ci95_high": 0.041485689811114654,
+                "fpr_upper95_one_sided": 0.035432715924432374,
+                "latency_mean_s": 0.005372872064248886,
+                "latency_median_s": 0.005282878875732422,
+                "debd_mean_all_pct": 63.14188893969108,
+                "debd_mean_detected_pct": 63.14188893969108,
+                "debd_byte_weighted_all_pct": 63.03773870413946
+              },
+              "fixed_20": {
+                "n_flows": 4415,
+                "n_malicious": 4283,
+                "n_benign": 132,
+                "TP": 4283,
+                "FN": 0,
+                "FP": 1,
+                "TN": 131,
+                "TP_early": 0,
+                "TP_terminal": 4283,
+                "precision": 0.9997665732959851,
+                "recall": 1.0,
+                "f1": 0.999883273024396,
+                "fpr": 0.007575757575757576,
+                "coverage": 1.0,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 1.0,
+                "avg_packets_all": 20.0,
+                "avg_packets_malicious": 20.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 4283,
+                "fpr_ci95_low": 0.000191783182892289,
+                "fpr_ci95_high": 0.041485689811114654,
+                "fpr_upper95_one_sided": 0.035432715924432374,
+                "latency_mean_s": 0.006222605566095588,
+                "latency_median_s": 0.006136894226074219,
+                "debd_mean_all_pct": 97.618681219509,
+                "debd_mean_detected_pct": 97.618681219509,
+                "debd_byte_weighted_all_pct": 97.59431320715757
+              }
+            },
+            "test": {
+              "adaptive": {
+                "n_flows": 4263,
+                "n_malicious": 4132,
+                "n_benign": 131,
+                "TP": 4132,
+                "FN": 0,
+                "FP": 0,
+                "TN": 131,
+                "TP_early": 4132,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.307295331925873,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.5153647665962937,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 4132,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.02776660511003646,
+                "fpr_upper95_one_sided": 0.022608690169639976,
+                "latency_mean_s": 0.005381391043815354,
+                "latency_median_s": 0.005281567573547363,
+                "debd_mean_all_pct": 63.01402311671255,
+                "debd_mean_detected_pct": 63.01402311671255,
+                "debd_byte_weighted_all_pct": 62.912809205788065
+              },
+              "fixed_10": {
+                "n_flows": 4263,
+                "n_malicious": 4132,
+                "n_benign": 131,
+                "TP": 4132,
+                "FN": 0,
+                "FP": 0,
+                "TN": 131,
+                "TP_early": 4132,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.5,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 4132,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.02776660511003646,
+                "fpr_upper95_one_sided": 0.022608690169639976,
+                "latency_mean_s": 0.005381391043815354,
+                "latency_median_s": 0.005281567573547363,
+                "debd_mean_all_pct": 63.01402311671255,
+                "debd_mean_detected_pct": 63.01402311671255,
+                "debd_byte_weighted_all_pct": 62.912809205788065
+              },
+              "fixed_20": {
+                "n_flows": 4263,
+                "n_malicious": 4132,
+                "n_benign": 131,
+                "TP": 4132,
+                "FN": 0,
+                "FP": 0,
+                "TN": 131,
+                "TP_early": 0,
+                "TP_terminal": 4132,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 1.0,
+                "avg_packets_all": 20.0,
+                "avg_packets_malicious": 20.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 4132,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.02776660511003646,
+                "fpr_upper95_one_sided": 0.022608690169639976,
+                "latency_mean_s": 0.006243875331361665,
+                "latency_median_s": 0.0061359405517578125,
+                "debd_mean_all_pct": 97.5985470369155,
+                "debd_mean_detected_pct": 97.5985470369155,
+                "debd_byte_weighted_all_pct": 97.57452754630036
+              }
+            }
+          },
+          "robustness_conditions": [
+            "normal",
+            "low_and_slow_x2",
+            "low_and_slow_x5",
+            "low_and_slow_x10",
+            "jitter_s0.25_a0",
+            "jitter_s0.5_a0.05",
+            "jitter_s1_a0.2"
+          ],
+          "validation_sweep_rows_verified": 3003,
+          "robustness_note": "Non-normal perturbation probabilities were not persisted; aggregate arithmetic can be checked but fitted-model responses cannot be replayed from saved scores.",
+          "calibration_reverification_limitation": "Calibration CSVs include unpersisted raw probabilities and shorter validation flows excluded from saved policy predictions; historical calibrated scores alone cannot independently reproduce every Brier/ECE entry."
+        },
+        "cnn_gru": {
+          "frozen_thresholds": {
+            "adaptive": 0.001,
+            "fixed_10": 0.001,
+            "fixed_20": 0.001
+          },
+          "normal_metrics": {
+            "val": {
+              "adaptive": {
+                "n_flows": 4415,
+                "n_malicious": 4283,
+                "n_benign": 132,
+                "TP": 4283,
+                "FN": 0,
+                "FP": 0,
+                "TN": 132,
+                "TP_early": 4283,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.298980747451868,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.5149490373725933,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 4283,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.027559177723457548,
+                "fpr_upper95_one_sided": 0.022439348489406666,
+                "latency_mean_s": 0.005372872064248886,
+                "latency_median_s": 0.005282878875732422,
+                "debd_mean_all_pct": 63.14188893969108,
+                "debd_mean_detected_pct": 63.14188893969108,
+                "debd_byte_weighted_all_pct": 63.03773870413946
+              },
+              "fixed_10": {
+                "n_flows": 4415,
+                "n_malicious": 4283,
+                "n_benign": 132,
+                "TP": 4283,
+                "FN": 0,
+                "FP": 0,
+                "TN": 132,
+                "TP_early": 4283,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.5,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 4283,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.027559177723457548,
+                "fpr_upper95_one_sided": 0.022439348489406666,
+                "latency_mean_s": 0.005372872064248886,
+                "latency_median_s": 0.005282878875732422,
+                "debd_mean_all_pct": 63.14188893969108,
+                "debd_mean_detected_pct": 63.14188893969108,
+                "debd_byte_weighted_all_pct": 63.03773870413946
+              },
+              "fixed_20": {
+                "n_flows": 4415,
+                "n_malicious": 4283,
+                "n_benign": 132,
+                "TP": 4283,
+                "FN": 0,
+                "FP": 0,
+                "TN": 132,
+                "TP_early": 0,
+                "TP_terminal": 4283,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 1.0,
+                "avg_packets_all": 20.0,
+                "avg_packets_malicious": 20.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 4283,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.027559177723457548,
+                "fpr_upper95_one_sided": 0.022439348489406666,
+                "latency_mean_s": 0.006222605566095588,
+                "latency_median_s": 0.006136894226074219,
+                "debd_mean_all_pct": 97.618681219509,
+                "debd_mean_detected_pct": 97.618681219509,
+                "debd_byte_weighted_all_pct": 97.59431320715757
+              }
+            },
+            "test": {
+              "adaptive": {
+                "n_flows": 4263,
+                "n_malicious": 4132,
+                "n_benign": 131,
+                "TP": 4132,
+                "FN": 0,
+                "FP": 0,
+                "TN": 131,
+                "TP_early": 4132,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.307295331925873,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.5153647665962937,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 4132,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.02776660511003646,
+                "fpr_upper95_one_sided": 0.022608690169639976,
+                "latency_mean_s": 0.005381391043815354,
+                "latency_median_s": 0.005281567573547363,
+                "debd_mean_all_pct": 63.01402311671255,
+                "debd_mean_detected_pct": 63.01402311671255,
+                "debd_byte_weighted_all_pct": 62.912809205788065
+              },
+              "fixed_10": {
+                "n_flows": 4263,
+                "n_malicious": 4132,
+                "n_benign": 131,
+                "TP": 4132,
+                "FN": 0,
+                "FP": 0,
+                "TN": 131,
+                "TP_early": 4132,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.5,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 4132,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.02776660511003646,
+                "fpr_upper95_one_sided": 0.022608690169639976,
+                "latency_mean_s": 0.005381391043815354,
+                "latency_median_s": 0.005281567573547363,
+                "debd_mean_all_pct": 63.01402311671255,
+                "debd_mean_detected_pct": 63.01402311671255,
+                "debd_byte_weighted_all_pct": 62.912809205788065
+              },
+              "fixed_20": {
+                "n_flows": 4263,
+                "n_malicious": 4132,
+                "n_benign": 131,
+                "TP": 4132,
+                "FN": 0,
+                "FP": 0,
+                "TN": 131,
+                "TP_early": 0,
+                "TP_terminal": 4132,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 1.0,
+                "avg_packets_all": 20.0,
+                "avg_packets_malicious": 20.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 4132,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.02776660511003646,
+                "fpr_upper95_one_sided": 0.022608690169639976,
+                "latency_mean_s": 0.006243875331361665,
+                "latency_median_s": 0.0061359405517578125,
+                "debd_mean_all_pct": 97.5985470369155,
+                "debd_mean_detected_pct": 97.5985470369155,
+                "debd_byte_weighted_all_pct": 97.57452754630036
+              }
+            }
+          },
+          "robustness_conditions": [
+            "normal",
+            "low_and_slow_x2",
+            "low_and_slow_x5",
+            "low_and_slow_x10",
+            "jitter_s0.25_a0",
+            "jitter_s0.5_a0.05",
+            "jitter_s1_a0.2"
+          ],
+          "validation_sweep_rows_verified": 3003,
+          "robustness_note": "Non-normal perturbation probabilities were not persisted; aggregate arithmetic can be checked but fitted-model responses cannot be replayed from saved scores.",
+          "calibration_reverification_limitation": "Calibration CSVs include unpersisted raw probabilities and shorter validation flows excluded from saved policy predictions; historical calibrated scores alone cannot independently reproduce every Brier/ECE entry."
+        }
+      },
+      "duplicate_figures": [
+        [
+          "detection_coverage.png",
+          "rf_detection_coverage.png"
+        ],
+        [
+          "prf_vs_prefix_length.png",
+          "rf_prf_vs_prefix_length.png"
+        ],
+        [
+          "rf_robustness.png",
+          "robustness.png"
+        ],
+        [
+          "rf_val_fpr_vs_threshold.png",
+          "val_fpr_vs_threshold.png"
+        ]
+      ],
+      "figure_provenance": [
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\cnn_gru_debd_comparison.png",
+          "sha256": "34b0ff94a1de7021396648d08db4ef548446a5a70e957c3997f21a4b5561dbf6",
+          "pixels": [
+            1035,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\cnn_gru_detection_coverage.png",
+          "sha256": "218041fb0b8c16b19f93bd0e0e585881e087024d966bddac371ee48b87ab701e",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\cnn_gru_detection_latency.png",
+          "sha256": "7c133dd1addd3f11632a8401f6f7d5520de06404b4f305e837e03649e89f828c",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\cnn_gru_observation_cost.png",
+          "sha256": "a2b2179454e288fdf3b454a0ae8c849a7e33856bb73040f096dac63a9845b78d",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\cnn_gru_prf_vs_prefix_length.png",
+          "sha256": "05ac30c66d1371ecf45aa931f393a00dd0c3670e600e880286a8136da2efaa18",
+          "pixels": [
+            900,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\cnn_gru_robustness.png",
+          "sha256": "0d9e8f23db8e801d9da3cff6476e0fdafcbaea9dd8dbbddc5772a8b6c7d89748",
+          "pixels": [
+            1650,
+            1050
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\cnn_gru_val_fpr_vs_threshold.png",
+          "sha256": "94f97176ff3d78d55c3ad16df8a7c348b50b8d0f783f66f21a3d52626929ad28",
+          "pixels": [
+            975,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\debd_comparison.png",
+          "sha256": "15476797d82e3fd084832162bd964bddf1e26aa6c21a0f18a915d6e14c289de7",
+          "pixels": [
+            1035,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\detection_coverage.png",
+          "sha256": "dc62c5c41ee4fb9bf2d02074255dd548991acb902b12ce7c8e6121e3ebb9bbb0",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\detection_latency.png",
+          "sha256": "2a9ae115689ea7fdeb3dd9fbda79baef3981acc234ace839769dd7b082c5b458",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\observation_cost.png",
+          "sha256": "94e6107506cf7e2807550d8132d4f148980ea3b1fb622eb68ce6b6b4e44fcfc1",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\prf_vs_prefix_length.png",
+          "sha256": "8c8115f10cb05d9dfa6e5b01e360e919a14ede04fd58aa9089d4b366cb09e290",
+          "pixels": [
+            900,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\rf_debd_comparison.png",
+          "sha256": "b10ddd541f816efad894f3c9f0b9f09d75e00174e7970a9b4247ee51656adf55",
+          "pixels": [
+            1035,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\rf_detection_coverage.png",
+          "sha256": "dc62c5c41ee4fb9bf2d02074255dd548991acb902b12ce7c8e6121e3ebb9bbb0",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\rf_observation_cost.png",
+          "sha256": "801f32f410504b6392f8262577a0455d5e6a4ad7a08b984e54bd118af16dc5cb",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\rf_prf_vs_prefix_length.png",
+          "sha256": "8c8115f10cb05d9dfa6e5b01e360e919a14ede04fd58aa9089d4b366cb09e290",
+          "pixels": [
+            900,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\rf_robustness.png",
+          "sha256": "e1903323b45229feffa7e84255eb4d7ddbdd6b819a2b770a812ffa68bca08360",
+          "pixels": [
+            1650,
+            1050
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\rf_val_fpr_vs_threshold.png",
+          "sha256": "e40fb4b9e3b76cc8075aa4d7c841ec6edda38296cdf9bcdb075ecfa12341f13b",
+          "pixels": [
+            975,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\rf_vs_cnn_adaptive_comparison.png",
+          "sha256": "cd99c95a3c9c7f63d5eb0709b785dd18be588c29ab0e80e171d643dd4030fedc",
+          "pixels": [
+            2100,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\robustness.png",
+          "sha256": "e1903323b45229feffa7e84255eb4d7ddbdd6b819a2b770a812ffa68bca08360",
+          "pixels": [
+            1650,
+            1050
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp10_20\\figures\\val_fpr_vs_threshold.png",
+          "sha256": "e40fb4b9e3b76cc8075aa4d7c841ec6edda38296cdf9bcdb075ecfa12341f13b",
+          "pixels": [
+            975,
+            630
+          ]
+        }
+      ],
+      "full_score_reverification": true,
+      "split_partition_counts": {
+        "test": {
+          "total": 27752,
+          "benign": 132,
+          "malicious": 27620,
+          "sources": [
+            "Benign/File01_DoH_Benign.pcapng",
+            "Benign/File04_DoH_Benign.pcapng",
+            "Malicious/File06_DoH_Exfiltration.pcap",
+            "Malicious/File07_DoH_Exfiltration.pcap",
+            "Malicious/File10_DoH_Exfiltration.pcap"
+          ]
+        },
+        "train": {
+          "total": 83253,
+          "benign": 395,
+          "malicious": 82858,
+          "sources": [
+            "Benign/File01_DoH_Benign.pcapng",
+            "Benign/File04_DoH_Benign.pcapng",
+            "Malicious/File06_DoH_Exfiltration.pcap",
+            "Malicious/File07_DoH_Exfiltration.pcap",
+            "Malicious/File10_DoH_Exfiltration.pcap"
+          ]
+        },
+        "val": {
+          "total": 27752,
+          "benign": 132,
+          "malicious": 27620,
+          "sources": [
+            "Benign/File01_DoH_Benign.pcapng",
+            "Benign/File04_DoH_Benign.pcapng",
+            "Malicious/File06_DoH_Exfiltration.pcap",
+            "Malicious/File07_DoH_Exfiltration.pcap",
+            "Malicious/File10_DoH_Exfiltration.pcap"
+          ]
+        }
+      },
+      "sources_present_in_all_partitions": [
+        "Benign/File01_DoH_Benign.pcapng",
+        "Benign/File04_DoH_Benign.pcapng",
+        "Malicious/File06_DoH_Exfiltration.pcap",
+        "Malicious/File07_DoH_Exfiltration.pcap",
+        "Malicious/File10_DoH_Exfiltration.pcap"
+      ],
+      "status": "completed exploratory real-data run",
+      "checkpoints": [
+        10,
+        20
+      ],
+      "synthetic": false,
+      "recorded_config": {
+        "raw_dir": "c:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\raw",
+        "processed_dir": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\processed",
+        "results_dir": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\results",
+        "experiment_name": "exp_ufu_real_cp10_20",
+        "dataset_name": "ufu_doh_exf",
+        "pcap_label_rules": {
+          "benign": "benign",
+          "exfiltration": "malicious",
+          "malicious": "malicious"
+        },
+        "pcap_extensions": [
+          ".pcap",
+          ".pcapng"
+        ],
+        "doh_port": 443,
+        "doh_server_ips": [],
+        "flow_idle_timeout_s": 120.0,
+        "max_stored_packets": 200,
+        "drop_zero_payload_packets": false,
+        "max_packets_per_file": null,
+        "checkpoints": [
+          10,
+          20
+        ],
+        "seed": 42,
+        "group_by": "flow",
+        "model_type": "both",
+        "rf_n_estimators": 200,
+        "rf_min_samples_leaf": 3,
+        "rf_class_weight": "balanced_subsample",
+        "flow_weighting": true,
+        "cnn_conv_channels": 64,
+        "cnn_conv_kernel": 3,
+        "cnn_gru_hidden": 64,
+        "cnn_gru_layers": 2,
+        "cnn_dropout": 0.2,
+        "cnn_epochs": 30,
+        "cnn_patience": 7,
+        "cnn_batch_size": 128,
+        "cnn_lr": 0.001,
+        "cnn_device": "cpu",
+        "calibration": "sigmoid",
+        "calibration_per_checkpoint": true,
+        "calibration_folds": 5,
+        "calibration_split_ratio": 0.25,
+        "alpha": 0.01,
+        "threshold_step": 0.001,
+        "prefix_eval_threshold": 0.5,
+        "low_and_slow_factors": [
+          2.0,
+          5.0,
+          10.0
+        ],
+        "jitter_settings": [
+          [
+            0.25,
+            0.0
+          ],
+          [
+            0.5,
+            0.05
+          ],
+          [
+            1.0,
+            0.2
+          ]
+        ]
+      },
+      "identical_length_direction_prefixes": {
+        "members_in_repeated_groups": 136661,
+        "additional_duplicate_rows": 132796,
+        "unique_signatures": 5961
+      },
+      "signatures_shared_train_and_test": 2722,
+      "training_history": {
+        "epochs_in_history": 12,
+        "reported_epochs_trained": 5,
+        "saved_best_epoch": 5,
+        "saved_best_val_loss": 9.991545884175717e-07,
+        "true_min_epoch": 12,
+        "true_min_val_loss": 1.4418294553977876e-07
+      },
+      "val_model_probability_differences": {
+        "10": 4415,
+        "20": 4415
+      },
+      "test_model_probability_differences": {
+        "10": 4263,
+        "20": 4263
+      },
+      "historical_rf_model_persisted": false,
+      "historical_cnn_calibrator_persisted": false
+    },
+    "exp_ufu_real_cp2_4_8_10_15": {
+      "path": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\results\\exp_ufu_real_cp2_4_8_10_15",
+      "files": {
+        "csv": 32,
+        "png": 21,
+        "json": 5,
+        "pt": 1,
+        "table_csv": 26
+      },
+      "models": {
+        "rf": {
+          "frozen_thresholds": {
+            "adaptive": 0.186,
+            "fixed_2": 0.005,
+            "fixed_4": 0.016,
+            "fixed_8": 0.033,
+            "fixed_10": 0.043,
+            "fixed_15": 0.131
+          },
+          "normal_metrics": {
+            "val": {
+              "adaptive": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 1,
+                "TN": 123,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 0.9999637943519188,
+                "recall": 1.0,
+                "f1": 0.9999818968482412,
+                "fpr": 0.008064516129032258,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 2.057636160472912,
+                "avg_packets_malicious": 2.0,
+                "cost_all": 0.13717574403152746,
+                "cost_malicious": 0.13333333333333333,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.00020415502836646483,
+                "fpr_ci95_high": 0.04411300388520081,
+                "fpr_upper95_one_sided": 0.03768426092087317,
+                "latency_mean_s": 0.0004335842521372183,
+                "latency_median_s": 0.0003879070281982422,
+                "debd_mean_all_pct": 3.354555936955836,
+                "debd_mean_detected_pct": 3.354555936955836,
+                "debd_byte_weighted_all_pct": 3.2982564107055103
+              },
+              "fixed_2": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 1,
+                "TN": 123,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 0.9999637943519188,
+                "recall": 1.0,
+                "f1": 0.9999818968482412,
+                "fpr": 0.008064516129032258,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 2.0,
+                "avg_packets_malicious": 2.0,
+                "cost_all": 0.13333333333333333,
+                "cost_malicious": 0.13333333333333333,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.00020415502836646483,
+                "fpr_ci95_high": 0.04411300388520081,
+                "fpr_upper95_one_sided": 0.03768426092087317,
+                "latency_mean_s": 0.0004335842521372183,
+                "latency_median_s": 0.0003879070281982422,
+                "debd_mean_all_pct": 3.354555936955836,
+                "debd_mean_detected_pct": 3.354555936955836,
+                "debd_byte_weighted_all_pct": 3.2982564107055103
+              },
+              "fixed_4": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 1,
+                "TN": 123,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 0.9999637943519188,
+                "recall": 1.0,
+                "f1": 0.9999818968482412,
+                "fpr": 0.008064516129032258,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 4.0,
+                "avg_packets_malicious": 4.0,
+                "cost_all": 0.26666666666666666,
+                "cost_malicious": 0.26666666666666666,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.00020415502836646483,
+                "fpr_ci95_high": 0.04411300388520081,
+                "fpr_upper95_one_sided": 0.03768426092087317,
+                "latency_mean_s": 0.0015817035042603816,
+                "latency_median_s": 0.00228118896484375,
+                "debd_mean_all_pct": 17.088750459510273,
+                "debd_mean_detected_pct": 17.088750459510273,
+                "debd_byte_weighted_all_pct": 17.22564238416923
+              },
+              "fixed_8": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 1,
+                "TN": 123,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 0.9999637943519188,
+                "recall": 1.0,
+                "f1": 0.9999818968482412,
+                "fpr": 0.008064516129032258,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 8.0,
+                "avg_packets_malicious": 8.0,
+                "cost_all": 0.5333333333333333,
+                "cost_malicious": 0.5333333333333333,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.00020415502836646483,
+                "fpr_ci95_high": 0.04411300388520081,
+                "fpr_upper95_one_sided": 0.03768426092087317,
+                "latency_mean_s": 0.004341212528888552,
+                "latency_median_s": 0.004662036895751953,
+                "debd_mean_all_pct": 62.59167389013687,
+                "debd_mean_detected_pct": 62.59167389013687,
+                "debd_byte_weighted_all_pct": 62.14368654204146
+              },
+              "fixed_10": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 1,
+                "TN": 123,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 0.9999637943519188,
+                "recall": 1.0,
+                "f1": 0.9999818968482412,
+                "fpr": 0.008064516129032258,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.6666666666666666,
+                "cost_malicious": 0.6666666666666666,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.00020415502836646483,
+                "fpr_ci95_high": 0.04411300388520081,
+                "fpr_upper95_one_sided": 0.03768426092087317,
+                "latency_mean_s": 0.004811131422004933,
+                "latency_median_s": 0.0050771236419677734,
+                "debd_mean_all_pct": 77.32328494994836,
+                "debd_mean_detected_pct": 77.32328494994836,
+                "debd_byte_weighted_all_pct": 76.72957637206922
+              },
+              "fixed_15": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 1,
+                "TN": 123,
+                "TP_early": 0,
+                "TP_terminal": 27619,
+                "precision": 0.9999637943519188,
+                "recall": 1.0,
+                "f1": 0.9999818968482412,
+                "fpr": 0.008064516129032258,
+                "coverage": 1.0,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 1.0,
+                "avg_packets_all": 15.0,
+                "avg_packets_malicious": 15.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.00020415502836646483,
+                "fpr_ci95_high": 0.04411300388520081,
+                "fpr_upper95_one_sided": 0.03768426092087317,
+                "latency_mean_s": 2.520315129448146,
+                "latency_median_s": 0.005916118621826172,
+                "debd_mean_all_pct": 96.73043199892133,
+                "debd_mean_detected_pct": 96.73043199892133,
+                "debd_byte_weighted_all_pct": 96.41709049097673
+              }
+            },
+            "test": {
+              "adaptive": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27620,
+                "FN": 0,
+                "FP": 0,
+                "TN": 127,
+                "TP_early": 27620,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 2.059501928136375,
+                "avg_packets_malicious": 2.0,
+                "cost_all": 0.137300128542425,
+                "cost_malicious": 0.13333333333333333,
+                "n_detected_for_latency": 27620,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.028628506134387614,
+                "fpr_upper95_one_sided": 0.023312410428213085,
+                "latency_mean_s": 0.0004375707576621882,
+                "latency_median_s": 0.0003879070281982422,
+                "debd_mean_all_pct": 3.349473655404128,
+                "debd_mean_detected_pct": 3.349473655404128,
+                "debd_byte_weighted_all_pct": 3.293664111788057
+              },
+              "fixed_2": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27620,
+                "FN": 0,
+                "FP": 1,
+                "TN": 126,
+                "TP_early": 27620,
+                "TP_terminal": 0,
+                "precision": 0.9999637956627204,
+                "recall": 1.0,
+                "f1": 0.9999818975036657,
+                "fpr": 0.007874015748031496,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 2.0,
+                "avg_packets_malicious": 2.0,
+                "cost_all": 0.13333333333333333,
+                "cost_malicious": 0.13333333333333333,
+                "n_detected_for_latency": 27620,
+                "fpr_ci95_low": 0.00019933294932112524,
+                "fpr_ci95_high": 0.04308967368200988,
+                "fpr_upper95_one_sided": 0.03680718257257509,
+                "latency_mean_s": 0.0004375707576621882,
+                "latency_median_s": 0.0003879070281982422,
+                "debd_mean_all_pct": 3.349473655404128,
+                "debd_mean_detected_pct": 3.349473655404128,
+                "debd_byte_weighted_all_pct": 3.293664111788057
+              },
+              "fixed_4": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27620,
+                "FN": 0,
+                "FP": 0,
+                "TN": 127,
+                "TP_early": 27620,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 4.0,
+                "avg_packets_malicious": 4.0,
+                "cost_all": 0.26666666666666666,
+                "cost_malicious": 0.26666666666666666,
+                "n_detected_for_latency": 27620,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.028628506134387614,
+                "fpr_upper95_one_sided": 0.023312410428213085,
+                "latency_mean_s": 0.0015884609519356322,
+                "latency_median_s": 0.0022919178009033203,
+                "debd_mean_all_pct": 17.10887263097022,
+                "debd_mean_detected_pct": 17.10887263097022,
+                "debd_byte_weighted_all_pct": 17.245813703127357
+              },
+              "fixed_8": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27620,
+                "FN": 0,
+                "FP": 1,
+                "TN": 126,
+                "TP_early": 27620,
+                "TP_terminal": 0,
+                "precision": 0.9999637956627204,
+                "recall": 1.0,
+                "f1": 0.9999818975036657,
+                "fpr": 0.007874015748031496,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 8.0,
+                "avg_packets_malicious": 8.0,
+                "cost_all": 0.5333333333333333,
+                "cost_malicious": 0.5333333333333333,
+                "n_detected_for_latency": 27620,
+                "fpr_ci95_low": 0.00019933294932112524,
+                "fpr_ci95_high": 0.04308967368200988,
+                "fpr_upper95_one_sided": 0.03680718257257509,
+                "latency_mean_s": 0.004346360001850611,
+                "latency_median_s": 0.0046689510345458984,
+                "debd_mean_all_pct": 62.55554112989012,
+                "debd_mean_detected_pct": 62.55554112989012,
+                "debd_byte_weighted_all_pct": 62.112646035480886
+              },
+              "fixed_10": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27620,
+                "FN": 0,
+                "FP": 2,
+                "TN": 125,
+                "TP_early": 27620,
+                "TP_terminal": 0,
+                "precision": 0.9999275939468539,
+                "recall": 1.0,
+                "f1": 0.9999637956627204,
+                "fpr": 0.015748031496062992,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.6666666666666666,
+                "cost_malicious": 0.6666666666666666,
+                "n_detected_for_latency": 27620,
+                "fpr_ci95_low": 0.0019128821227939314,
+                "fpr_ci95_high": 0.05572908669409177,
+                "fpr_upper95_one_sided": 0.048741388070404706,
+                "latency_mean_s": 0.004818182592371251,
+                "latency_median_s": 0.005093097686767578,
+                "debd_mean_all_pct": 77.30507693878145,
+                "debd_mean_detected_pct": 77.30507693878145,
+                "debd_byte_weighted_all_pct": 76.72039418155512
+              },
+              "fixed_15": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27620,
+                "FN": 0,
+                "FP": 2,
+                "TN": 125,
+                "TP_early": 0,
+                "TP_terminal": 27620,
+                "precision": 0.9999275939468539,
+                "recall": 1.0,
+                "f1": 0.9999637956627204,
+                "fpr": 0.015748031496062992,
+                "coverage": 1.0,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 1.0,
+                "avg_packets_all": 15.0,
+                "avg_packets_malicious": 15.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 27620,
+                "fpr_ci95_low": 0.0019128821227939314,
+                "fpr_ci95_high": 0.05572908669409177,
+                "fpr_upper95_one_sided": 0.048741388070404706,
+                "latency_mean_s": 2.4793549309771272,
+                "latency_median_s": 0.005908966064453125,
+                "debd_mean_all_pct": 96.7204641166899,
+                "debd_mean_detected_pct": 96.7204641166899,
+                "debd_byte_weighted_all_pct": 96.41266574439965
+              }
+            }
+          },
+          "robustness_conditions": [
+            "normal",
+            "low_and_slow_x2",
+            "low_and_slow_x5",
+            "low_and_slow_x10",
+            "jitter_s0.25_a0",
+            "jitter_s0.5_a0.05",
+            "jitter_s1_a0.2"
+          ],
+          "validation_sweep_rows_verified": 6006,
+          "robustness_note": "Non-normal perturbation probabilities were not persisted; aggregate arithmetic can be checked but fitted-model responses cannot be replayed from saved scores.",
+          "calibration_reverification_limitation": "Calibration CSVs include unpersisted raw probabilities and shorter validation flows excluded from saved policy predictions; historical calibrated scores alone cannot independently reproduce every Brier/ECE entry."
+        },
+        "cnn_gru": {
+          "frozen_thresholds": {
+            "adaptive": 0.011,
+            "fixed_2": 0.001,
+            "fixed_4": 0.011,
+            "fixed_8": 0.001,
+            "fixed_10": 0.001,
+            "fixed_15": 0.001
+          },
+          "normal_metrics": {
+            "val": {
+              "adaptive": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 1,
+                "TN": 123,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 0.9999637943519188,
+                "recall": 1.0,
+                "f1": 0.9999818968482412,
+                "fpr": 0.008064516129032258,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 2.057636160472912,
+                "avg_packets_malicious": 2.0,
+                "cost_all": 0.13717574403152746,
+                "cost_malicious": 0.13333333333333333,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.00020415502836646483,
+                "fpr_ci95_high": 0.04411300388520081,
+                "fpr_upper95_one_sided": 0.03768426092087317,
+                "latency_mean_s": 0.0004335842521372183,
+                "latency_median_s": 0.0003879070281982422,
+                "debd_mean_all_pct": 3.354555936955836,
+                "debd_mean_detected_pct": 3.354555936955836,
+                "debd_byte_weighted_all_pct": 3.2982564107055103
+              },
+              "fixed_2": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 1,
+                "TN": 123,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 0.9999637943519188,
+                "recall": 1.0,
+                "f1": 0.9999818968482412,
+                "fpr": 0.008064516129032258,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 2.0,
+                "avg_packets_malicious": 2.0,
+                "cost_all": 0.13333333333333333,
+                "cost_malicious": 0.13333333333333333,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.00020415502836646483,
+                "fpr_ci95_high": 0.04411300388520081,
+                "fpr_upper95_one_sided": 0.03768426092087317,
+                "latency_mean_s": 0.0004335842521372183,
+                "latency_median_s": 0.0003879070281982422,
+                "debd_mean_all_pct": 3.354555936955836,
+                "debd_mean_detected_pct": 3.354555936955836,
+                "debd_byte_weighted_all_pct": 3.2982564107055103
+              },
+              "fixed_4": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 0,
+                "TN": 124,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 4.0,
+                "avg_packets_malicious": 4.0,
+                "cost_all": 0.26666666666666666,
+                "cost_malicious": 0.26666666666666666,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.029310881089774928,
+                "fpr_upper95_one_sided": 0.02386963543559245,
+                "latency_mean_s": 0.0015817035042603816,
+                "latency_median_s": 0.00228118896484375,
+                "debd_mean_all_pct": 17.088750459510273,
+                "debd_mean_detected_pct": 17.088750459510273,
+                "debd_byte_weighted_all_pct": 17.22564238416923
+              },
+              "fixed_8": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 0,
+                "TN": 124,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 8.0,
+                "avg_packets_malicious": 8.0,
+                "cost_all": 0.5333333333333333,
+                "cost_malicious": 0.5333333333333333,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.029310881089774928,
+                "fpr_upper95_one_sided": 0.02386963543559245,
+                "latency_mean_s": 0.004341212528888552,
+                "latency_median_s": 0.004662036895751953,
+                "debd_mean_all_pct": 62.59167389013687,
+                "debd_mean_detected_pct": 62.59167389013687,
+                "debd_byte_weighted_all_pct": 62.14368654204146
+              },
+              "fixed_10": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 0,
+                "TN": 124,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.6666666666666666,
+                "cost_malicious": 0.6666666666666666,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.029310881089774928,
+                "fpr_upper95_one_sided": 0.02386963543559245,
+                "latency_mean_s": 0.004811131422004933,
+                "latency_median_s": 0.0050771236419677734,
+                "debd_mean_all_pct": 77.32328494994836,
+                "debd_mean_detected_pct": 77.32328494994836,
+                "debd_byte_weighted_all_pct": 76.72957637206922
+              },
+              "fixed_15": {
+                "n_flows": 27743,
+                "n_malicious": 27619,
+                "n_benign": 124,
+                "TP": 27619,
+                "FN": 0,
+                "FP": 0,
+                "TN": 124,
+                "TP_early": 0,
+                "TP_terminal": 27619,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 1.0,
+                "avg_packets_all": 15.0,
+                "avg_packets_malicious": 15.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.029310881089774928,
+                "fpr_upper95_one_sided": 0.02386963543559245,
+                "latency_mean_s": 2.520315129448146,
+                "latency_median_s": 0.005916118621826172,
+                "debd_mean_all_pct": 96.73043199892133,
+                "debd_mean_detected_pct": 96.73043199892133,
+                "debd_byte_weighted_all_pct": 96.41709049097673
+              }
+            },
+            "test": {
+              "adaptive": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27620,
+                "FN": 0,
+                "FP": 0,
+                "TN": 127,
+                "TP_early": 27620,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 2.059718167729845,
+                "avg_packets_malicious": 2.0002172338884865,
+                "cost_all": 0.137314544515323,
+                "cost_malicious": 0.13334781559256575,
+                "n_detected_for_latency": 27620,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.028628506134387614,
+                "fpr_upper95_one_sided": 0.023312410428213085,
+                "latency_mean_s": 0.0004377433478530121,
+                "latency_median_s": 0.0003879070281982422,
+                "debd_mean_all_pct": 3.351518241091779,
+                "debd_mean_detected_pct": 3.351518241091779,
+                "debd_byte_weighted_all_pct": 3.2959447535743696
+              },
+              "fixed_2": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27619,
+                "FN": 1,
+                "FP": 0,
+                "TN": 127,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 0.9999637943519188,
+                "f1": 0.9999818968482412,
+                "fpr": 0.0,
+                "coverage": 0.9999637943519188,
+                "early_detection_rate": 0.9999637943519188,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 2.0,
+                "avg_packets_malicious": 2.0,
+                "cost_all": 0.13333333333333333,
+                "cost_malicious": 0.13333333333333333,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.028628506134387614,
+                "fpr_upper95_one_sided": 0.023312410428213085,
+                "latency_mean_s": 0.00043655180767938727,
+                "latency_median_s": 0.0003879070281982422,
+                "debd_mean_all_pct": 3.3529873137710537,
+                "debd_mean_detected_pct": 3.3494880193474237,
+                "debd_byte_weighted_all_pct": 3.297583436931942
+              },
+              "fixed_4": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27619,
+                "FN": 1,
+                "FP": 0,
+                "TN": 127,
+                "TP_early": 27619,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 0.9999637943519188,
+                "f1": 0.9999818968482412,
+                "fpr": 0.0,
+                "coverage": 0.9999637943519188,
+                "early_detection_rate": 0.9999637943519188,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 4.0,
+                "avg_packets_malicious": 4.0,
+                "cost_all": 0.26666666666666666,
+                "cost_malicious": 0.26666666666666666,
+                "n_detected_for_latency": 27619,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.028628506134387614,
+                "fpr_upper95_one_sided": 0.023312410428213085,
+                "latency_mean_s": 0.0015874046683548853,
+                "latency_median_s": 0.0022919178009033203,
+                "debd_mean_all_pct": 17.11183304850402,
+                "debd_mean_detected_pct": 17.108831920043485,
+                "debd_byte_weighted_all_pct": 17.249115913434945
+              },
+              "fixed_8": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27620,
+                "FN": 0,
+                "FP": 0,
+                "TN": 127,
+                "TP_early": 27620,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 8.0,
+                "avg_packets_malicious": 8.0,
+                "cost_all": 0.5333333333333333,
+                "cost_malicious": 0.5333333333333333,
+                "n_detected_for_latency": 27620,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.028628506134387614,
+                "fpr_upper95_one_sided": 0.023312410428213085,
+                "latency_mean_s": 0.004346360001850611,
+                "latency_median_s": 0.0046689510345458984,
+                "debd_mean_all_pct": 62.55554112989012,
+                "debd_mean_detected_pct": 62.55554112989012,
+                "debd_byte_weighted_all_pct": 62.112646035480886
+              },
+              "fixed_10": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27620,
+                "FN": 0,
+                "FP": 0,
+                "TN": 127,
+                "TP_early": 27620,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 1.0,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.6666666666666666,
+                "cost_malicious": 0.6666666666666666,
+                "n_detected_for_latency": 27620,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.028628506134387614,
+                "fpr_upper95_one_sided": 0.023312410428213085,
+                "latency_mean_s": 0.004818182592371251,
+                "latency_median_s": 0.005093097686767578,
+                "debd_mean_all_pct": 77.30507693878145,
+                "debd_mean_detected_pct": 77.30507693878145,
+                "debd_byte_weighted_all_pct": 76.72039418155512
+              },
+              "fixed_15": {
+                "n_flows": 27747,
+                "n_malicious": 27620,
+                "n_benign": 127,
+                "TP": 27620,
+                "FN": 0,
+                "FP": 0,
+                "TN": 127,
+                "TP_early": 0,
+                "TP_terminal": 27620,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "fpr": 0.0,
+                "coverage": 1.0,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 1.0,
+                "avg_packets_all": 15.0,
+                "avg_packets_malicious": 15.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 27620,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.028628506134387614,
+                "fpr_upper95_one_sided": 0.023312410428213085,
+                "latency_mean_s": 2.4793549309771272,
+                "latency_median_s": 0.005908966064453125,
+                "debd_mean_all_pct": 96.7204641166899,
+                "debd_mean_detected_pct": 96.7204641166899,
+                "debd_byte_weighted_all_pct": 96.41266574439965
+              }
+            }
+          },
+          "robustness_conditions": [
+            "normal",
+            "low_and_slow_x2",
+            "low_and_slow_x5",
+            "low_and_slow_x10",
+            "jitter_s0.25_a0",
+            "jitter_s0.5_a0.05",
+            "jitter_s1_a0.2"
+          ],
+          "validation_sweep_rows_verified": 6006,
+          "robustness_note": "Non-normal perturbation probabilities were not persisted; aggregate arithmetic can be checked but fitted-model responses cannot be replayed from saved scores.",
+          "calibration_reverification_limitation": "Calibration CSVs include unpersisted raw probabilities and shorter validation flows excluded from saved policy predictions; historical calibrated scores alone cannot independently reproduce every Brier/ECE entry."
+        }
+      },
+      "duplicate_figures": [
+        [
+          "detection_coverage.png",
+          "rf_detection_coverage.png"
+        ],
+        [
+          "prf_vs_prefix_length.png",
+          "rf_prf_vs_prefix_length.png"
+        ],
+        [
+          "rf_robustness.png",
+          "robustness.png"
+        ],
+        [
+          "rf_val_fpr_vs_threshold.png",
+          "val_fpr_vs_threshold.png"
+        ]
+      ],
+      "figure_provenance": [
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\cnn_gru_debd_comparison.png",
+          "sha256": "f1c5120ebc0455ed17c6f2f321b797010fc18412bdb54f56cdae5390a0b4c03e",
+          "pixels": [
+            1035,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\cnn_gru_detection_coverage.png",
+          "sha256": "b71c8c79b60e1d39e606f31081f34fe23423554317d33f86cb5001a5526d9e7b",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\cnn_gru_detection_latency.png",
+          "sha256": "9e03609777b42a9232eeceabcd43cd5e14ede79d41404cd705bac05c79bc3e13",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\cnn_gru_observation_cost.png",
+          "sha256": "428a85e5e17ded748013d13088c9d71366a3c350d89ef2446b8b36ed8d206782",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\cnn_gru_prf_vs_prefix_length.png",
+          "sha256": "7a5e029247a165ce01307ffc4d1180ac81614e51b39d2aa7a8002878154482ca",
+          "pixels": [
+            900,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\cnn_gru_robustness.png",
+          "sha256": "6812ab8a0f4d1c0f2fde256113d5f3252998a49d4beeec00ff98c884ea5129f2",
+          "pixels": [
+            1650,
+            1050
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\cnn_gru_val_fpr_vs_threshold.png",
+          "sha256": "bfa56419ff425679271b641f4d25cbb63af97cda0df37e33cb1d03cca45bd482",
+          "pixels": [
+            975,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\debd_comparison.png",
+          "sha256": "d691474dec49b27c536987a679baff327262e37146ad9cf8788396748627f039",
+          "pixels": [
+            1035,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\detection_coverage.png",
+          "sha256": "02c93869acc84d7f8e62e1d44b4efe09b995f34c45e61cc8a51968cba7c72002",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\detection_latency.png",
+          "sha256": "ba39148c4d808ad5aeb18c9002f78df5d5da692a26a76390fbef6a15575caab2",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\observation_cost.png",
+          "sha256": "beb731fa762ad324f8517474c959b1895d861dc8c40d86f5bb928a372b95fa74",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\prf_vs_prefix_length.png",
+          "sha256": "85f776b15ef73f1badeda640b78d38d2272f7a389df77cdd3121faf2f0accbda",
+          "pixels": [
+            900,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\rf_debd_comparison.png",
+          "sha256": "7ee2d1604701e3eb00af4f9e0cd4140dba3f78b1bdf81c867674d28e4190aed4",
+          "pixels": [
+            1035,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\rf_detection_coverage.png",
+          "sha256": "02c93869acc84d7f8e62e1d44b4efe09b995f34c45e61cc8a51968cba7c72002",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\rf_observation_cost.png",
+          "sha256": "3225158972e3f8ef4d520282f75f253cf5b94828fea24e69153e61e5c51cdf9b",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\rf_prf_vs_prefix_length.png",
+          "sha256": "85f776b15ef73f1badeda640b78d38d2272f7a389df77cdd3121faf2f0accbda",
+          "pixels": [
+            900,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\rf_robustness.png",
+          "sha256": "0a1bb34fa1fe9b489bbb0cc675c88c3e7012cfc168e4682e500ac430500ae625",
+          "pixels": [
+            1650,
+            1050
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\rf_val_fpr_vs_threshold.png",
+          "sha256": "9b143ea996c1b29f19d76e61a068bb8736c64e0f8ad8a9e39355ae0842e0400d",
+          "pixels": [
+            975,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\rf_vs_cnn_adaptive_comparison.png",
+          "sha256": "0795bf8fe45f111233a73969cf4c3b95a48d16cbb571a7f0de9e52bbee1be292",
+          "pixels": [
+            2100,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\robustness.png",
+          "sha256": "0a1bb34fa1fe9b489bbb0cc675c88c3e7012cfc168e4682e500ac430500ae625",
+          "pixels": [
+            1650,
+            1050
+          ]
+        },
+        {
+          "path": "data\\results\\exp_ufu_real_cp2_4_8_10_15\\figures\\val_fpr_vs_threshold.png",
+          "sha256": "9b143ea996c1b29f19d76e61a068bb8736c64e0f8ad8a9e39355ae0842e0400d",
+          "pixels": [
+            975,
+            630
+          ]
+        }
+      ],
+      "full_score_reverification": true,
+      "split_partition_counts": {
+        "test": {
+          "total": 27816,
+          "benign": 196,
+          "malicious": 27620,
+          "sources": [
+            "Benign/File01_DoH_Benign.pcapng",
+            "Benign/File04_DoH_Benign.pcapng",
+            "Malicious/File06_DoH_Exfiltration.pcap",
+            "Malicious/File07_DoH_Exfiltration.pcap",
+            "Malicious/File10_DoH_Exfiltration.pcap"
+          ]
+        },
+        "train": {
+          "total": 83445,
+          "benign": 587,
+          "malicious": 82858,
+          "sources": [
+            "Benign/File01_DoH_Benign.pcapng",
+            "Benign/File04_DoH_Benign.pcapng",
+            "Malicious/File06_DoH_Exfiltration.pcap",
+            "Malicious/File07_DoH_Exfiltration.pcap",
+            "Malicious/File10_DoH_Exfiltration.pcap"
+          ]
+        },
+        "val": {
+          "total": 27815,
+          "benign": 195,
+          "malicious": 27620,
+          "sources": [
+            "Benign/File01_DoH_Benign.pcapng",
+            "Benign/File04_DoH_Benign.pcapng",
+            "Malicious/File06_DoH_Exfiltration.pcap",
+            "Malicious/File07_DoH_Exfiltration.pcap",
+            "Malicious/File10_DoH_Exfiltration.pcap"
+          ]
+        }
+      },
+      "sources_present_in_all_partitions": [
+        "Benign/File01_DoH_Benign.pcapng",
+        "Benign/File04_DoH_Benign.pcapng",
+        "Malicious/File06_DoH_Exfiltration.pcap",
+        "Malicious/File07_DoH_Exfiltration.pcap",
+        "Malicious/File10_DoH_Exfiltration.pcap"
+      ],
+      "status": "completed exploratory real-data run",
+      "checkpoints": [
+        2,
+        4,
+        8,
+        10,
+        15
+      ],
+      "synthetic": false,
+      "recorded_config": {
+        "raw_dir": "c:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\raw",
+        "processed_dir": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\processed",
+        "results_dir": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\results",
+        "experiment_name": "exp_ufu_real_cp2_4_8_10_15",
+        "dataset_name": "ufu_doh_exf",
+        "pcap_label_rules": {
+          "benign": "benign",
+          "exfiltration": "malicious",
+          "malicious": "malicious"
+        },
+        "pcap_extensions": [
+          ".pcap",
+          ".pcapng"
+        ],
+        "doh_port": 443,
+        "doh_server_ips": [],
+        "flow_idle_timeout_s": 120.0,
+        "max_stored_packets": 200,
+        "drop_zero_payload_packets": false,
+        "max_packets_per_file": null,
+        "checkpoints": [
+          2,
+          4,
+          8,
+          10,
+          15
+        ],
+        "seed": 42,
+        "group_by": "flow",
+        "model_type": "both",
+        "rf_n_estimators": 200,
+        "rf_min_samples_leaf": 3,
+        "rf_class_weight": "balanced_subsample",
+        "flow_weighting": true,
+        "cnn_conv_channels": 64,
+        "cnn_conv_kernel": 3,
+        "cnn_gru_hidden": 64,
+        "cnn_gru_layers": 2,
+        "cnn_dropout": 0.2,
+        "cnn_epochs": 30,
+        "cnn_patience": 7,
+        "cnn_batch_size": 128,
+        "cnn_lr": 0.001,
+        "cnn_device": "cpu",
+        "calibration": "sigmoid",
+        "calibration_per_checkpoint": true,
+        "calibration_folds": 5,
+        "calibration_split_ratio": 0.25,
+        "alpha": 0.01,
+        "threshold_step": 0.001,
+        "prefix_eval_threshold": 0.5,
+        "low_and_slow_factors": [
+          2.0,
+          5.0,
+          10.0
+        ],
+        "jitter_settings": [
+          [
+            0.25,
+            0.0
+          ],
+          [
+            0.5,
+            0.05
+          ],
+          [
+            1.0,
+            0.2
+          ]
+        ]
+      },
+      "identical_length_direction_prefixes": {
+        "members_in_repeated_groups": 137877,
+        "additional_duplicate_rows": 135128,
+        "unique_signatures": 3948
+      },
+      "signatures_shared_train_and_test": 2069,
+      "training_history": {
+        "epochs_in_history": 17,
+        "reported_epochs_trained": 10,
+        "saved_best_epoch": 10,
+        "saved_best_val_loss": 2.977775759999432e-06,
+        "true_min_epoch": 14,
+        "true_min_val_loss": 2.4955536525361078e-06
+      },
+      "val_model_probability_differences": {
+        "2": 27743,
+        "4": 27743,
+        "8": 27743,
+        "10": 27743,
+        "15": 27743
+      },
+      "test_model_probability_differences": {
+        "2": 27747,
+        "4": 27747,
+        "8": 27747,
+        "10": 27747,
+        "15": 27747
+      },
+      "historical_rf_model_persisted": false,
+      "historical_cnn_calibrator_persisted": false
+    },
+    "member3_smoke_20261017": {
+      "path": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\results\\member3_smoke_20261017",
+      "files": {
+        "csv": 30,
+        "png": 21,
+        "json": 5,
+        "pt": 1,
+        "table_csv": 24
+      },
+      "models": {
+        "rf": {
+          "frozen_thresholds": {
+            "adaptive": 0.814,
+            "fixed_10": 0.638,
+            "fixed_20": 0.703,
+            "fixed_30": 0.714,
+            "fixed_40": 0.814
+          },
+          "normal_metrics": {
+            "val": {
+              "adaptive": {
+                "n_flows": 216,
+                "n_malicious": 107,
+                "n_benign": 109,
+                "TP": 54,
+                "FN": 53,
+                "FP": 1,
+                "TN": 108,
+                "TP_early": 33,
+                "TP_terminal": 21,
+                "precision": 0.9818181818181818,
+                "recall": 0.5046728971962616,
+                "f1": 0.6666666666666666,
+                "fpr": 0.009174311926605505,
+                "coverage": 0.5046728971962616,
+                "early_detection_rate": 0.308411214953271,
+                "terminal_detection_rate": 0.19626168224299065,
+                "avg_packets_all": 37.77777777777778,
+                "avg_packets_malicious": 35.60747663551402,
+                "cost_all": 0.9444444444444444,
+                "cost_malicious": 0.8901869158878505,
+                "n_detected_for_latency": 54,
+                "fpr_ci95_low": 0.00023224649435231098,
+                "fpr_ci95_high": 0.05005682308481245,
+                "fpr_upper95_one_sided": 0.042781362245849566
+              },
+              "fixed_10": {
+                "n_flows": 216,
+                "n_malicious": 107,
+                "n_benign": 109,
+                "TP": 7,
+                "FN": 100,
+                "FP": 1,
+                "TN": 108,
+                "TP_early": 7,
+                "TP_terminal": 0,
+                "precision": 0.875,
+                "recall": 0.06542056074766354,
+                "f1": 0.12173913043478261,
+                "fpr": 0.009174311926605505,
+                "coverage": 0.06542056074766354,
+                "early_detection_rate": 0.06542056074766354,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.25,
+                "cost_malicious": 0.25,
+                "n_detected_for_latency": 7,
+                "fpr_ci95_low": 0.00023224649435231098,
+                "fpr_ci95_high": 0.05005682308481245,
+                "fpr_upper95_one_sided": 0.042781362245849566
+              },
+              "fixed_20": {
+                "n_flows": 216,
+                "n_malicious": 107,
+                "n_benign": 109,
+                "TP": 23,
+                "FN": 84,
+                "FP": 1,
+                "TN": 108,
+                "TP_early": 23,
+                "TP_terminal": 0,
+                "precision": 0.9583333333333334,
+                "recall": 0.21495327102803738,
+                "f1": 0.3511450381679389,
+                "fpr": 0.009174311926605505,
+                "coverage": 0.21495327102803738,
+                "early_detection_rate": 0.21495327102803738,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 20.0,
+                "avg_packets_malicious": 20.0,
+                "cost_all": 0.5,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 23,
+                "fpr_ci95_low": 0.00023224649435231098,
+                "fpr_ci95_high": 0.05005682308481245,
+                "fpr_upper95_one_sided": 0.042781362245849566
+              },
+              "fixed_30": {
+                "n_flows": 216,
+                "n_malicious": 107,
+                "n_benign": 109,
+                "TP": 38,
+                "FN": 69,
+                "FP": 1,
+                "TN": 108,
+                "TP_early": 38,
+                "TP_terminal": 0,
+                "precision": 0.9743589743589743,
+                "recall": 0.35514018691588783,
+                "f1": 0.5205479452054794,
+                "fpr": 0.009174311926605505,
+                "coverage": 0.35514018691588783,
+                "early_detection_rate": 0.35514018691588783,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 30.0,
+                "avg_packets_malicious": 30.0,
+                "cost_all": 0.75,
+                "cost_malicious": 0.75,
+                "n_detected_for_latency": 38,
+                "fpr_ci95_low": 0.00023224649435231098,
+                "fpr_ci95_high": 0.05005682308481245,
+                "fpr_upper95_one_sided": 0.042781362245849566
+              },
+              "fixed_40": {
+                "n_flows": 216,
+                "n_malicious": 107,
+                "n_benign": 109,
+                "TP": 54,
+                "FN": 53,
+                "FP": 1,
+                "TN": 108,
+                "TP_early": 0,
+                "TP_terminal": 54,
+                "precision": 0.9818181818181818,
+                "recall": 0.5046728971962616,
+                "f1": 0.6666666666666666,
+                "fpr": 0.009174311926605505,
+                "coverage": 0.5046728971962616,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 0.5046728971962616,
+                "avg_packets_all": 40.0,
+                "avg_packets_malicious": 40.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 54,
+                "fpr_ci95_low": 0.00023224649435231098,
+                "fpr_ci95_high": 0.05005682308481245,
+                "fpr_upper95_one_sided": 0.042781362245849566
+              }
+            },
+            "test": {
+              "adaptive": {
+                "n_flows": 216,
+                "n_malicious": 106,
+                "n_benign": 110,
+                "TP": 52,
+                "FN": 54,
+                "FP": 2,
+                "TN": 108,
+                "TP_early": 30,
+                "TP_terminal": 22,
+                "precision": 0.9629629629629629,
+                "recall": 0.49056603773584906,
+                "f1": 0.65,
+                "fpr": 0.01818181818181818,
+                "coverage": 0.49056603773584906,
+                "early_detection_rate": 0.2830188679245283,
+                "terminal_detection_rate": 0.20754716981132076,
+                "avg_packets_all": 37.916666666666664,
+                "avg_packets_malicious": 35.75471698113208,
+                "cost_all": 0.9479166666666666,
+                "cost_malicious": 0.8938679245283019,
+                "n_detected_for_latency": 52,
+                "fpr_ci95_low": 0.002209537174896206,
+                "fpr_ci95_high": 0.06413753937745299,
+                "fpr_upper95_one_sided": 0.05612708514646994
+              },
+              "fixed_10": {
+                "n_flows": 216,
+                "n_malicious": 106,
+                "n_benign": 110,
+                "TP": 6,
+                "FN": 100,
+                "FP": 0,
+                "TN": 110,
+                "TP_early": 6,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 0.05660377358490566,
+                "f1": 0.10714285714285714,
+                "fpr": 0.0,
+                "coverage": 0.05660377358490566,
+                "early_detection_rate": 0.05660377358490566,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.25,
+                "cost_malicious": 0.25,
+                "n_detected_for_latency": 6,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.032979194032219696,
+                "fpr_upper95_one_sided": 0.02686643000626772
+              },
+              "fixed_20": {
+                "n_flows": 216,
+                "n_malicious": 106,
+                "n_benign": 110,
+                "TP": 28,
+                "FN": 78,
+                "FP": 3,
+                "TN": 107,
+                "TP_early": 28,
+                "TP_terminal": 0,
+                "precision": 0.9032258064516129,
+                "recall": 0.2641509433962264,
+                "f1": 0.40875912408759124,
+                "fpr": 0.02727272727272727,
+                "coverage": 0.2641509433962264,
+                "early_detection_rate": 0.2641509433962264,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 20.0,
+                "avg_packets_malicious": 20.0,
+                "cost_all": 0.5,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 28,
+                "fpr_ci95_low": 0.005659996441479292,
+                "fpr_ci95_high": 0.07763677049951324,
+                "fpr_upper95_one_sided": 0.06897760901476477
+              },
+              "fixed_30": {
+                "n_flows": 216,
+                "n_malicious": 106,
+                "n_benign": 110,
+                "TP": 38,
+                "FN": 68,
+                "FP": 3,
+                "TN": 107,
+                "TP_early": 38,
+                "TP_terminal": 0,
+                "precision": 0.926829268292683,
+                "recall": 0.3584905660377358,
+                "f1": 0.5170068027210885,
+                "fpr": 0.02727272727272727,
+                "coverage": 0.3584905660377358,
+                "early_detection_rate": 0.3584905660377358,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 30.0,
+                "avg_packets_malicious": 30.0,
+                "cost_all": 0.75,
+                "cost_malicious": 0.75,
+                "n_detected_for_latency": 38,
+                "fpr_ci95_low": 0.005659996441479292,
+                "fpr_ci95_high": 0.07763677049951324,
+                "fpr_upper95_one_sided": 0.06897760901476477
+              },
+              "fixed_40": {
+                "n_flows": 216,
+                "n_malicious": 106,
+                "n_benign": 110,
+                "TP": 52,
+                "FN": 54,
+                "FP": 2,
+                "TN": 108,
+                "TP_early": 0,
+                "TP_terminal": 52,
+                "precision": 0.9629629629629629,
+                "recall": 0.49056603773584906,
+                "f1": 0.65,
+                "fpr": 0.01818181818181818,
+                "coverage": 0.49056603773584906,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 0.49056603773584906,
+                "avg_packets_all": 40.0,
+                "avg_packets_malicious": 40.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 52,
+                "fpr_ci95_low": 0.002209537174896206,
+                "fpr_ci95_high": 0.06413753937745299,
+                "fpr_upper95_one_sided": 0.05612708514646994
+              }
+            }
+          },
+          "robustness_conditions": [
+            "normal",
+            "low_and_slow_x2",
+            "low_and_slow_x5",
+            "low_and_slow_x10",
+            "jitter_s0.25_a0",
+            "jitter_s0.5_a0.05",
+            "jitter_s1_a0.2"
+          ],
+          "validation_sweep_rows_verified": 5005,
+          "robustness_note": "Non-normal perturbation probabilities were not persisted; aggregate arithmetic can be checked but fitted-model responses cannot be replayed from saved scores.",
+          "calibration_reverification_limitation": "Calibration CSVs include unpersisted raw probabilities and shorter validation flows excluded from saved policy predictions; historical calibrated scores alone cannot independently reproduce every Brier/ECE entry."
+        },
+        "cnn_gru": {
+          "frozen_thresholds": {
+            "adaptive": 0.952,
+            "fixed_10": 0.571,
+            "fixed_20": 0.875,
+            "fixed_30": 0.876,
+            "fixed_40": 0.952
+          },
+          "normal_metrics": {
+            "val": {
+              "adaptive": {
+                "n_flows": 216,
+                "n_malicious": 107,
+                "n_benign": 109,
+                "TP": 55,
+                "FN": 52,
+                "FP": 1,
+                "TN": 108,
+                "TP_early": 26,
+                "TP_terminal": 29,
+                "precision": 0.9821428571428571,
+                "recall": 0.514018691588785,
+                "f1": 0.6748466257668712,
+                "fpr": 0.009174311926605505,
+                "coverage": 0.514018691588785,
+                "early_detection_rate": 0.24299065420560748,
+                "terminal_detection_rate": 0.27102803738317754,
+                "avg_packets_all": 38.56481481481482,
+                "avg_packets_malicious": 37.10280373831776,
+                "cost_all": 0.9641203703703705,
+                "cost_malicious": 0.9275700934579441,
+                "n_detected_for_latency": 55,
+                "fpr_ci95_low": 0.00023224649435231098,
+                "fpr_ci95_high": 0.05005682308481245,
+                "fpr_upper95_one_sided": 0.042781362245849566
+              },
+              "fixed_10": {
+                "n_flows": 216,
+                "n_malicious": 107,
+                "n_benign": 109,
+                "TP": 12,
+                "FN": 95,
+                "FP": 1,
+                "TN": 108,
+                "TP_early": 12,
+                "TP_terminal": 0,
+                "precision": 0.9230769230769231,
+                "recall": 0.11214953271028037,
+                "f1": 0.2,
+                "fpr": 0.009174311926605505,
+                "coverage": 0.11214953271028037,
+                "early_detection_rate": 0.11214953271028037,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.25,
+                "cost_malicious": 0.25,
+                "n_detected_for_latency": 12,
+                "fpr_ci95_low": 0.00023224649435231098,
+                "fpr_ci95_high": 0.05005682308481245,
+                "fpr_upper95_one_sided": 0.042781362245849566
+              },
+              "fixed_20": {
+                "n_flows": 216,
+                "n_malicious": 107,
+                "n_benign": 109,
+                "TP": 17,
+                "FN": 90,
+                "FP": 1,
+                "TN": 108,
+                "TP_early": 17,
+                "TP_terminal": 0,
+                "precision": 0.9444444444444444,
+                "recall": 0.1588785046728972,
+                "f1": 0.272,
+                "fpr": 0.009174311926605505,
+                "coverage": 0.1588785046728972,
+                "early_detection_rate": 0.1588785046728972,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 20.0,
+                "avg_packets_malicious": 20.0,
+                "cost_all": 0.5,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 17,
+                "fpr_ci95_low": 0.00023224649435231098,
+                "fpr_ci95_high": 0.05005682308481245,
+                "fpr_upper95_one_sided": 0.042781362245849566
+              },
+              "fixed_30": {
+                "n_flows": 216,
+                "n_malicious": 107,
+                "n_benign": 109,
+                "TP": 44,
+                "FN": 63,
+                "FP": 1,
+                "TN": 108,
+                "TP_early": 44,
+                "TP_terminal": 0,
+                "precision": 0.9777777777777777,
+                "recall": 0.411214953271028,
+                "f1": 0.5789473684210527,
+                "fpr": 0.009174311926605505,
+                "coverage": 0.411214953271028,
+                "early_detection_rate": 0.411214953271028,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 30.0,
+                "avg_packets_malicious": 30.0,
+                "cost_all": 0.75,
+                "cost_malicious": 0.75,
+                "n_detected_for_latency": 44,
+                "fpr_ci95_low": 0.00023224649435231098,
+                "fpr_ci95_high": 0.05005682308481245,
+                "fpr_upper95_one_sided": 0.042781362245849566
+              },
+              "fixed_40": {
+                "n_flows": 216,
+                "n_malicious": 107,
+                "n_benign": 109,
+                "TP": 55,
+                "FN": 52,
+                "FP": 1,
+                "TN": 108,
+                "TP_early": 0,
+                "TP_terminal": 55,
+                "precision": 0.9821428571428571,
+                "recall": 0.514018691588785,
+                "f1": 0.6748466257668712,
+                "fpr": 0.009174311926605505,
+                "coverage": 0.514018691588785,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 0.514018691588785,
+                "avg_packets_all": 40.0,
+                "avg_packets_malicious": 40.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 55,
+                "fpr_ci95_low": 0.00023224649435231098,
+                "fpr_ci95_high": 0.05005682308481245,
+                "fpr_upper95_one_sided": 0.042781362245849566
+              }
+            },
+            "test": {
+              "adaptive": {
+                "n_flows": 216,
+                "n_malicious": 106,
+                "n_benign": 110,
+                "TP": 57,
+                "FN": 49,
+                "FP": 0,
+                "TN": 110,
+                "TP_early": 25,
+                "TP_terminal": 32,
+                "precision": 1.0,
+                "recall": 0.5377358490566038,
+                "f1": 0.6993865030674846,
+                "fpr": 0.0,
+                "coverage": 0.5377358490566038,
+                "early_detection_rate": 0.2358490566037736,
+                "terminal_detection_rate": 0.3018867924528302,
+                "avg_packets_all": 38.657407407407405,
+                "avg_packets_malicious": 37.264150943396224,
+                "cost_all": 0.9664351851851851,
+                "cost_malicious": 0.9316037735849056,
+                "n_detected_for_latency": 57,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.032979194032219696,
+                "fpr_upper95_one_sided": 0.02686643000626772
+              },
+              "fixed_10": {
+                "n_flows": 216,
+                "n_malicious": 106,
+                "n_benign": 110,
+                "TP": 10,
+                "FN": 96,
+                "FP": 1,
+                "TN": 109,
+                "TP_early": 10,
+                "TP_terminal": 0,
+                "precision": 0.9090909090909091,
+                "recall": 0.09433962264150944,
+                "f1": 0.17094017094017094,
+                "fpr": 0.00909090909090909,
+                "coverage": 0.09433962264150944,
+                "early_detection_rate": 0.09433962264150944,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 10.0,
+                "avg_packets_malicious": 10.0,
+                "cost_all": 0.25,
+                "cost_malicious": 0.25,
+                "n_detected_for_latency": 10,
+                "fpr_ci95_low": 0.00023013540555029248,
+                "fpr_ci95_high": 0.04961118931198478,
+                "fpr_upper95_one_sided": 0.04239904695711901
+              },
+              "fixed_20": {
+                "n_flows": 216,
+                "n_malicious": 106,
+                "n_benign": 110,
+                "TP": 23,
+                "FN": 83,
+                "FP": 0,
+                "TN": 110,
+                "TP_early": 23,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 0.2169811320754717,
+                "f1": 0.35658914728682173,
+                "fpr": 0.0,
+                "coverage": 0.2169811320754717,
+                "early_detection_rate": 0.2169811320754717,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 20.0,
+                "avg_packets_malicious": 20.0,
+                "cost_all": 0.5,
+                "cost_malicious": 0.5,
+                "n_detected_for_latency": 23,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.032979194032219696,
+                "fpr_upper95_one_sided": 0.02686643000626772
+              },
+              "fixed_30": {
+                "n_flows": 216,
+                "n_malicious": 106,
+                "n_benign": 110,
+                "TP": 41,
+                "FN": 65,
+                "FP": 0,
+                "TN": 110,
+                "TP_early": 41,
+                "TP_terminal": 0,
+                "precision": 1.0,
+                "recall": 0.3867924528301887,
+                "f1": 0.5578231292517006,
+                "fpr": 0.0,
+                "coverage": 0.3867924528301887,
+                "early_detection_rate": 0.3867924528301887,
+                "terminal_detection_rate": 0.0,
+                "avg_packets_all": 30.0,
+                "avg_packets_malicious": 30.0,
+                "cost_all": 0.75,
+                "cost_malicious": 0.75,
+                "n_detected_for_latency": 41,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.032979194032219696,
+                "fpr_upper95_one_sided": 0.02686643000626772
+              },
+              "fixed_40": {
+                "n_flows": 216,
+                "n_malicious": 106,
+                "n_benign": 110,
+                "TP": 57,
+                "FN": 49,
+                "FP": 0,
+                "TN": 110,
+                "TP_early": 0,
+                "TP_terminal": 57,
+                "precision": 1.0,
+                "recall": 0.5377358490566038,
+                "f1": 0.6993865030674846,
+                "fpr": 0.0,
+                "coverage": 0.5377358490566038,
+                "early_detection_rate": 0.0,
+                "terminal_detection_rate": 0.5377358490566038,
+                "avg_packets_all": 40.0,
+                "avg_packets_malicious": 40.0,
+                "cost_all": 1.0,
+                "cost_malicious": 1.0,
+                "n_detected_for_latency": 57,
+                "fpr_ci95_low": 0.0,
+                "fpr_ci95_high": 0.032979194032219696,
+                "fpr_upper95_one_sided": 0.02686643000626772
+              }
+            }
+          },
+          "robustness_conditions": [
+            "normal",
+            "low_and_slow_x2",
+            "low_and_slow_x5",
+            "low_and_slow_x10",
+            "jitter_s0.25_a0",
+            "jitter_s0.5_a0.05",
+            "jitter_s1_a0.2"
+          ],
+          "validation_sweep_rows_verified": 5005,
+          "robustness_note": "Non-normal perturbation probabilities were not persisted; aggregate arithmetic can be checked but fitted-model responses cannot be replayed from saved scores.",
+          "calibration_reverification_limitation": "Calibration CSVs include unpersisted raw probabilities and shorter validation flows excluded from saved policy predictions; historical calibrated scores alone cannot independently reproduce every Brier/ECE entry."
+        }
+      },
+      "duplicate_figures": [
+        [
+          "detection_coverage.png",
+          "rf_detection_coverage.png"
+        ],
+        [
+          "prf_vs_prefix_length.png",
+          "rf_prf_vs_prefix_length.png"
+        ],
+        [
+          "rf_robustness.png",
+          "robustness.png"
+        ],
+        [
+          "rf_val_fpr_vs_threshold.png",
+          "val_fpr_vs_threshold.png"
+        ]
+      ],
+      "figure_provenance": [
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\cnn_gru_debd_comparison.png",
+          "sha256": "5e9bd570c989e288847ba00b3f8a69e757dafe6071df464c58ffe8392e1d4715",
+          "pixels": [
+            1035,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\cnn_gru_detection_coverage.png",
+          "sha256": "e81861e84694c2b8b9925a9f6bca4bc1ab24fd4a690a31a79379000bbda794b8",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\cnn_gru_detection_latency.png",
+          "sha256": "d5c7203af86ace4b121ef147ba18f6e873dec6ecf1e182a131700e811cbc8852",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\cnn_gru_observation_cost.png",
+          "sha256": "ff9a0904a38f89e96aac26a34d8d2c2de74dbd37b488eaebe6a01fa8938306e6",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\cnn_gru_prf_vs_prefix_length.png",
+          "sha256": "6fd82acc07113476e15e781673a856b440015a1c37a007c482af09b5a5985379",
+          "pixels": [
+            900,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\cnn_gru_robustness.png",
+          "sha256": "dace3432eff3c0694ff1eebfd210de10989913134b80e02362979623f8921f0a",
+          "pixels": [
+            1650,
+            1050
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\cnn_gru_val_fpr_vs_threshold.png",
+          "sha256": "a320d5795ca960daefae52fb40375a69d4e45f5e6f0e5c01de3d631cc1ed6837",
+          "pixels": [
+            975,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\debd_comparison.png",
+          "sha256": "e1294e7b95b626627e3dc4e82cb671d49b26277a63068328cf75dd6141ed7bb1",
+          "pixels": [
+            1035,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\detection_coverage.png",
+          "sha256": "18b0b9234b20c89d50e937a53880dca2ca25cca45b695681a4a84b9d4e847dba",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\detection_latency.png",
+          "sha256": "9eb4d8889466670c1fb08c267fc158c8e7c2e10c32aef58f8cda35ca69524cdb",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\observation_cost.png",
+          "sha256": "b6a87f126bc69e9b1fdd3005ab2663740055a4c9096822aece5e21acb788d8e8",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\prf_vs_prefix_length.png",
+          "sha256": "e01942ddf79483ab020945c8f0eec894ba0772f2192900bf179a4a527b29ffad",
+          "pixels": [
+            900,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\rf_debd_comparison.png",
+          "sha256": "c4ec2e725fc011f74460eca3c0416db5bb8a48dc3128bd673ad792af04e3164e",
+          "pixels": [
+            1035,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\rf_detection_coverage.png",
+          "sha256": "18b0b9234b20c89d50e937a53880dca2ca25cca45b695681a4a84b9d4e847dba",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\rf_observation_cost.png",
+          "sha256": "7a9c56c4d54eb980030ee33691ae0ab9f6d38d0b9abc142fe3e8542dcb613680",
+          "pixels": [
+            900,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\rf_prf_vs_prefix_length.png",
+          "sha256": "e01942ddf79483ab020945c8f0eec894ba0772f2192900bf179a4a527b29ffad",
+          "pixels": [
+            900,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\rf_robustness.png",
+          "sha256": "5d1ade690bfb9f6abe31b12612f510d27acc3359e1e8728c9a06e646d3a7363a",
+          "pixels": [
+            1650,
+            1050
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\rf_val_fpr_vs_threshold.png",
+          "sha256": "f23e1fdabcaedb8e5aa6847339060f72f489d731761187b316d96d89c1ce39a9",
+          "pixels": [
+            975,
+            630
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\rf_vs_cnn_adaptive_comparison.png",
+          "sha256": "d2b84e1348d97afc6e1e701dfd7e05be3c5bc8a1def6977a4b6cb767bc324803",
+          "pixels": [
+            2100,
+            600
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\robustness.png",
+          "sha256": "5d1ade690bfb9f6abe31b12612f510d27acc3359e1e8728c9a06e646d3a7363a",
+          "pixels": [
+            1650,
+            1050
+          ]
+        },
+        {
+          "path": "data\\results\\member3_smoke_20261017\\figures\\val_fpr_vs_threshold.png",
+          "sha256": "f23e1fdabcaedb8e5aa6847339060f72f489d731761187b316d96d89c1ce39a9",
+          "pixels": [
+            975,
+            630
+          ]
+        }
+      ],
+      "full_score_reverification": false,
+      "split_partition_counts": {
+        "test": {
+          "total": 216,
+          "benign": 110,
+          "malicious": 106,
+          "sources": [
+            "syn_file_0_0.pcap",
+            "syn_file_0_1.pcap",
+            "syn_file_0_2.pcap",
+            "syn_file_0_3.pcap",
+            "syn_file_0_4.pcap",
+            "syn_file_0_5.pcap",
+            "syn_file_0_6.pcap",
+            "syn_file_0_7.pcap",
+            "syn_file_0_8.pcap",
+            "syn_file_0_9.pcap",
+            "syn_file_1_0.pcap",
+            "syn_file_1_1.pcap",
+            "syn_file_1_2.pcap",
+            "syn_file_1_3.pcap",
+            "syn_file_1_4.pcap",
+            "syn_file_1_5.pcap",
+            "syn_file_1_6.pcap",
+            "syn_file_1_7.pcap",
+            "syn_file_1_8.pcap",
+            "syn_file_1_9.pcap"
+          ]
+        },
+        "train": {
+          "total": 648,
+          "benign": 327,
+          "malicious": 321,
+          "sources": [
+            "syn_file_0_0.pcap",
+            "syn_file_0_1.pcap",
+            "syn_file_0_2.pcap",
+            "syn_file_0_3.pcap",
+            "syn_file_0_4.pcap",
+            "syn_file_0_5.pcap",
+            "syn_file_0_6.pcap",
+            "syn_file_0_7.pcap",
+            "syn_file_0_8.pcap",
+            "syn_file_0_9.pcap",
+            "syn_file_1_0.pcap",
+            "syn_file_1_1.pcap",
+            "syn_file_1_2.pcap",
+            "syn_file_1_3.pcap",
+            "syn_file_1_4.pcap",
+            "syn_file_1_5.pcap",
+            "syn_file_1_6.pcap",
+            "syn_file_1_7.pcap",
+            "syn_file_1_8.pcap",
+            "syn_file_1_9.pcap"
+          ]
+        },
+        "val": {
+          "total": 216,
+          "benign": 109,
+          "malicious": 107,
+          "sources": [
+            "syn_file_0_0.pcap",
+            "syn_file_0_1.pcap",
+            "syn_file_0_2.pcap",
+            "syn_file_0_3.pcap",
+            "syn_file_0_4.pcap",
+            "syn_file_0_5.pcap",
+            "syn_file_0_6.pcap",
+            "syn_file_0_7.pcap",
+            "syn_file_0_8.pcap",
+            "syn_file_0_9.pcap",
+            "syn_file_1_0.pcap",
+            "syn_file_1_1.pcap",
+            "syn_file_1_2.pcap",
+            "syn_file_1_3.pcap",
+            "syn_file_1_4.pcap",
+            "syn_file_1_5.pcap",
+            "syn_file_1_6.pcap",
+            "syn_file_1_7.pcap",
+            "syn_file_1_8.pcap",
+            "syn_file_1_9.pcap"
+          ]
+        }
+      },
+      "sources_present_in_all_partitions": [
+        "syn_file_0_0.pcap",
+        "syn_file_0_1.pcap",
+        "syn_file_0_2.pcap",
+        "syn_file_0_3.pcap",
+        "syn_file_0_4.pcap",
+        "syn_file_0_5.pcap",
+        "syn_file_0_6.pcap",
+        "syn_file_0_7.pcap",
+        "syn_file_0_8.pcap",
+        "syn_file_0_9.pcap",
+        "syn_file_1_0.pcap",
+        "syn_file_1_1.pcap",
+        "syn_file_1_2.pcap",
+        "syn_file_1_3.pcap",
+        "syn_file_1_4.pcap",
+        "syn_file_1_5.pcap",
+        "syn_file_1_6.pcap",
+        "syn_file_1_7.pcap",
+        "syn_file_1_8.pcap",
+        "syn_file_1_9.pcap"
+      ],
+      "status": "synthetic smoke",
+      "checkpoints": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "synthetic": true,
+      "recorded_config": {
+        "raw_dir": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\raw",
+        "processed_dir": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\processed",
+        "results_dir": "C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\data\\results",
+        "experiment_name": "member3_smoke_20261017",
+        "dataset_name": "ufu_doh_exf",
+        "pcap_label_rules": {},
+        "pcap_extensions": [
+          ".pcap",
+          ".pcapng"
+        ],
+        "doh_port": 443,
+        "doh_server_ips": [],
+        "flow_idle_timeout_s": 120.0,
+        "max_stored_packets": 200,
+        "drop_zero_payload_packets": false,
+        "max_packets_per_file": null,
+        "checkpoints": [
+          10,
+          20,
+          30,
+          40
+        ],
+        "seed": 42,
+        "group_by": "flow",
+        "model_type": "both",
+        "rf_n_estimators": 60,
+        "rf_min_samples_leaf": 3,
+        "rf_class_weight": "balanced_subsample",
+        "flow_weighting": true,
+        "cnn_conv_channels": 64,
+        "cnn_conv_kernel": 3,
+        "cnn_gru_hidden": 64,
+        "cnn_gru_layers": 2,
+        "cnn_dropout": 0.2,
+        "cnn_epochs": 5,
+        "cnn_patience": 3,
+        "cnn_batch_size": 128,
+        "cnn_lr": 0.001,
+        "cnn_device": "cpu",
+        "calibration": "sigmoid",
+        "calibration_per_checkpoint": true,
+        "calibration_folds": 5,
+        "calibration_split_ratio": 0.25,
+        "alpha": 0.01,
+        "threshold_step": 0.001,
+        "prefix_eval_threshold": 0.5,
+        "low_and_slow_factors": [
+          2.0,
+          5.0,
+          10.0
+        ],
+        "jitter_settings": [
+          [
+            0.25,
+            0.0
+          ],
+          [
+            0.5,
+            0.05
+          ],
+          [
+            1.0,
+            0.2
+          ]
+        ]
+      },
+      "training_history": {
+        "epochs_in_history": 5,
+        "reported_epochs_trained": 5,
+        "saved_best_epoch": 5,
+        "saved_best_val_loss": 0.639366090297699,
+        "true_min_epoch": 5,
+        "true_min_val_loss": 0.639366090297699
+      },
+      "val_model_probability_differences": {
+        "10": 216,
+        "20": 216,
+        "30": 216,
+        "40": 216
+      },
+      "test_model_probability_differences": {
+        "10": 216,
+        "20": 216,
+        "30": 216,
+        "40": 216
+      },
+      "historical_rf_model_persisted": false,
+      "historical_cnn_calibrator_persisted": false
+    }
+  },
+  "limitations": [
+    "Five local raw captures are present; File02 and File03 are absent from data/raw and the processed artifact.",
+    "All real-data outer partitions share all five source captures. No unseen-capture generalization test exists.",
+    "Current raw/processed hashes establish present identity only; historical run records did not save hashes to prove training-time identity.",
+    "Historical RF trees and CNN calibrators are absent. Calibrated saved scores can be audited, but complete historical fitted prediction pipelines cannot be reloaded.",
+    "Perturbed per-flow scores and raw calibration predictions are absent. Their reported aggregate arithmetic, not all fitted-model outputs, is independently verifiable.",
+    "Preprocessing packet counters were not independently recomputed by re-reading full captures in this audit.",
+    "Figure existence, PNG integrity, and artifact hashes are checked; document embedding/caption validation is performed separately.",
+    "No saved SHAP/Captum package-execution artifacts were present at audit start; native IG diagnostic prose is not a persisted attribution dataset."
+  ],
+  "verification": {
+    "checks": 144113,
+    "passed": 144113,
+    "failed": 0,
+    "failures": []
+  },
+  "artifact_hashes": {
+    "data\\processed\\dataset_inspection.json": "92a1a71cd7620f2a9c6bdf6c8013251d0c4706003be79c6717736ef6b04f248e",
+    "data\\processed\\dataset_manifest.json": "feba2094a1b5ff5f964d45ebdbd86e8e33762f039d15d9fdfde898fd0ed46a75",
+    "data\\processed\\flows.pkl": "f2be0cef3bdb2c2e6c862e3c5bc4f67e8f1734a480335d43fb09ab2dd0362820",
+    "data\\processed\\flows_report.json": "c701febe237f7499f951df72180f6ad42a87e4c896ba48f1993e5f0db36b0d28",
+    "data\\results\\exp_ufu_real_20261018\\split_assignment.csv": "f94e6a0e166eb0701346c8b724c4bedabc57d97190956ab6aa56b124dc95de22",
+    "data\\results\\exp_ufu_real_20261018\\split_manifest.json": "fb631561c06553bdd52d3e97849727c0cab503fe20398959566fdcc57a0a49a0",
+    "data\\results\\exp_ufu_real_20261018\\tables\\dataset_stats.csv": "ee30b5fd390fee45e2a63390ba611b6ff491085e22bd6cf554b36a7218964d33",
+    "data\\results\\exp_ufu_real_cp10_20\\cnn_gru_best.pt": "ad8fb2b548bb80ffb22cceab3b7cef529806abd3dc7374b15c871c3a74f09947",
+    "data\\results\\exp_ufu_real_cp10_20\\cnn_gru_predictions_test.csv": "6d2c64425740801d5ab0f4dba5f61c1aa867364b22a85fe2bea7078ba7c6f6a2",
+    "data\\results\\exp_ufu_real_cp10_20\\cnn_gru_predictions_val.csv": "252fd830bfa3b011b2b826bf15cb110b780e6eaa638799a3df3e7b028d6854bb",
+    "data\\results\\exp_ufu_real_cp10_20\\cnn_gru_thresholds.json": "821073d8fea0d3981816fd9199d1398fd00bb3f30b3e448a1123530defd64712",
+    "data\\results\\exp_ufu_real_cp10_20\\cnn_gru_train_history.json": "aae98199a264b9309f3b7df64f858ef0ab2408b5a321ba678bf10e824f8f5e7c",
+    "data\\results\\exp_ufu_real_cp10_20\\predictions_test.csv": "16cc4040591b07d0618f7c9e9a1ab2475ad4187b1bd0c1cf40d3afa444328ca0",
+    "data\\results\\exp_ufu_real_cp10_20\\predictions_val.csv": "dc4572a03b587a00f7533d0a061db9ef5c86e85fb4852d0c019f3ceab1298b76",
+    "data\\results\\exp_ufu_real_cp10_20\\run_record.json": "9a9e0c1125fff3e5c431817f431bc4fd1208ef8c9866c2738bf48f93d943b73a",
+    "data\\results\\exp_ufu_real_cp10_20\\split_assignment.csv": "f94e6a0e166eb0701346c8b724c4bedabc57d97190956ab6aa56b124dc95de22",
+    "data\\results\\exp_ufu_real_cp10_20\\split_manifest.json": "fb631561c06553bdd52d3e97849727c0cab503fe20398959566fdcc57a0a49a0",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\calibration_validation.csv": "4fbc9ed2929632cf14ae156dc6c0a81e42e73a6e479aaa7315a0b01ad9434f0f",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\cnn_gru_calibration_validation.csv": "57573b09daec933f0cb4322020921608fe65dd102dfe0419d73b06feef3acb3f",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\cnn_gru_fixed_vs_adaptive_test.csv": "d2c8955c683dc80dca2f7e1d14da87c4b6f9b13b5c9dca1ce65423cd74b8f1de",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\cnn_gru_fixed_vs_adaptive_validation.csv": "6a5246c245d330a5c361bc8b8592b5521a38f79515158b23c71412dded0fb82c",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\cnn_gru_fpr_constraint_validation_vs_test.csv": "f3b330568d8ca7f941fa0240e877b1701b4eca82c63975c8301d285fcae10c1e",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\cnn_gru_prefix_level_test.csv": "a8da497ad8194c750bad5aea50e56a4ca5923e95cd5ed7a7a40a092b7a9c8f62",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\cnn_gru_robustness_test.csv": "93e6087f48cab07e46233cee0cca6412d2b840d50adc090571d91486a863a7e4",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\cnn_gru_threshold_sweep_val_adaptive.csv": "012b2d4d354b4401964946b87bfd23d066fd94f3d28392086463a767eab8979a",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\cnn_gru_threshold_sweep_val_fixed_10.csv": "9764a8bcc50986b6385512ca561806c072d39e1667ffe64ab2917f37d29d5bc6",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\cnn_gru_threshold_sweep_val_fixed_20.csv": "9764a8bcc50986b6385512ca561806c072d39e1667ffe64ab2917f37d29d5bc6",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\dataset_stats.csv": "008bcaa2fa17343798a9e36c16bb528e7fa84fca9f72eec5b2c96d5343cdb8f4",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\fixed_vs_adaptive_test.csv": "ed5d318d07eb2ddac573555ff43e9d524a08bd1b02bb663904b28094b068e5b2",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\fixed_vs_adaptive_validation.csv": "e4066db312e6503dd6eae193391a492fdfc142ee1e3c4237493ce1eaa4ba2065",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\fpr_constraint_validation_vs_test.csv": "da3ad6745daeac360a1c4f768a1ace89d801052ac92654380f1f8981d85f5a8f",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\prefix_level_test.csv": "da05ac94da28f13b025cede5ae8fb953f6753730d57144b4c378e4d0247adf63",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\rf_calibration_validation.csv": "4fbc9ed2929632cf14ae156dc6c0a81e42e73a6e479aaa7315a0b01ad9434f0f",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\robustness_test.csv": "0277ebf8209fc39146712b7fa7800bad101f8cae3f4eb9344d01a776e2aae236",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\threshold_sweep_val_adaptive.csv": "a88ef7dea60c4ca1c0c5bf1dd026083436c9299d5c199428bd0f304ad9e2fa6d",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\threshold_sweep_val_fixed_10.csv": "f307a8b986558f10948b0f0b2c5c41f12d7bf14e148aa731215a8b1b5323e0ec",
+    "data\\results\\exp_ufu_real_cp10_20\\tables\\threshold_sweep_val_fixed_20.csv": "2a0a135d4d4a5fb1dc1cfa11ec4eb9a95626a5340ff1720db22dd4d51049e310",
+    "data\\results\\exp_ufu_real_cp10_20\\thresholds.json": "0b158dfa57dde8d2c25840d69f9e6f250ae32ddd8c1f4c1f0004866ceeb347bb",
+    "data\\results\\exp_ufu_real_cp10_20\\train_fit_cal_split.csv": "af7bbd6f3f28c2b72e318f6627bbe26235b729d23919c3f5e54d7e8292b3ec18",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\cnn_gru_best.pt": "e8c3c29c75f929ec2813093a85206ad7240d603b6c4f1c137caccbaad4b90d99",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\cnn_gru_predictions_test.csv": "62713b81f13384046fe6c72fe0045c61a9198752d517586e55b92548aaf19db5",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\cnn_gru_predictions_val.csv": "c9107681e784e91f4d81e7b6cf16da670925b0f219f771ba3c73b58d26cf3a95",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\cnn_gru_thresholds.json": "e95febf04b820a28b25adc629290a7eaeaff5b3b84b08c7d7351c041e97067c0",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\cnn_gru_train_history.json": "06cf3f18f0f8850408086d1735a0e7bc5f7f91b9c4fad963694a523bde78fa2c",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\predictions_test.csv": "ce9d78019543e4214b4f6e22335c5e8f91c29beb0a3f01d3857d6aaee8145bdc",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\predictions_val.csv": "020619e34847bd502b35205f1c99fe2ca805186b227f006623d83871c9043e55",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\run_record.json": "b4d1e8a0e8801b4b9a5f0a4bff68ec24b74819d67a09024e519da9352ea1eca3",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\split_assignment.csv": "07af4099b0799fb3fa939a4df845477fed15ad3272ceb50e40fa0c0d3a96d7d6",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\split_manifest.json": "e0790bcc617074225b6ea66ad93466de5a1568a0ca12d9cc4aa7c00ff0efd8ab",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\calibration_validation.csv": "ce7a81b40fcdaaa0db2644add07679c18ba7076436b974a78db4dddb182ec5f7",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_calibration_validation.csv": "dcf2c85b2bb71b5414691544f7b8dd381dc0ce953ac453f898602e51f42392b3",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_fixed_vs_adaptive_test.csv": "46b1c764a80432b8c842fb570b2f86539d26dd2646c5081cc7b8d4bbff8f8148",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_fixed_vs_adaptive_validation.csv": "70584d5415185bc0e1cdba520869fd6f4e80153f336405c760156a150317e8dc",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_fpr_constraint_validation_vs_test.csv": "286fa1080260e295ee7b980f12bc547872790620b6bf8c7034e18ef17ed0bb90",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_prefix_level_test.csv": "1d09b06bc5c8d3fc01a99abc63814ea793c7880a0a500593876b8cd8634f6db8",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_robustness_test.csv": "06c3f2d9bad0438fc01b54db4f4765ab5e5df0afe8469f62df633e5e8a67a2dc",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_threshold_sweep_val_adaptive.csv": "01bd336c46cdaf9e2daeed5d10dcd9bc34d70509ada128eb2ee0f9f62e6c1015",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_threshold_sweep_val_fixed_10.csv": "19eea8decbf9e20d24ef9f33f1bc54eeedcd7b8a38b9580ca1131646712a63e1",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_threshold_sweep_val_fixed_15.csv": "19eea8decbf9e20d24ef9f33f1bc54eeedcd7b8a38b9580ca1131646712a63e1",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_threshold_sweep_val_fixed_2.csv": "f087a54a2d0a5620f67ab91f9ee2d7f719277c37110c2dabbe84961135f9e1a3",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_threshold_sweep_val_fixed_4.csv": "cdd94b9c378cd246167301c820fadbbd7bc06c29827e95c38d46c8760c64b75e",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\cnn_gru_threshold_sweep_val_fixed_8.csv": "19eea8decbf9e20d24ef9f33f1bc54eeedcd7b8a38b9580ca1131646712a63e1",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\dataset_stats.csv": "d60a729fee44911c91defce21983a94f8436b5179f7d83477db17cdea1484f65",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\fixed_vs_adaptive_test.csv": "6f86cf5578d35fe17b39d35a93387d2e6be9eb85e32c748727300cd7246fbf96",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\fixed_vs_adaptive_validation.csv": "ea5e595a71ee8a44cae70fcd5b7e606123bfcce35fe342bf93c15fe69220c09b",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\fpr_constraint_validation_vs_test.csv": "83caff21f0b2dbfb9eb5582dbbb480e222d619dc95ac872cbc9011f5c219cc3e",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\prefix_level_test.csv": "d5a97babd3af4358013c6974c3a47fa40974564629dbb62a81a25eb8bf101b0e",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\rf_calibration_validation.csv": "ce7a81b40fcdaaa0db2644add07679c18ba7076436b974a78db4dddb182ec5f7",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\robustness_test.csv": "80c3225680bcc0a3b75a581319c738400c09410561091e5de30e5a0364fa3b9f",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\threshold_sweep_val_adaptive.csv": "83f1d2746930960b98b43b7b15384b0fe1a4d9ab5d201c8fdb5c7483a6923980",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\threshold_sweep_val_fixed_10.csv": "7942eb2c1f2c0e5af18ccd199c16b0e73888999dd5aeeb06398c35f0545f6b54",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\threshold_sweep_val_fixed_15.csv": "0492f2e94e3c7849ba1f09996ba57a3de63aadeade431d18c423655d73f0d9b2",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\threshold_sweep_val_fixed_2.csv": "74b8adc191e9cd55904af51918a517490f09e9acafdfc7c6fa8cd1623718369e",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\threshold_sweep_val_fixed_4.csv": "eab5a7e56d13c56a2aa8b9348ffffe3e659e82db89cd45cecfdcb171d1cdc35a",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\tables\\threshold_sweep_val_fixed_8.csv": "69e84d711fb485c9bb36503ad7ef1284fa84296fa8b77f5bf5fcfe2df959d287",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\thresholds.json": "bd0a7f73f9237f7b57019583a063b9babba09e2d066e1809ef5bd680c8fe5eac",
+    "data\\results\\exp_ufu_real_cp2_4_8_10_15\\train_fit_cal_split.csv": "915e831d8b762164f4869ccaeba532fa2cb1862799c748e0f1894ae23ae3eba5",
+    "data\\results\\member3_smoke_20261017\\cnn_gru_best.pt": "e732ea125bfed480d2eb067a466663478d4736649b8f6381a6b7101f42025258",
+    "data\\results\\member3_smoke_20261017\\cnn_gru_predictions_test.csv": "3a37b438d280bd5b8d74b64e3d6ce990e7341f19b3dd59712952955cd0d4b45e",
+    "data\\results\\member3_smoke_20261017\\cnn_gru_predictions_val.csv": "77883f07419aaee397c975a0b7205f1aaca1091170195e85aabfceaab9920f27",
+    "data\\results\\member3_smoke_20261017\\cnn_gru_thresholds.json": "00fc70689d118005f1ca9bbb3594ff054cdf407cb41fb05f80419c1668133e85",
+    "data\\results\\member3_smoke_20261017\\cnn_gru_train_history.json": "a8c33ee7cc6b4c1802ae1cff9f93c4055f35e067b6b7a28a0ab22a4f7f4e9453",
+    "data\\results\\member3_smoke_20261017\\predictions_test.csv": "768b1e881cbaf9098d97cd7b67d87135bdb96d0a962ae2f17c544693d0b27982",
+    "data\\results\\member3_smoke_20261017\\predictions_val.csv": "1e547a29cd6f7ec990e11184d73374bc2370783c9d0296f1528fc390090d99fd",
+    "data\\results\\member3_smoke_20261017\\run_record.json": "014e2df37b073bb0ed060fa36f6dba7e5af929bc1d7ded926b474bfb591b5a9c",
+    "data\\results\\member3_smoke_20261017\\split_assignment.csv": "0697567fda9001074a8fa34ef8ec2c92ecfa5900c46147a18c1a4229c3a9e1e7",
+    "data\\results\\member3_smoke_20261017\\split_manifest.json": "514f09154cbf3c6630f73e8c2a68c1cd8ccd31d865457115e9d9c0405d25b113",
+    "data\\results\\member3_smoke_20261017\\tables\\calibration_validation.csv": "5ba37b9971bfa6d44824efb53377dde4eaf37a5aa885b48ba024c0bce6b0a4f0",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_calibration_validation.csv": "3c52add21814922b70c109ae115bca2470c94518e956e45512d3f0ac8815817f",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_fixed_vs_adaptive_test.csv": "ccc5ef0f7ad5a3c365afa0eaf36e4cf008d2661adf1b936f9dfc63aafe22674b",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_fixed_vs_adaptive_validation.csv": "7581da1256a1b5d9acccd78143256dda6acaaf1c69c16d989cce3281a92e4b90",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_fpr_constraint_validation_vs_test.csv": "6051fdd7a7d2d07edb5a027219177eea43143d099624ed6a738b765e4fb4234c",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_prefix_level_test.csv": "72df87bc24c4431bc93143e155ebb0cb91158178471fd74f8eaacacf10494201",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_robustness_test.csv": "f07dc305a9b1f85f46def9fbf6c17c9008c6d768dafaac895c4a2c9f6c82461e",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_threshold_sweep_val_adaptive.csv": "d8d44b80b00a553ac61a3b3db0fbfe05658a5dff667099cce4015a5f511921af",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_threshold_sweep_val_fixed_10.csv": "6654d467e72d8606babd06f7adac66d807f4b6821024ea1d083554fd308c1c4e",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_threshold_sweep_val_fixed_20.csv": "a831da3b32cd13c72fd73fb8e8e151f0acd0730f22ef1917715892790910cf27",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_threshold_sweep_val_fixed_30.csv": "69c1ebfdbf7c0bccbf587acb603c8c8c4448af0e82149194d130af6318daa87c",
+    "data\\results\\member3_smoke_20261017\\tables\\cnn_gru_threshold_sweep_val_fixed_40.csv": "5dd38a0bfaf60e21bc096bda9470fc6b8f281b107f2b3d84bcfc144e2393dd90",
+    "data\\results\\member3_smoke_20261017\\tables\\dataset_stats.csv": "a136867145d82fe255c5e6157d0f006008161946fd59557115ec0304534b2a37",
+    "data\\results\\member3_smoke_20261017\\tables\\fixed_vs_adaptive_test.csv": "8902275881bbf0aa7b62e4b9d496782db0d0ac41eb8f9e2f24d3efc4aee63dcd",
+    "data\\results\\member3_smoke_20261017\\tables\\fixed_vs_adaptive_validation.csv": "426b075b2b1f1e0af04a5a1363755d84c5e15f49202fc1a1e49236644c6b095c",
+    "data\\results\\member3_smoke_20261017\\tables\\fpr_constraint_validation_vs_test.csv": "a982dac71467a9daac21d6420ac9dd7b0d09e937c26810f85917ab1ca45d07e6",
+    "data\\results\\member3_smoke_20261017\\tables\\prefix_level_test.csv": "2e175c76a0d2b2d06917581ed9b1cec37561ddfc1c50e033b3425f6d95f49d49",
+    "data\\results\\member3_smoke_20261017\\tables\\rf_calibration_validation.csv": "5ba37b9971bfa6d44824efb53377dde4eaf37a5aa885b48ba024c0bce6b0a4f0",
+    "data\\results\\member3_smoke_20261017\\tables\\robustness_test.csv": "2eaf5dd88ae81a2e7de20e426f029c8db9d29a294dfb014be37540b4c183ad83",
+    "data\\results\\member3_smoke_20261017\\tables\\threshold_sweep_val_adaptive.csv": "d723030753bb5dc4e0a32932fdcd573398ddb7ed8faef572472e5988f4eaad0a",
+    "data\\results\\member3_smoke_20261017\\tables\\threshold_sweep_val_fixed_10.csv": "ce0e4202c03e1572a0c16a6fc9c22735f83d832f56e093801e335624b390ae1a",
+    "data\\results\\member3_smoke_20261017\\tables\\threshold_sweep_val_fixed_20.csv": "c1b60d7178de6ab4082469975298e5b746861fec70b03885cf4d2f1e8c8a462f",
+    "data\\results\\member3_smoke_20261017\\tables\\threshold_sweep_val_fixed_30.csv": "6d7c51e3081745cc88740eb164e65351ee98bdcd572b42929da67b1db0b072bb",
+    "data\\results\\member3_smoke_20261017\\tables\\threshold_sweep_val_fixed_40.csv": "0590fb996c5d0f9516f3deb68435dc4bf78582aa621f3e15b303c9f6d7db6eef",
+    "data\\results\\member3_smoke_20261017\\thresholds.json": "bcff1e7afe6c9180049c6a16c0042b2c5be23eb5fc0549bcff050e024947ea14",
+    "data\\results\\member3_smoke_20261017\\train_fit_cal_split.csv": "1c457c8b5b185a36d30feabd241306619a6ec13c8301538f549999095202822e"
+  }
+}

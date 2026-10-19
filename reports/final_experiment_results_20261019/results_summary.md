@@ -1,5 +1,11 @@
 # Research results — preliminary within-capture evaluation
 
+> Preserved historical findings. The final sections describe availability and
+> verification at the original run time. In this checkout, five-capture historical
+> scores are present, but this seven-capture study's processed data, predictions
+> and models are absent. Cleanup verified aggregate arithmetic and figure integrity,
+> not a fresh full replay. See [RESULTS_GUIDE.md](../../RESULTS_GUIDE.md).
+
 
 
 ## 1. Experimental setup

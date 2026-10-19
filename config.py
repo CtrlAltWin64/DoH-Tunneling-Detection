@@ -111,8 +111,17 @@ class Config:
 
     def validate(self) -> None:
         cps = list(self.checkpoints)
-        if not cps or cps != sorted(set(cps)) or cps[0] < 2:
+        if (not cps or any(not isinstance(cp, int) or isinstance(cp, bool) for cp in cps)
+                or cps != sorted(set(cps)) or cps[0] < 2):
             raise ValueError("checkpoints must be strictly increasing integers >= 2")
+        if not self.experiment_name or self.experiment_name in (".", "..") or any(
+            ch in self.experiment_name for ch in '/\\:'
+        ):
+            raise ValueError("experiment_name must be a directory name, not a path")
+        if self.max_packets_per_file is not None and self.max_packets_per_file < 1:
+            raise ValueError("max_packets_per_file must be positive")
+        if not 0 < self.threshold_step <= 1:
+            raise ValueError("threshold_step must be in (0, 1]")
         if self.max_stored_packets < cps[-1]:
             raise ValueError("max_stored_packets must be >= the largest checkpoint")
         if not 0 < self.alpha < 1:

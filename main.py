@@ -35,7 +35,7 @@ def _cfg(args) -> Config:
         kw["group_by"] = args.group_by
     if getattr(args, "seed", None) is not None:
         kw["seed"] = args.seed
-    if getattr(args, "max_packets_per_file", None):
+    if getattr(args, "max_packets_per_file", None) is not None:
         kw["max_packets_per_file"] = args.max_packets_per_file
     if getattr(args, "name", None):
         kw["experiment_name"] = args.name
@@ -89,6 +89,22 @@ def main(argv=None) -> int:
     cfg = _cfg(args)
     cfg.validate()
 
+    # Reject invalid destinations before parsing captures or replacing datasets.
+    if args.cmd in ("run", "all") and not args.name:
+        ap.error("--name is required for run/all")
+    if args.cmd in ("run", "all", "dry-run"):
+        out = Path(cfg.results_dir) / (args.name or "synthetic_smoke_test")
+        if out.exists() and any(out.iterdir()) and not args.overwrite:
+            raise FileExistsError(f"{out} is not empty; choose a new --name")
+    if args.cmd in ("build", "all") and not args.overwrite:
+        for filename in ("flows.pkl", "flows_report.json"):
+            target = Path(cfg.processed_dir) / filename
+            if target.exists():
+                raise FileExistsError(
+                    f"{target} already exists; choose a new --processed-dir "
+                    "or explicitly pass --overwrite"
+                )
+
     if args.cmd == "inspect":
         rep = insp.inspect_dir(cfg.raw_dir)
         insp.print_report(rep)
@@ -101,8 +117,6 @@ def main(argv=None) -> int:
         print(f"built {len(flows)} flows -> {path}\ncounters: {report['counters']}")
 
     if args.cmd in ("run", "all"):
-        if not args.name:
-            ap.error("--name is required for run/all")
         flows = load_flows(cfg.processed_dir)
         out = Path(cfg.results_dir) / cfg.experiment_name
         run_experiment(flows, cfg, out, synthetic=False, overwrite=args.overwrite)
@@ -127,4 +141,8 @@ def main(argv=None) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except (ValueError, FileNotFoundError, FileExistsError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        sys.exit(2)

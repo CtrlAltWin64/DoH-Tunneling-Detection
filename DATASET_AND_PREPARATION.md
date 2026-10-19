@@ -1,5 +1,13 @@
 # Dataset and preparation
 
+> **Current checkout, 19 October 2026:** five captures are present under
+> `data/raw/Benign/` and `data/raw/Malicious/`, with 139,076 processed flows
+> (978 benign / 138,098 malicious) in `data/processed/flows.pkl`. File02 and File03
+> are absent. The seven-capture paths/counts below describe the archived study,
+> whose processed data, predictions and models are not present here. See
+> [data/README.md](data/README.md) and [RESULTS_GUIDE.md](RESULTS_GUIDE.md) for
+> current availability. Do not substitute the five-capture flows for that study.
+
 > Historical protocol note: the counts and five-group splitter restriction below
 > describe the frozen source used for the recorded experiment. The newly merged
 > code adds a three-fold capture-split fallback and changes preprocessing/model
@@ -12,8 +20,9 @@ publication dates and licensing have not been independently authenticated.
 
 ## Inputs
 
-The seven captures were directly inside `data/`, not `data/raw/` or the nested
-checkout. See the [file list](data/README.md) and [SHA-256 manifest](reports/final_experiment_results_20261019/metrics/capture_manifest.csv).
+The archived study read seven captures directly inside its workspace's `data/`.
+That is not the current five-capture recursive `data/raw/` layout. See the
+[SHA-256 manifest](reports/final_experiment_results_20261019/metrics/capture_manifest.csv).
 Total size: 1,703,660,902 bytes (approximately 1.59 GiB). All are ignored by Git.
 
 The project identifies these as UFU-DoH-EXF / DNS-360 scenario captures. Hashes
@@ -44,7 +53,7 @@ Missing prefixes are never fabricated. Only about 15% of attacks reach 20 packet
 
 ## Splitting and model roles
 
-Four benign and three malicious captures fail the existing five-fold capture
+Four benign and three malicious captures failed the historical five-fold capture
 splitter's minimum five groups per class. This study explicitly uses a **preliminary
 flow split**, seed 42: fold 0 test, fold 1 validation, folds 2–4 training. Only flows
 reaching 10 packets enter the split. All prefixes of one flow stay together.
@@ -60,7 +69,10 @@ captures. Repeated length/direction signatures also span training and test.
 RF calibration uses training-only flow-grouped out-of-fold scores. The study's CNN
 uses separate fitting, calibration and early-stopping roles inside outer training,
 with seeds 42 and 43. Outer validation selects thresholds; test uses frozen models
-and thresholds. The generic CLI differs in its early-stopping arrangement.
+and thresholds. The current generic CLI also separates all three CNN training
+roles, but can fall back to flow grouping inside outer training captures.
+RF OOF calibration groups by flow within outer training even when the outer
+split is capture-isolated. Inspect the actual role and split manifests.
 
 The common comparison requires at least 20 packets: 4,137 malicious and 275 benign
 test flows, excluding 23,484 outer test flows. Native 10-packet results are separate
@@ -90,9 +102,11 @@ afterward cannot restore it. The storage cap limits recovery of late-arriving ea
 packets. TCP/443 is not DoH authentication. Labels do not identify genuine evasive
 rates or tools. Session fingerprints and capture correlation limit conclusions.
 
-One additional benign and two additional malicious captures would merely pass the
-outer splitter's count guard; more independent sessions may be required for every
-model/calibration/validation/test role and meaningful capture-level uncertainty.
+For historical source, one additional benign and two additional malicious captures
+would merely pass its five-group guard. The current outer splitter permits three
+groups per class; the local two-benign/three-malicious set still fails. Meeting a
+count guard does not establish independent sessions, adequate inner training roles
+or meaningful capture-level uncertainty.
 
 ## Reproduction and storage
 

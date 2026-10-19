@@ -1,0 +1,94 @@
+{
+  "environment": {
+    "python": "3.14.2",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2",
+    "torch": "2.14.1+cpu",
+    "timestamp_utc": "2026-10-19T06:10:03Z"
+  },
+  "synthetic_bundle_replay": [
+    {
+      "model": "rf",
+      "partition": "val",
+      "checkpoint": 10,
+      "flows": 216,
+      "max_delta": 3.3306690738754696e-16,
+      "passed": true
+    },
+    {
+      "model": "rf",
+      "partition": "val",
+      "checkpoint": 20,
+      "flows": 216,
+      "max_delta": 2.220446049250313e-16,
+      "passed": true
+    },
+    {
+      "model": "rf",
+      "partition": "test",
+      "checkpoint": 10,
+      "flows": 216,
+      "max_delta": 2.220446049250313e-16,
+      "passed": true
+    },
+    {
+      "model": "rf",
+      "partition": "test",
+      "checkpoint": 20,
+      "flows": 216,
+      "max_delta": 6.661338147750939e-16,
+      "passed": true
+    },
+    {
+      "model": "cnn_gru",
+      "partition": "val",
+      "checkpoint": 10,
+      "flows": 216,
+      "max_delta": 5.551115123125783e-17,
+      "passed": true
+    },
+    {
+      "model": "cnn_gru",
+      "partition": "val",
+      "checkpoint": 20,
+      "flows": 216,
+      "max_delta": 8.326672684688674e-17,
+      "passed": true
+    },
+    {
+      "model": "cnn_gru",
+      "partition": "test",
+      "checkpoint": 10,
+      "flows": 216,
+      "max_delta": 8.326672684688674e-17,
+      "passed": true
+    },
+    {
+      "model": "cnn_gru",
+      "partition": "test",
+      "checkpoint": 20,
+      "flows": 216,
+      "max_delta": 8.326672684688674e-17,
+      "passed": true
+    }
+  ],
+  "legacy_raw_checkpoint_load": [
+    {
+      "run": "exp_ufu_real_cp10_20",
+      "raw_checkpoint_load": true,
+      "finite_raw_scores": true,
+      "note": "Raw checkpoint smoke only; historical calibrator absent."
+    },
+    {
+      "run": "exp_ufu_real_cp2_4_8_10_15",
+      "raw_checkpoint_load": true,
+      "finite_raw_scores": true,
+      "note": "Raw checkpoint smoke only; historical calibrator absent."
+    }
+  ],
+  "rf_class_weight_override": "verified"
+}

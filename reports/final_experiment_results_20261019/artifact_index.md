@@ -1,5 +1,11 @@
 # Research results package
 
+> Historical package index. Current availability differs: the large processed,
+> prediction, trace and model directories are absent from this checkout. Tables,
+> figures and recorded verification summaries remain. Older five-capture score
+> files are present separately under `data/results/`. See the current
+> [results guide](../../RESULTS_GUIDE.md) before interpreting retention claims below.
+
 - [Main report](results_summary.md)
 - [Methodology and limitations](methodology_and_limitations.md)
 - [Reproduction commands](reproduction.md)

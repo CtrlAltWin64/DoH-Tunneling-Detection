@@ -1,0 +1,52 @@
+[
+  {
+    "args": [
+      "all"
+    ],
+    "exit_code": 2,
+    "stderr": "usage: main.py [-h] {inspect,build,run,all,dry-run} ...\nmain.py: error: --name is required for run/all",
+    "passed": true
+  },
+  {
+    "args": [
+      "build",
+      "--processed-dir",
+      "data/processed"
+    ],
+    "exit_code": 2,
+    "stderr": "error: data\\processed\\flows.pkl already exists; choose a new --processed-dir or explicitly pass --overwrite",
+    "passed": true
+  },
+  {
+    "args": [
+      "dry-run",
+      "--results-dir",
+      "reports/cleanup_verification_20261019/smoke",
+      "--name",
+      "both_models"
+    ],
+    "exit_code": 2,
+    "stderr": "error: reports\\cleanup_verification_20261019\\smoke\\both_models is not empty; choose a new --name",
+    "passed": true
+  },
+  {
+    "args": [
+      "run",
+      "--name",
+      "../escape"
+    ],
+    "exit_code": 2,
+    "stderr": "error: experiment_name must be a directory name, not a path",
+    "passed": true
+  },
+  {
+    "args": [
+      "build",
+      "--max-packets-per-file",
+      "0"
+    ],
+    "exit_code": 2,
+    "stderr": "error: max_packets_per_file must be positive",
+    "passed": true
+  }
+]

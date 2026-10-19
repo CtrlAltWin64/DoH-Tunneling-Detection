@@ -1,5 +1,21 @@
 # Full-project research audit: Adaptive DoH tunneling detection
 
+> **Historical audit; current-status note (19 October 2026 cleanup).** The body
+> below is preserved as evidence from its original branch/source/workspace. Its
+> line numbers, test counts and statements of current availability are not a live
+> inventory. The checkout is now `main` at `c38aac2` with cleanup edits. Five raw
+> captures and the two original completed real runs are present locally; File02,
+> File03 and the seven-capture report's large model/data/prediction bundle are absent.
+> Merged code supplies RF/CNN calibrated bundles, legacy CNN loading, three-fold
+> outer splitting fallback, separate CNN early-stop roles and parser repairs.
+> Cleanup adds output guards, explicit run status, result JSON, correct terminal
+> robustness plotting and documentation. Historical saved-score replay passes
+> 144,113 checks; this does not recreate missing historical model/calibrator state.
+> See [RESULTS_GUIDE.md](../RESULTS_GUIDE.md) and the
+> [current verification record](cleanup_verification_20261019/verification.md).
+> Shared-capture dependence, short-flow exclusions, missing complete historical
+> bundles and TCP high-water retransmission limitations remain relevant.
+
 **Audit date:** 18 October 2026. **Scope:** all three members' research pipeline, tests, documentation, saved experiments, dataset assets, and the frontend's relationship to research results.
 
 **Repository:** `C:\Users\vemba\Desktop\DoH-Tunneling-Detection`.

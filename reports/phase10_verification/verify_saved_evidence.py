@@ -7,6 +7,7 @@ metadata, using explicit NumPy formulas rather than the production evaluators.
 from __future__ import annotations
 
 import hashlib
+import argparse
 import json
 import math
 import pickle
@@ -134,7 +135,10 @@ def verify_dataset_stats(path, flows, split):
                 check(str(path.relative_to(ROOT)) + f"/{row.partition}/{row.label}/pct_ge_{cp}", round(100 * n / len(cohort), 2), row[f"pct_ge_{cp}"])
 
 
-def run():
+def run(output=None):
+    output = Path(output) if output else OUT / "evidence_verification.json"
+    if output.exists():
+        raise FileExistsError(f"Preserve {output}; choose a new --output path")
     flows = pickle.loads((ROOT / "data/processed/flows.pkl").read_bytes())
     flow_map = {f.flow_id:f for f in flows}
     raw = sorted((ROOT / "data/raw").rglob("*.pcap*"))
@@ -151,9 +155,12 @@ def run():
     check("flows_report/flows_built",len(flows),processed_report["counters"]["flows_built"])
     check("flows_report/source_files", sorted(set(f.source_file for f in flows)),sorted(x["file"] for x in processed_report["files_used"]))
     check("raw/distinct_hashes", len({p["sha256"] for p in report["raw_captures"]}),len(raw))
-    for experiment in sorted((ROOT / "data/results").iterdir()):
+    # This verifier targets the historical schema, not arbitrary future runs.
+    names = ("exp_ufu_real_20261018", "exp_ufu_real_cp10_20",
+             "exp_ufu_real_cp2_4_8_10_15", "member3_smoke_20261017")
+    for experiment in (ROOT / "data/results" / name for name in names):
         if not experiment.is_dir():
-            continue
+            raise FileNotFoundError(f"Restore the historical result directory: {experiment}")
         print(f"Verifying {experiment.name}", flush=True)
         record_path=experiment / "run_record.json"
         x={"path":str(experiment),"files":{},"models":{},"duplicate_figures":[],"figure_provenance":[],"full_score_reverification":False}
@@ -284,10 +291,13 @@ def run():
         if isinstance(value, np.generic):return clean(value.item())
         if isinstance(value,float) and not math.isfinite(value):return None
         return value
-    (OUT/"evidence_verification.json").write_text(json.dumps(clean(report),indent=2),encoding="utf-8")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(clean(report),indent=2),encoding="utf-8")
     print(json.dumps(clean(report["verification"]),indent=2))
     return 1 if report["verification"]["failed"] else 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(run())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, help="New verification JSON path; existing files are refused")
+    raise SystemExit(run(parser.parse_args().output))

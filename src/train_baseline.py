@@ -34,7 +34,7 @@ def make_rf(cfg) -> RandomForestClassifier:
     return RandomForestClassifier(
         n_estimators=cfg.rf_n_estimators,
         min_samples_leaf=cfg.rf_min_samples_leaf,
-        class_weight="balanced_subsample",
+        class_weight=cfg.rf_class_weight,
         n_jobs=-1,
         random_state=cfg.seed,
     )

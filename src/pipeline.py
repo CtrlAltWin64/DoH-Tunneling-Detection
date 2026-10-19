@@ -177,7 +177,7 @@ def _run_cnn_gru_experiment(
     }
     for p, c in cnn_curves.items():
         if len(set(c.y)) < 2:
-            log(f"WARNING [CNN-GRU]: {p} eligible flows contain only one class — evaluation may be unreliable")
+            raise ValueError(f"CNN-GRU {p}: eligible (>= {tmax} packets) flows contain a single class")
 
     # Calibration quality
     cal_rows = []
@@ -315,14 +315,41 @@ def _run_cnn_gru_experiment(
 def run_experiment(
     flows, cfg, out_dir, synthetic: bool = False, overwrite: bool = False, log=print
 ) -> dict:
+    """Run with an explicit completion marker; preserve failed outputs for diagnosis."""
+    from .result_export import write_result_manifest
+
     cfg.validate()
-    cps = list(cfg.checkpoints)
-    tmax = cps[-1]
     out = Path(out_dir)
     if out.exists() and any(out.iterdir()) and not overwrite:
         raise FileExistsError(
             f"{out} already exists and is not empty; choose another --name or pass --overwrite"
         )
+    out.mkdir(parents=True, exist_ok=True)
+    status = {"schema_version": 1, "status": "running", "synthetic": synthetic,
+              "config": asdict(cfg), "environment": environment_record()}
+
+    def save_status():
+        (out / "run_status.json").write_text(json.dumps(status, indent=2), encoding="utf-8")
+
+    save_status()
+    try:
+        result = _run_experiment(flows, cfg, out, synthetic, log)
+        write_result_manifest(out)
+    except BaseException as exc:
+        status.update(status="failed", error_type=type(exc).__name__, error=str(exc))
+        save_status()
+        raise
+    status.update(status="complete")
+    save_status()
+    log(f"[done] results in {out}")
+    return result
+
+
+def _run_experiment(flows, cfg, out_dir, synthetic, log):
+    cfg.validate()
+    cps = list(cfg.checkpoints)
+    tmax = cps[-1]
+    out = Path(out_dir)
     (out / "tables").mkdir(parents=True, exist_ok=True)
     (out / "figures").mkdir(exist_ok=True)
     banner = (
@@ -557,8 +584,8 @@ def run_experiment(
                            "Fraction", "RF Coverage and FPR (test)", fig / "rf_detection_coverage.png")
         plots.grouped_bars(two_rf, "policy", {"coverage": "coverage (= recall)", "fpr": "FPR"},
                            "Fraction", "RF Coverage and FPR (test)", fig / "detection_coverage.png")
-        plots.plot_robustness(result_rf["robustness"], fig / "rf_robustness.png")
-        plots.plot_robustness(result_rf["robustness"], fig / "robustness.png")
+        plots.plot_robustness(result_rf["robustness"], fig / "rf_robustness.png", ("adaptive", f"fixed_{tmax}"))
+        plots.plot_robustness(result_rf["robustness"], fig / "robustness.png", ("adaptive", f"fixed_{tmax}"))
         # Observation cost (backward compat)
         plots.grouped_bars(two_rf, "policy", {"cost_malicious": "malicious flows", "cost_all": "all flows"},
                            "Normalised obs. cost (pkts/Tmax)", "Observation cost (test)",
@@ -587,7 +614,7 @@ def run_experiment(
                            fig / "cnn_gru_debd_comparison.png")
         plots.grouped_bars(two_cnn, "policy", {"coverage": "coverage (= recall)", "fpr": "FPR"},
                            "Fraction", "CNN-GRU Coverage and FPR (test)", fig / "cnn_gru_detection_coverage.png")
-        plots.plot_robustness(result_cnn["robustness"], fig / "cnn_gru_robustness.png")
+        plots.plot_robustness(result_cnn["robustness"], fig / "cnn_gru_robustness.png", ("adaptive", f"fixed_{tmax}"))
 
         if result_rf is not None:
             _plot_rf_vs_cnn_comparison(result_rf, result_cnn, tmax, fig)
@@ -652,7 +679,6 @@ def run_experiment(
             "both directions, including the alert packet, retransmissions removed, "
             "undetected malicious = 100%). Coverage equals recall at flow level.\n")
     (out / "summary.md").write_text(md, encoding="utf-8")
-    log(f"[done] results in {out}")
 
     # Return combined result (backward-compat keys from RF if available, else CNN)
     primary = result_rf if result_rf is not None else result_cnn

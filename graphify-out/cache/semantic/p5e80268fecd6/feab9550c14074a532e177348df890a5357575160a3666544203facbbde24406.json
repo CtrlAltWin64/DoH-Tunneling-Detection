@@ -1,1 +1,0 @@
-{"nodes": [{"id": "frontend_traceglass", "label": "Traceglass UI", "file_type": "document", "source_file": "frontend/README.md", "rationale": "React-based frontend concept for visualizing detection results."}], "edges": [], "hyperedges": []}
