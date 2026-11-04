@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "check": "rfval_model_reload",
+      "passed": true,
+      "max_probability_difference": 1.1102230246251565e-16
+    },
+    {
+      "check": "rfvaladaptive_latency",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_10_latency",
+      "passed": true
+    },
+    {
+      "check": "rfvalfixed_20_latency",
+      "passed": true
+    },
+    {
+      "check": "rftest_model_reload",
+      "passed": true,
+      "max_probability_difference": 1.1102230246251565e-16
+    },
+    {
+      "check": "rftestadaptive_latency",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_10_latency",
+      "passed": true
+    },
+    {
+      "check": "rftestfixed_20_latency",
+      "passed": true
+    },
+    {
+      "check": "cnnval_model_reload",
+      "passed": true,
+      "max_probability_difference": 1.6940658945086007e-21
+    },
+    {
+      "check": "cnnvaladaptive_latency",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_10_latency",
+      "passed": true
+    },
+    {
+      "check": "cnnvalfixed_20_latency",
+      "passed": true
+    },
+    {
+      "check": "cnntest_model_reload",
+      "passed": true,
+      "max_probability_difference": 1.6940658945086007e-21
+    },
+    {
+      "check": "cnntestadaptive_latency",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_10_latency",
+      "passed": true
+    },
+    {
+      "check": "cnntestfixed_20_latency",
+      "passed": true
+    }
+  ],
+  "passed": 16,
+  "failed": 0
+}

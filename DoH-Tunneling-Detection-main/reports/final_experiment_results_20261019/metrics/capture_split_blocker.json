@@ -1,0 +1,5 @@
+{
+  "error": "class 0 has only 4 source_file group(s); at least 5 are needed for a 60/20/20 split - use group_by='flow'",
+  "benign_captures": 4,
+  "malicious_captures": 3
+}

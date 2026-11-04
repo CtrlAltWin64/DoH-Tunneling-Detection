@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-19",
+  "purpose": "Git packaging after original experiment; historical artifact hashes retained.",
+  "hashes": {
+    ".gitignore": "184c8341f238eba064629ee19f3b72fcc108e88f4db3408fe3e93d569c0c3b0c",
+    ".gitattributes": "10b6f09fad3ed8c6f059cd99a0358ddc901f02f1ebdc1951483d08ad9a42f960",
+    "README.md": "062a49edc23288fbf142110b28ba14a1d016a2d00013407c9b004f1bcdf3be75",
+    "DATASET_AND_PREPARATION.md": "93a9e9c216481960be098b9e4f76f5bb8ce6fed6bdfb1c4a1a174e2aa8bfc739",
+    "GIT_READINESS.md": "b75f155d45921ce1a69954382b0aefd80fa54926f4a2e065f2c9ee7fd941a6c5",
+    "data/README.md": "a07d63a2db6196bdbc33ab8bc16a52bb9fe932484a483b550932aad8ea65a0db",
+    "requirements-dev.txt": "5d3ae7647d4f33e21a119aeb2dbeafe7de0c23b02619956adaf9c6380a544a1b",
+    "reports/final_experiment_results_20261019/verify_inputs.py": "933ff082655ee8615771dde62df257412e00f2c1600b48d33b8752e26e7772be"
+  },
+  "checks": {
+    "capture_files_excluded": true,
+    "large_generated_artifacts_excluded": true,
+    "nested_checkout_excluded": true,
+    "documentation_links_valid": true,
+    "candidate_files_under_10_MiB": true
+  },
+  "candidate_file_count_before_this_manifest": 136,
+  "candidate_bytes_before_this_manifest": 1876776,
+  "largest_candidate_files": [
+    {
+      "path": "reports/final_experiment_results_20261019/figures/confusion_matrices.png",
+      "bytes": 225650
+    },
+    {
+      "path": "reports/final_experiment_results_20261019/figures/observation_cost_and_latency.png",
+      "bytes": 185770
+    },
+    {
+      "path": "reports/final_experiment_results_20261019/figures/roc_precision_recall.png",
+      "bytes": 165591
+    },
+    {
+      "path": "reports/final_experiment_results_20261019/figures/checkpoint_coverage.png",
+      "bytes": 114216
+    },
+    {
+      "path": "reports/final_experiment_results_20261019/figures/stopping_distribution.png",
+      "bytes": 104313
+    }
+  ]
+}

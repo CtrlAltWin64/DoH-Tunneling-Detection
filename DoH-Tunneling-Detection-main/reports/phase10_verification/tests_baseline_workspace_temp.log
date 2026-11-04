@@ -1,0 +1,1482 @@
+test_normalizer_preserved_after_load (test_cnn_gru.CheckpointSaveLoad.test_normalizer_preserved_after_load) ... ERROR
+test_save_and_load_roundtrip (test_cnn_gru.CheckpointSaveLoad.test_save_and_load_roundtrip) ... ERROR
+test_checkpoint_lengths_10_20_30_40 (test_cnn_gru.ModelShapes.test_checkpoint_lengths_10_20_30_40)
+Model processes all required checkpoint lengths cleanly. ... ok
+test_cpu_execution (test_cnn_gru.ModelShapes.test_cpu_execution)
+CPU execution runs without error. ... ok
+test_forward_padded_batch (test_cnn_gru.ModelShapes.test_forward_padded_batch)
+Batch with different sequence lengths; padded inputs should give per-sample logits. ... ok
+test_forward_single_sample (test_cnn_gru.ModelShapes.test_forward_single_sample) ... ok
+test_invalid_lengths_and_empty_batches_rejected (test_cnn_gru.ModelShapes.test_invalid_lengths_and_empty_batches_rejected)
+Model strictly validates input dimensions and sequence lengths. ... ok
+test_mixed_length_batch_invariance (test_cnn_gru.ModelShapes.test_mixed_length_batch_invariance)
+Causal conv and masked normalization ensure a sequence's prediction is invariant to padding and other batch elements. ... ok
+test_output_is_scalar_per_sample (test_cnn_gru.ModelShapes.test_output_is_scalar_per_sample) ... ok
+setUpClass (test_cnn_gru.PrefixTableIntegration) ... ERROR
+test_calibration_subset_disjoint_from_fitting_subset (test_cnn_gru.SeparateCalibrationTests.test_calibration_subset_disjoint_from_fitting_subset) ... ok
+test_build_sequence_dataset_filters_short_flows (test_cnn_gru.SequenceBuilding.test_build_sequence_dataset_filters_short_flows) ... ok
+test_causal_future_packets_dont_affect_prefix (test_cnn_gru.SequenceBuilding.test_causal_future_packets_dont_affect_prefix) ... ok
+test_feature_count_matches_constant (test_cnn_gru.SequenceBuilding.test_feature_count_matches_constant) ... ok
+test_sequence_shape_equals_t (test_cnn_gru.SequenceBuilding.test_sequence_shape_equals_t) ... ok
+test_constant_feature_does_not_crash (test_cnn_gru.SequenceNormalizerTests.test_constant_feature_does_not_crash) ... ok
+test_fit_transform_zero_mean_unit_std (test_cnn_gru.SequenceNormalizerTests.test_fit_transform_zero_mean_unit_std) ... ok
+test_state_dict_roundtrip (test_cnn_gru.SequenceNormalizerTests.test_state_dict_roundtrip) ... ok
+test_unfitted_raises (test_cnn_gru.SequenceNormalizerTests.test_unfitted_raises) ... ok
+test_inference_returns_probabilities_in_0_1 (test_cnn_gru.TrainingSmokeTest.test_inference_returns_probabilities_in_0_1) ... ERROR
+test_train_returns_model_normalizer_history (test_cnn_gru.TrainingSmokeTest.test_train_returns_model_normalizer_history) ... ERROR
+tearDownClass (test_cnn_gru.TrainingSmokeTest) ... ERROR
+test_features_are_recomputed_from_new_timestamps (test_evasion.Evasion.test_features_are_recomputed_from_new_timestamps) ... ok
+test_invalid_parameters_rejected (test_evasion.Evasion.test_invalid_parameters_rejected) ... ok
+test_jitter_independent_of_processing_order (test_evasion.Evasion.test_jitter_independent_of_processing_order) ... ok
+test_jitter_is_reproducible_and_seed_dependent (test_evasion.Evasion.test_jitter_is_reproducible_and_seed_dependent) ... ok
+test_jitter_preserves_order_sizes_and_is_nonnegative (test_evasion.Evasion.test_jitter_preserves_order_sizes_and_is_nonnegative) ... ok
+test_low_and_slow_scales_iats_keeps_everything_else (test_evasion.Evasion.test_low_and_slow_scales_iats_keeps_everything_else) ... ok
+test_original_flow_not_mutated (test_evasion.Evasion.test_original_flow_not_mutated) ... ok
+test_counts (test_metrics.Confusion.test_counts) ... ok
+test_coverage_equals_detected_over_malicious (test_metrics.Confusion.test_coverage_equals_detected_over_malicious) ... ok
+test_latency_only_over_detected_malicious (test_metrics.Confusion.test_latency_only_over_detected_malicious) ... ok
+test_no_alerts_gives_nan_precision_not_crash (test_metrics.Confusion.test_no_alerts_gives_nan_precision_not_crash) ... ok
+test_observation_cost_and_stopping_packets (test_metrics.Confusion.test_observation_cost_and_stopping_packets) ... ok
+test_rates (test_metrics.Confusion.test_rates) ... ok
+test_undetected_malicious_is_fn_and_undetected_benign_is_not_fp (test_metrics.Confusion.test_undetected_malicious_is_fn_and_undetected_benign_is_not_fp) ... ok
+test_alert_packet_bytes_are_included (test_metrics.DEBD.test_alert_packet_bytes_are_included) ... ok
+test_byte_weighted_differs_from_per_flow_mean (test_metrics.DEBD.test_byte_weighted_differs_from_per_flow_mean) ... ok
+test_detected_only_mean (test_metrics.DEBD.test_detected_only_mean) ... ok
+test_per_flow_mean_with_undetected_as_100 (test_metrics.DEBD.test_per_flow_mean_with_undetected_as_100) ... ok
+test_clopper_pearson_brackets_point_estimate (test_metrics.Statistics.test_clopper_pearson_brackets_point_estimate) ... ok
+test_clopper_pearson_zero_events (test_metrics.Statistics.test_clopper_pearson_zero_events) ... ok
+test_prefix_metrics_perfect_and_ece (test_metrics.Statistics.test_prefix_metrics_perfect_and_ece) ... ok
+test_bounded_processing_max_packets (test_pcap_end_to_end.PcapEndToEnd.test_bounded_processing_max_packets) ... ERROR
+test_csv_only_directory_is_reported_not_guessed (test_pcap_end_to_end.PcapEndToEnd.test_csv_only_directory_is_reported_not_guessed) ... ERROR
+test_empty_directory_raises (test_pcap_end_to_end.PcapEndToEnd.test_empty_directory_raises) ... ERROR
+test_inspect_and_save_generates_manifest_and_report (test_pcap_end_to_end.PcapEndToEnd.test_inspect_and_save_generates_manifest_and_report) ... ERROR
+test_inspect_build_run (test_pcap_end_to_end.PcapEndToEnd.test_inspect_build_run) ... ERROR
+test_pcapng_files_in_tree_inspected_and_built (test_pcap_end_to_end.PcapEndToEnd.test_pcapng_files_in_tree_inspected_and_built) ... ERROR
+test_calibrator_outputs_probabilities_and_is_monotone_per_checkpoint (test_pipeline.CalibrationLeakage.test_calibrator_outputs_probabilities_and_is_monotone_per_checkpoint) ... ok
+test_oof_folds_are_flow_grouped_and_training_only (test_pipeline.CalibrationLeakage.test_oof_folds_are_flow_grouped_and_training_only) ... ok
+test_all_inverted_falls_back_to_identity (test_pipeline.CalibrationMonotonicity.test_all_inverted_falls_back_to_identity) ... ok
+test_inverted_signal_never_produces_decreasing_map (test_pipeline.CalibrationMonotonicity.test_inverted_signal_never_produces_decreasing_map)
+If out-of-fold scores are anti-correlated with the label at a checkpoint, the Platt slope would be ... ok
+setUpClass (test_pipeline.Pipeline) ... ERROR
+test_each_flow_gets_equal_total_weight (test_pipeline.Weighting.test_each_flow_gets_equal_total_weight) ... ok
+test_empty_capture_files (test_prefixes.PcapPreprocessing.test_empty_capture_files)
+Verify empty files (0 bytes) raise PcapFormatError. ... ERROR
+test_empty_capture_files (test_prefixes.PcapPreprocessing.test_empty_capture_files)
+Verify empty files (0 bytes) raise PcapFormatError. ... ERROR
+test_flow_key_direction_retransmission_and_length (test_prefixes.PcapPreprocessing.test_flow_key_direction_retransmission_and_length) ... ERROR
+test_flow_key_direction_retransmission_and_length (test_prefixes.PcapPreprocessing.test_flow_key_direction_retransmission_and_length) ... ERROR
+test_idle_timeout_splits_flows (test_prefixes.PcapPreprocessing.test_idle_timeout_splits_flows) ... ERROR
+test_idle_timeout_splits_flows (test_prefixes.PcapPreprocessing.test_idle_timeout_splits_flows) ... ERROR
+test_label_rules_required_and_applied (test_prefixes.PcapPreprocessing.test_label_rules_required_and_applied) ... ERROR
+test_label_rules_required_and_applied (test_prefixes.PcapPreprocessing.test_label_rules_required_and_applied) ... ERROR
+test_out_of_order_timestamps_are_sorted_and_reported (test_prefixes.PcapPreprocessing.test_out_of_order_timestamps_are_sorted_and_reported) ... ERROR
+test_out_of_order_timestamps_are_sorted_and_reported (test_prefixes.PcapPreprocessing.test_out_of_order_timestamps_are_sorted_and_reported) ... ERROR
+test_pcapng_and_garbage_rejected (test_prefixes.PcapPreprocessing.test_pcapng_and_garbage_rejected) ... ERROR
+test_pcapng_and_garbage_rejected (test_prefixes.PcapPreprocessing.test_pcapng_and_garbage_rejected) ... ERROR
+test_pcapng_direct_parsing_and_flows (test_prefixes.PcapPreprocessing.test_pcapng_direct_parsing_and_flows)
+Verify native PCAPNG parsing and flow construction. ... ERROR
+test_pcapng_direct_parsing_and_flows (test_prefixes.PcapPreprocessing.test_pcapng_direct_parsing_and_flows)
+Verify native PCAPNG parsing and flow construction. ... ERROR
+test_pcapng_to_pcap_conversion_fallback (test_prefixes.PcapPreprocessing.test_pcapng_to_pcap_conversion_fallback)
+Verify convert_pcapng_to_pcap fallback produces a readable classic PCAP. ... ERROR
+test_pcapng_to_pcap_conversion_fallback (test_prefixes.PcapPreprocessing.test_pcapng_to_pcap_conversion_fallback)
+Verify convert_pcapng_to_pcap fallback produces a readable classic PCAP. ... ERROR
+test_truncated_capture_keeps_true_ip_length (test_prefixes.PcapPreprocessing.test_truncated_capture_keeps_true_ip_length) ... ERROR
+test_truncated_capture_keeps_true_ip_length (test_prefixes.PcapPreprocessing.test_truncated_capture_keeps_true_ip_length) ... ERROR
+test_udp_packets_skipped_and_tracked (test_prefixes.PcapPreprocessing.test_udp_packets_skipped_and_tracked)
+Verify UDP packets are properly classified and counted. ... ERROR
+test_cannot_build_prefix_longer_than_flow (test_prefixes.PrefixConstruction.test_cannot_build_prefix_longer_than_flow) ... ok
+test_causality_future_packets_do_not_change_features (test_prefixes.PrefixConstruction.test_causality_future_packets_do_not_change_features)
+Leakage detector: scrambling every packet after t must not change the t-packet features. ... ok
+test_checkpoint_validation_and_eligible_counts (test_prefixes.PrefixConstruction.test_checkpoint_validation_and_eligible_counts) ... ok
+test_deterministic (test_prefixes.PrefixConstruction.test_deterministic) ... ok
+test_flow_level_totals_are_not_model_features (test_prefixes.PrefixConstruction.test_flow_level_totals_are_not_model_features) ... ok
+test_generate_flow_prefixes_single_flow (test_prefixes.PrefixConstruction.test_generate_flow_prefixes_single_flow) ... ok
+test_hand_computed_features (test_prefixes.PrefixConstruction.test_hand_computed_features) ... ok
+test_prefix_length_feature_equals_checkpoint (test_prefixes.PrefixConstruction.test_prefix_length_feature_equals_checkpoint) ... ok
+test_prefix_table_row_independent_of_flow_tail_and_totals (test_prefixes.PrefixConstruction.test_prefix_table_row_independent_of_flow_tail_and_totals) ... ok
+test_rows_exist_only_where_flow_is_long_enough (test_prefixes.PrefixConstruction.test_rows_exist_only_where_flow_is_long_enough) ... ok
+test_sequence_feature_extraction_shape_dtype_and_causality (test_prefixes.PrefixConstruction.test_sequence_feature_extraction_shape_dtype_and_causality) ... ok
+test_sequence_feature_extraction_short_flow_raises (test_prefixes.PrefixConstruction.test_sequence_feature_extraction_short_flow_raises) ... ok
+test_all_prefixes_of_a_flow_share_the_partition (test_splitting.FlowLevelSplit.test_all_prefixes_of_a_flow_share_the_partition) ... ok
+test_both_classes_in_every_partition (test_splitting.FlowLevelSplit.test_both_classes_in_every_partition) ... ok
+test_capture_group_split_zero_leakage_assertion (test_splitting.FlowLevelSplit.test_capture_group_split_zero_leakage_assertion)
+Strict capture-level test: verify no source capture file appears in multiple partitions. ... ok
+test_create_split_manifest_reports_leakage_check_and_seed (test_splitting.FlowLevelSplit.test_create_split_manifest_reports_leakage_check_and_seed) ... ERROR
+test_deterministic_and_seed_sensitive (test_splitting.FlowLevelSplit.test_deterministic_and_seed_sensitive) ... ok
+test_duplicate_flow_ids_rejected (test_splitting.FlowLevelSplit.test_duplicate_flow_ids_rejected) ... ok
+test_every_flow_in_exactly_one_partition_and_proportions (test_splitting.FlowLevelSplit.test_every_flow_in_exactly_one_partition_and_proportions) ... ok
+test_group_split_keeps_source_files_together (test_splitting.FlowLevelSplit.test_group_split_keeps_source_files_together) ... ok
+test_missing_column_raises (test_splitting.FlowLevelSplit.test_missing_column_raises) ... ok
+test_no_flow_overlap_between_partitions (test_splitting.FlowLevelSplit.test_no_flow_overlap_between_partitions) ... ok
+test_split_train_calibration_disjoint_and_both_classes (test_splitting.FlowLevelSplit.test_split_train_calibration_disjoint_and_both_classes) ... ok
+test_too_few_groups_raises (test_splitting.FlowLevelSplit.test_too_few_groups_raises) ... ok
+test_fpr_counts_unique_flows_alerting_at_any_checkpoint (test_stopping_rule.SequentialFPR.test_fpr_counts_unique_flows_alerting_at_any_checkpoint) ... ok
+test_not_equal_to_single_checkpoint_fpr (test_stopping_rule.SequentialFPR.test_not_equal_to_single_checkpoint_fpr) ... ok
+test_sweep_matches_bruteforce_policy_runs (test_stopping_rule.SequentialFPR.test_sweep_matches_bruteforce_policy_runs) ... ok
+test_continues_when_threshold_not_reached_then_stops_at_first_crossing (test_stopping_rule.ThresholdCrossing.test_continues_when_threshold_not_reached_then_stops_at_first_crossing) ... ok
+test_decision_ignores_later_checkpoints_once_alerted (test_stopping_rule.ThresholdCrossing.test_decision_ignores_later_checkpoints_once_alerted) ... ok
+test_equality_counts_as_crossing (test_stopping_rule.ThresholdCrossing.test_equality_counts_as_crossing) ... ok
+test_fixed_window_is_single_checkpoint_policy (test_stopping_rule.ThresholdCrossing.test_fixed_window_is_single_checkpoint_policy) ... ok
+test_nondetection_recorded_as_such (test_stopping_rule.ThresholdCrossing.test_nondetection_recorded_as_such) ... ok
+test_run_policy_vectorised (test_stopping_rule.ThresholdCrossing.test_run_policy_vectorised) ... ok
+test_spec_example_alerts_at_20_packets (test_stopping_rule.ThresholdCrossing.test_spec_example_alerts_at_20_packets) ... ok
+test_grid_ends_with_sentinel_above_one (test_stopping_rule.ThresholdSelection.test_grid_ends_with_sentinel_above_one) ... ok
+test_infeasible_target_degrades_to_never_alert_sentinel (test_stopping_rule.ThresholdSelection.test_infeasible_target_degrades_to_never_alert_sentinel) ... ok
+test_resolution_warning_when_too_few_benign_flows (test_stopping_rule.ThresholdSelection.test_resolution_warning_when_too_few_benign_flows) ... ok
+test_selected_threshold_satisfies_alpha_and_is_lowest_feasible (test_stopping_rule.ThresholdSelection.test_selected_threshold_satisfies_alpha_and_is_lowest_feasible) ... ok
+test_selection_uses_only_the_passed_curves (test_stopping_rule.ThresholdSelection.test_selection_uses_only_the_passed_curves) ... ok
+
+======================================================================
+ERROR: test_normalizer_preserved_after_load (test_cnn_gru.CheckpointSaveLoad.test_normalizer_preserved_after_load)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_cnn_gru.py", line 233, in test_normalizer_preserved_after_load
+    save_model(model, norm, path)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\cnn_gru_model.py", line 585, in save_model
+    torch.save(payload, path)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 1002, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+         ~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 864, in _open_zipfile_writer
+    return container(name_or_buffer)  # type: ignore[arg-type]
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 828, in __init__
+    torch._C.PyTorchFileWriter(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.name, get_crc32_options(), _get_storage_alignment()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+RuntimeError: [enforce fail at inline_container.cc:745] . open file failed with error code: 5
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp0sb_s4h3'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_cnn_gru.py", line 223, in test_normalizer_preserved_after_load
+    with tempfile.TemporaryDirectory() as tmp:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 971, in __exit__
+    self.cleanup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp0sb_s4h3'
+
+======================================================================
+ERROR: test_save_and_load_roundtrip (test_cnn_gru.CheckpointSaveLoad.test_save_and_load_roundtrip)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_cnn_gru.py", line 210, in test_save_and_load_roundtrip
+    save_model(model, norm, path)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\cnn_gru_model.py", line 585, in save_model
+    torch.save(payload, path)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 1002, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+         ~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 864, in _open_zipfile_writer
+    return container(name_or_buffer)  # type: ignore[arg-type]
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 828, in __init__
+    torch._C.PyTorchFileWriter(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.name, get_crc32_options(), _get_storage_alignment()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+RuntimeError: [enforce fail at inline_container.cc:745] . open file failed with error code: 5
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpricwzr9o'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_cnn_gru.py", line 200, in test_save_and_load_roundtrip
+    with tempfile.TemporaryDirectory() as tmp:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 971, in __exit__
+    self.cleanup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpricwzr9o'
+
+======================================================================
+ERROR: setUpClass (test_cnn_gru.PrefixTableIntegration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_cnn_gru.py", line 286, in setUpClass
+    model, normalizer, _ = train_cnn_gru(
+                           ~~~~~~~~~~~~~^
+        flows[:80], flows[80:], CFG_TINY.checkpoints, CFG_TINY, ckpt, device="cpu"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\cnn_gru_model.py", line 504, in train_cnn_gru
+    torch.save({"epoch": epoch, "model_state": model.state_dict(),
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                "val_loss": val_loss, "normalizer": normalizer.state_dict()},
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               checkpoint_path)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 1002, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+         ~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 864, in _open_zipfile_writer
+    return container(name_or_buffer)  # type: ignore[arg-type]
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 828, in __init__
+    torch._C.PyTorchFileWriter(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.name, get_crc32_options(), _get_storage_alignment()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+RuntimeError: [enforce fail at inline_container.cc:745] . open file failed with error code: 5
+
+======================================================================
+ERROR: test_inference_returns_probabilities_in_0_1 (test_cnn_gru.TrainingSmokeTest.test_inference_returns_probabilities_in_0_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_cnn_gru.py", line 268, in test_inference_returns_probabilities_in_0_1
+    model, normalizer, _ = train_cnn_gru(
+                           ~~~~~~~~~~~~~^
+        self.train, self.val, CFG_TINY.checkpoints, CFG_TINY,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        Path(self.tmp.name) / "m2.pt", device="cpu"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\cnn_gru_model.py", line 504, in train_cnn_gru
+    torch.save({"epoch": epoch, "model_state": model.state_dict(),
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                "val_loss": val_loss, "normalizer": normalizer.state_dict()},
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               checkpoint_path)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 1002, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+         ~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 864, in _open_zipfile_writer
+    return container(name_or_buffer)  # type: ignore[arg-type]
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 828, in __init__
+    torch._C.PyTorchFileWriter(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.name, get_crc32_options(), _get_storage_alignment()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+RuntimeError: [enforce fail at inline_container.cc:745] . open file failed with error code: 5
+
+======================================================================
+ERROR: test_train_returns_model_normalizer_history (test_cnn_gru.TrainingSmokeTest.test_train_returns_model_normalizer_history)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_cnn_gru.py", line 256, in test_train_returns_model_normalizer_history
+    model, normalizer, history = train_cnn_gru(
+                                 ~~~~~~~~~~~~~^
+        self.train, self.val, CFG_TINY.checkpoints, CFG_TINY, self.ckpt, device="cpu"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\cnn_gru_model.py", line 504, in train_cnn_gru
+    torch.save({"epoch": epoch, "model_state": model.state_dict(),
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                "val_loss": val_loss, "normalizer": normalizer.state_dict()},
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               checkpoint_path)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 1002, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+         ~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 864, in _open_zipfile_writer
+    return container(name_or_buffer)  # type: ignore[arg-type]
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\serialization.py", line 828, in __init__
+    torch._C.PyTorchFileWriter(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.name, get_crc32_options(), _get_storage_alignment()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+RuntimeError: [enforce fail at inline_container.cc:745] . open file failed with error code: 5
+
+======================================================================
+ERROR: tearDownClass (test_cnn_gru.TrainingSmokeTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpiyu85ebn'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_cnn_gru.py", line 253, in tearDownClass
+    cls.tmp.cleanup()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpiyu85ebn'
+
+======================================================================
+ERROR: test_bounded_processing_max_packets (test_pcap_end_to_end.PcapEndToEnd.test_bounded_processing_max_packets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp284toklj\\raw\\Benign'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 128, in test_bounded_processing_max_packets
+    make_pcap_tree(raw, files_per_class=1, flows_per_file=1, pkts=50)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 58, in make_pcap_tree
+    (root / folder).mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1015, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp284toklj\\raw'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp284toklj'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 126, in test_bounded_processing_max_packets
+    with tempfile.TemporaryDirectory() as td:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 971, in __exit__
+    self.cleanup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp284toklj'
+
+======================================================================
+ERROR: test_csv_only_directory_is_reported_not_guessed (test_pcap_end_to_end.PcapEndToEnd.test_csv_only_directory_is_reported_not_guessed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 137, in test_csv_only_directory_is_reported_not_guessed
+    (Path(td) / "l2.csv").write_text("Duration,FlowBytesSent,PacketLengthMean,Label\n1,2,3,Benign\n4,5,6,Malicious\n")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 809, in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpfmql3s6a\\l2.csv'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpfmql3s6a'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 136, in test_csv_only_directory_is_reported_not_guessed
+    with tempfile.TemporaryDirectory() as td:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 971, in __exit__
+    self.cleanup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpfmql3s6a'
+
+======================================================================
+ERROR: test_empty_directory_raises (test_pcap_end_to_end.PcapEndToEnd.test_empty_directory_raises)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpnqurg893'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 146, in test_empty_directory_raises
+    with tempfile.TemporaryDirectory() as td, self.assertRaises(FileNotFoundError):
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 971, in __exit__
+    self.cleanup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpnqurg893'
+
+======================================================================
+ERROR: test_inspect_and_save_generates_manifest_and_report (test_pcap_end_to_end.PcapEndToEnd.test_inspect_and_save_generates_manifest_and_report)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpregbl7op\\raw\\Benign'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 88, in test_inspect_and_save_generates_manifest_and_report
+    make_pcap_tree(raw, files_per_class=2, flows_per_file=4, pkts=15)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 58, in make_pcap_tree
+    (root / folder).mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1015, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpregbl7op\\raw'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpregbl7op'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 86, in test_inspect_and_save_generates_manifest_and_report
+    with tempfile.TemporaryDirectory() as td:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 971, in __exit__
+    self.cleanup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpregbl7op'
+
+======================================================================
+ERROR: test_inspect_build_run (test_pcap_end_to_end.PcapEndToEnd.test_inspect_build_run)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpt862m8da\\raw\\Benign'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 66, in test_inspect_build_run
+    make_pcap_tree(raw)
+    ~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 58, in make_pcap_tree
+    (root / folder).mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1015, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpt862m8da\\raw'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpt862m8da'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 64, in test_inspect_build_run
+    with tempfile.TemporaryDirectory() as td:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 971, in __exit__
+    self.cleanup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpt862m8da'
+
+======================================================================
+ERROR: test_pcapng_files_in_tree_inspected_and_built (test_pcap_end_to_end.PcapEndToEnd.test_pcapng_files_in_tree_inspected_and_built)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmparweclqo\\raw\\Benign'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 107, in test_pcapng_files_in_tree_inspected_and_built
+    (raw / "Benign").mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1015, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmparweclqo\\raw'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmparweclqo'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pcap_end_to_end.py", line 105, in test_pcapng_files_in_tree_inspected_and_built
+    with tempfile.TemporaryDirectory() as td:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 971, in __exit__
+    self.cleanup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmparweclqo'
+
+======================================================================
+ERROR: setUpClass (test_pipeline.Pipeline)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpglh_tp9q\\a\\tables'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_pipeline.py", line 39, in setUpClass
+    cls.r1 = run_experiment(cls.flows, CFG, base / "a", synthetic=True, log=quiet)
+             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\pipeline.py", line 300, in run_experiment
+    (out / "tables").mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1015, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpglh_tp9q\\a'
+
+======================================================================
+ERROR: test_empty_capture_files (test_prefixes.PcapPreprocessing.test_empty_capture_files)
+Verify empty files (0 bytes) raise PcapFormatError.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 311, in test_empty_capture_files
+    empty_p.write_bytes(b"")
+    ~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 796, in write_bytes
+    with self.open(mode='wb') as f:
+         ~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpnai38mn5\\empty.pcap'
+
+======================================================================
+ERROR: test_empty_capture_files (test_prefixes.PcapPreprocessing.test_empty_capture_files)
+Verify empty files (0 bytes) raise PcapFormatError.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpnai38mn5'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 182, in tearDown
+    self.tmp.cleanup()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpnai38mn5'
+
+======================================================================
+ERROR: test_flow_key_direction_retransmission_and_length (test_prefixes.PcapPreprocessing.test_flow_key_direction_retransmission_and_length)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 200, in test_flow_key_direction_retransmission_and_length
+    p = self._pcap("t.pcap", pk)
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 187, in _pcap
+    write_pcap(p, packets, **kw)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\synthetic.py", line 59, in write_pcap
+    with open(path, "wb") as f:
+         ~~~~^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpcn7mc3lt\\t.pcap'
+
+======================================================================
+ERROR: test_flow_key_direction_retransmission_and_length (test_prefixes.PcapPreprocessing.test_flow_key_direction_retransmission_and_length)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpcn7mc3lt'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 182, in tearDown
+    self.tmp.cleanup()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpcn7mc3lt'
+
+======================================================================
+ERROR: test_idle_timeout_splits_flows (test_prefixes.PcapPreprocessing.test_idle_timeout_splits_flows)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 223, in test_idle_timeout_splits_flows
+    flows = build_flows_from_pcap(self._pcap("i.pcap", pk), 0, "i.pcap", self.cfg, Counter())
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 187, in _pcap
+    write_pcap(p, packets, **kw)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\synthetic.py", line 59, in write_pcap
+    with open(path, "wb") as f:
+         ~~~~^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmprcd12inh\\i.pcap'
+
+======================================================================
+ERROR: test_idle_timeout_splits_flows (test_prefixes.PcapPreprocessing.test_idle_timeout_splits_flows)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmprcd12inh'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 182, in tearDown
+    self.tmp.cleanup()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmprcd12inh'
+
+======================================================================
+ERROR: test_label_rules_required_and_applied (test_prefixes.PcapPreprocessing.test_label_rules_required_and_applied)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 237, in test_label_rules_required_and_applied
+    self._pcap("Benign/a.pcap", pk)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 186, in _pcap
+    p.parent.mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 1011, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp9zt_je4j\\Benign'
+
+======================================================================
+ERROR: test_label_rules_required_and_applied (test_prefixes.PcapPreprocessing.test_label_rules_required_and_applied)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp9zt_je4j'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 182, in tearDown
+    self.tmp.cleanup()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp9zt_je4j'
+
+======================================================================
+ERROR: test_out_of_order_timestamps_are_sorted_and_reported (test_prefixes.PcapPreprocessing.test_out_of_order_timestamps_are_sorted_and_reported)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 216, in test_out_of_order_timestamps_are_sorted_and_reported
+    f = build_flows_from_pcap(self._pcap("o.pcap", pk), 1, "o.pcap", self.cfg, st)[0]
+                              ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 187, in _pcap
+    write_pcap(p, packets, **kw)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\synthetic.py", line 59, in write_pcap
+    with open(path, "wb") as f:
+         ~~~~^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpph5psyni\\o.pcap'
+
+======================================================================
+ERROR: test_out_of_order_timestamps_are_sorted_and_reported (test_prefixes.PcapPreprocessing.test_out_of_order_timestamps_are_sorted_and_reported)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpph5psyni'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 182, in tearDown
+    self.tmp.cleanup()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpph5psyni'
+
+======================================================================
+ERROR: test_pcapng_and_garbage_rejected (test_prefixes.PcapPreprocessing.test_pcapng_and_garbage_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 249, in test_pcapng_and_garbage_rejected
+    p.write_bytes(b"\x0a\x0d\x0d\x0a" + b"\x00" * 40)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 796, in write_bytes
+    with self.open(mode='wb') as f:
+         ~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpvobwp77v\\x.pcap'
+
+======================================================================
+ERROR: test_pcapng_and_garbage_rejected (test_prefixes.PcapPreprocessing.test_pcapng_and_garbage_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpvobwp77v'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 182, in tearDown
+    self.tmp.cleanup()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpvobwp77v'
+
+======================================================================
+ERROR: test_pcapng_direct_parsing_and_flows (test_prefixes.PcapPreprocessing.test_pcapng_direct_parsing_and_flows)
+Verify native PCAPNG parsing and flow construction.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 265, in test_pcapng_direct_parsing_and_flows
+    _write_pcapng_file(ng_path, pk)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 61, in _write_pcapng_file
+    Path(path).write_bytes(shb + idb + b"".join(epbs))
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 796, in write_bytes
+    with self.open(mode='wb') as f:
+         ~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpfdduc_7e\\valid.pcapng'
+
+======================================================================
+ERROR: test_pcapng_direct_parsing_and_flows (test_prefixes.PcapPreprocessing.test_pcapng_direct_parsing_and_flows)
+Verify native PCAPNG parsing and flow construction.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpfdduc_7e'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 182, in tearDown
+    self.tmp.cleanup()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpfdduc_7e'
+
+======================================================================
+ERROR: test_pcapng_to_pcap_conversion_fallback (test_prefixes.PcapPreprocessing.test_pcapng_to_pcap_conversion_fallback)
+Verify convert_pcapng_to_pcap fallback produces a readable classic PCAP.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 285, in test_pcapng_to_pcap_conversion_fallback
+    _write_pcapng_file(ng_path, pk)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 61, in _write_pcapng_file
+    Path(path).write_bytes(shb + idb + b"".join(epbs))
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 796, in write_bytes
+    with self.open(mode='wb') as f:
+         ~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp8xi2atzp\\source.pcapng'
+
+======================================================================
+ERROR: test_pcapng_to_pcap_conversion_fallback (test_prefixes.PcapPreprocessing.test_pcapng_to_pcap_conversion_fallback)
+Verify convert_pcapng_to_pcap fallback produces a readable classic PCAP.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp8xi2atzp'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 182, in tearDown
+    self.tmp.cleanup()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp8xi2atzp'
+
+======================================================================
+ERROR: test_truncated_capture_keeps_true_ip_length (test_prefixes.PcapPreprocessing.test_truncated_capture_keeps_true_ip_length)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 230, in test_truncated_capture_keeps_true_ip_length
+    f = build_flows_from_pcap(self._pcap("s.pcap", pk, snaplen_cut=80), 0, "s.pcap", self.cfg, st)[0]
+                              ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 187, in _pcap
+    write_pcap(p, packets, **kw)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\synthetic.py", line 59, in write_pcap
+    with open(path, "wb") as f:
+         ~~~~^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp423icqnj\\s.pcap'
+
+======================================================================
+ERROR: test_truncated_capture_keeps_true_ip_length (test_prefixes.PcapPreprocessing.test_truncated_capture_keeps_true_ip_length)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp423icqnj'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 182, in tearDown
+    self.tmp.cleanup()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp423icqnj'
+
+======================================================================
+ERROR: test_udp_packets_skipped_and_tracked (test_prefixes.PcapPreprocessing.test_udp_packets_skipped_and_tracked)
+Verify UDP packets are properly classified and counted.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp3pe02e7m'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_prefixes.py", line 182, in tearDown
+    self.tmp.cleanup()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp3pe02e7m'
+
+======================================================================
+ERROR: test_create_split_manifest_reports_leakage_check_and_seed (test_splitting.FlowLevelSplit.test_create_split_manifest_reports_leakage_check_and_seed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_splitting.py", line 109, in test_create_split_manifest_reports_leakage_check_and_seed
+    saved = save_split_manifest(manifest, out_p)
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\src\dataset_split.py", line 221, in save_split_manifest
+    p.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 809, in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\pathlib\__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp6gi5573v\\split_manifest.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp6gi5573v'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\Desktop\DoH-Tunneling-Detection\tests\test_splitting.py", line 107, in test_create_split_manifest_reports_leakage_check_and_seed
+    with tempfile.TemporaryDirectory() as td:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 971, in __exit__
+    self.cleanup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 975, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmp6gi5573v'
+
+----------------------------------------------------------------------
+Ran 101 tests in 6.075s
+
+FAILED (errors=33)
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpglh_tp9q'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\weakref.py", line 566, in _exitfunc
+    f()
+    ~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\weakref.py", line 490, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 960, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpglh_tp9q'
+Traceback (most recent call last):
+  File "<frozen os>", line 377, in walk
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpmpxtsgjy'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\weakref.py", line 566, in _exitfunc
+    f()
+    ~^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\weakref.py", line 490, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 960, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 955, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 689, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 413, in walk
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 687, in onerror
+    onexc(os.scandir, err.filename, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 927, in onexc
+    _resetperms(path)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vemba\AppData\Local\Programs\Python\Python314\Lib\tempfile.py", line 276, in _dont_follow_symlinks
+    func(path, *args, follow_symlinks=False)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'C:\\Users\\vemba\\Desktop\\DoH-Tunneling-Detection\\reports\\phase10_verification\\test_tmp\\tmpmpxtsgjy'

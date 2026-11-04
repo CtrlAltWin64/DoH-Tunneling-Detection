@@ -1,0 +1,132 @@
+test_normalizer_preserved_after_load (test_cnn_gru.CheckpointSaveLoad.test_normalizer_preserved_after_load) ... ok
+test_save_and_load_roundtrip (test_cnn_gru.CheckpointSaveLoad.test_save_and_load_roundtrip) ... ok
+test_checkpoint_lengths_10_20_30_40 (test_cnn_gru.ModelShapes.test_checkpoint_lengths_10_20_30_40)
+Model processes all required checkpoint lengths cleanly. ... ok
+test_cpu_execution (test_cnn_gru.ModelShapes.test_cpu_execution)
+CPU execution runs without error. ... ok
+test_forward_padded_batch (test_cnn_gru.ModelShapes.test_forward_padded_batch)
+Batch with different sequence lengths; padded inputs should give per-sample logits. ... ok
+test_forward_single_sample (test_cnn_gru.ModelShapes.test_forward_single_sample) ... ok
+test_invalid_lengths_and_empty_batches_rejected (test_cnn_gru.ModelShapes.test_invalid_lengths_and_empty_batches_rejected)
+Model strictly validates input dimensions and sequence lengths. ... ok
+test_mixed_length_batch_invariance (test_cnn_gru.ModelShapes.test_mixed_length_batch_invariance)
+Causal conv and masked normalization ensure a sequence's prediction is invariant to padding and other batch elements. ... ok
+test_output_is_scalar_per_sample (test_cnn_gru.ModelShapes.test_output_is_scalar_per_sample) ... ok
+test_checkpoint_column_matches_requested_checkpoints (test_cnn_gru.PrefixTableIntegration.test_checkpoint_column_matches_requested_checkpoints) ... ok
+test_flow_isolation_consistent_prefix (test_cnn_gru.PrefixTableIntegration.test_flow_isolation_consistent_prefix)
+Scoring a single flow at t=10 should match the value in the prefix table. ... ok
+test_prefix_table_has_expected_columns (test_cnn_gru.PrefixTableIntegration.test_prefix_table_has_expected_columns) ... ok
+test_raw_proba_cnn_returns_floats_in_0_1 (test_cnn_gru.PrefixTableIntegration.test_raw_proba_cnn_returns_floats_in_0_1) ... ok
+test_calibration_subset_disjoint_from_fitting_subset (test_cnn_gru.SeparateCalibrationTests.test_calibration_subset_disjoint_from_fitting_subset) ... ok
+test_build_sequence_dataset_filters_short_flows (test_cnn_gru.SequenceBuilding.test_build_sequence_dataset_filters_short_flows) ... ok
+test_causal_future_packets_dont_affect_prefix (test_cnn_gru.SequenceBuilding.test_causal_future_packets_dont_affect_prefix) ... ok
+test_feature_count_matches_constant (test_cnn_gru.SequenceBuilding.test_feature_count_matches_constant) ... ok
+test_sequence_shape_equals_t (test_cnn_gru.SequenceBuilding.test_sequence_shape_equals_t) ... ok
+test_constant_feature_does_not_crash (test_cnn_gru.SequenceNormalizerTests.test_constant_feature_does_not_crash) ... ok
+test_fit_transform_zero_mean_unit_std (test_cnn_gru.SequenceNormalizerTests.test_fit_transform_zero_mean_unit_std) ... ok
+test_state_dict_roundtrip (test_cnn_gru.SequenceNormalizerTests.test_state_dict_roundtrip) ... ok
+test_unfitted_raises (test_cnn_gru.SequenceNormalizerTests.test_unfitted_raises) ... ok
+test_inference_returns_probabilities_in_0_1 (test_cnn_gru.TrainingSmokeTest.test_inference_returns_probabilities_in_0_1) ... ok
+test_train_returns_model_normalizer_history (test_cnn_gru.TrainingSmokeTest.test_train_returns_model_normalizer_history) ... ok
+test_features_are_recomputed_from_new_timestamps (test_evasion.Evasion.test_features_are_recomputed_from_new_timestamps) ... ok
+test_invalid_parameters_rejected (test_evasion.Evasion.test_invalid_parameters_rejected) ... ok
+test_jitter_independent_of_processing_order (test_evasion.Evasion.test_jitter_independent_of_processing_order) ... ok
+test_jitter_is_reproducible_and_seed_dependent (test_evasion.Evasion.test_jitter_is_reproducible_and_seed_dependent) ... ok
+test_jitter_preserves_order_sizes_and_is_nonnegative (test_evasion.Evasion.test_jitter_preserves_order_sizes_and_is_nonnegative) ... ok
+test_low_and_slow_scales_iats_keeps_everything_else (test_evasion.Evasion.test_low_and_slow_scales_iats_keeps_everything_else) ... ok
+test_original_flow_not_mutated (test_evasion.Evasion.test_original_flow_not_mutated) ... ok
+test_counts (test_metrics.Confusion.test_counts) ... ok
+test_coverage_equals_detected_over_malicious (test_metrics.Confusion.test_coverage_equals_detected_over_malicious) ... ok
+test_latency_only_over_detected_malicious (test_metrics.Confusion.test_latency_only_over_detected_malicious) ... ok
+test_no_alerts_gives_nan_precision_not_crash (test_metrics.Confusion.test_no_alerts_gives_nan_precision_not_crash) ... ok
+test_observation_cost_and_stopping_packets (test_metrics.Confusion.test_observation_cost_and_stopping_packets) ... ok
+test_rates (test_metrics.Confusion.test_rates) ... ok
+test_undetected_malicious_is_fn_and_undetected_benign_is_not_fp (test_metrics.Confusion.test_undetected_malicious_is_fn_and_undetected_benign_is_not_fp) ... ok
+test_alert_packet_bytes_are_included (test_metrics.DEBD.test_alert_packet_bytes_are_included) ... ok
+test_byte_weighted_differs_from_per_flow_mean (test_metrics.DEBD.test_byte_weighted_differs_from_per_flow_mean) ... ok
+test_detected_only_mean (test_metrics.DEBD.test_detected_only_mean) ... ok
+test_per_flow_mean_with_undetected_as_100 (test_metrics.DEBD.test_per_flow_mean_with_undetected_as_100) ... ok
+test_clopper_pearson_brackets_point_estimate (test_metrics.Statistics.test_clopper_pearson_brackets_point_estimate) ... ok
+test_clopper_pearson_zero_events (test_metrics.Statistics.test_clopper_pearson_zero_events) ... ok
+test_prefix_metrics_perfect_and_ece (test_metrics.Statistics.test_prefix_metrics_perfect_and_ece) ... ok
+test_bounded_processing_max_packets (test_pcap_end_to_end.PcapEndToEnd.test_bounded_processing_max_packets) ... ok
+test_csv_only_directory_is_reported_not_guessed (test_pcap_end_to_end.PcapEndToEnd.test_csv_only_directory_is_reported_not_guessed) ... ok
+test_empty_directory_raises (test_pcap_end_to_end.PcapEndToEnd.test_empty_directory_raises) ... ok
+test_inspect_and_save_generates_manifest_and_report (test_pcap_end_to_end.PcapEndToEnd.test_inspect_and_save_generates_manifest_and_report) ... ok
+test_inspect_build_run (test_pcap_end_to_end.PcapEndToEnd.test_inspect_build_run) ... ok
+test_pcapng_files_in_tree_inspected_and_built (test_pcap_end_to_end.PcapEndToEnd.test_pcapng_files_in_tree_inspected_and_built) ... ok
+test_calibrator_outputs_probabilities_and_is_monotone_per_checkpoint (test_pipeline.CalibrationLeakage.test_calibrator_outputs_probabilities_and_is_monotone_per_checkpoint) ... ok
+test_oof_folds_are_flow_grouped_and_training_only (test_pipeline.CalibrationLeakage.test_oof_folds_are_flow_grouped_and_training_only) ... ok
+test_all_inverted_falls_back_to_identity (test_pipeline.CalibrationMonotonicity.test_all_inverted_falls_back_to_identity) ... ok
+test_inverted_signal_never_produces_decreasing_map (test_pipeline.CalibrationMonotonicity.test_inverted_signal_never_produces_decreasing_map)
+If out-of-fold scores are anti-correlated with the label at a checkpoint, the Platt slope would be ... ok
+test_expected_outputs_exist (test_pipeline.Pipeline.test_expected_outputs_exist) ... ok
+test_frozen_thresholds_file_matches_results (test_pipeline.Pipeline.test_frozen_thresholds_file_matches_results) ... ok
+test_label_shuffle_gives_chance_level_performance (test_pipeline.Pipeline.test_label_shuffle_gives_chance_level_performance)
+Leakage detector: with randomly permuted labels no feature pipeline should beat chance. ... ok
+test_refuses_to_overwrite (test_pipeline.Pipeline.test_refuses_to_overwrite) ... ok
+test_reproducible_under_fixed_seed (test_pipeline.Pipeline.test_reproducible_under_fixed_seed) ... ok
+test_robustness_normal_matches_main_test_and_evasion_only_touches_malicious (test_pipeline.Pipeline.test_robustness_normal_matches_main_test_and_evasion_only_touches_malicious) ... ok
+test_split_assignment_has_no_duplicates_and_prediction_flows_are_test_flows (test_pipeline.Pipeline.test_split_assignment_has_no_duplicates_and_prediction_flows_are_test_flows) ... ok
+test_validation_fpr_respects_alpha_when_feasible (test_pipeline.Pipeline.test_validation_fpr_respects_alpha_when_feasible) ... ok
+test_each_flow_gets_equal_total_weight (test_pipeline.Weighting.test_each_flow_gets_equal_total_weight) ... ok
+test_empty_capture_files (test_prefixes.PcapPreprocessing.test_empty_capture_files)
+Verify empty files (0 bytes) raise PcapFormatError. ... ok
+test_flow_key_direction_retransmission_and_length (test_prefixes.PcapPreprocessing.test_flow_key_direction_retransmission_and_length) ... ok
+test_idle_timeout_splits_flows (test_prefixes.PcapPreprocessing.test_idle_timeout_splits_flows) ... ok
+test_label_rules_required_and_applied (test_prefixes.PcapPreprocessing.test_label_rules_required_and_applied) ... ok
+test_out_of_order_timestamps_are_sorted_and_reported (test_prefixes.PcapPreprocessing.test_out_of_order_timestamps_are_sorted_and_reported) ... ok
+test_pcapng_and_garbage_rejected (test_prefixes.PcapPreprocessing.test_pcapng_and_garbage_rejected) ... ok
+test_pcapng_direct_parsing_and_flows (test_prefixes.PcapPreprocessing.test_pcapng_direct_parsing_and_flows)
+Verify native PCAPNG parsing and flow construction. ... ok
+test_pcapng_to_pcap_conversion_fallback (test_prefixes.PcapPreprocessing.test_pcapng_to_pcap_conversion_fallback)
+Verify convert_pcapng_to_pcap fallback produces a readable classic PCAP. ... ok
+test_truncated_capture_keeps_true_ip_length (test_prefixes.PcapPreprocessing.test_truncated_capture_keeps_true_ip_length) ... ok
+test_udp_packets_skipped_and_tracked (test_prefixes.PcapPreprocessing.test_udp_packets_skipped_and_tracked)
+Verify UDP packets are properly classified and counted. ... ok
+test_cannot_build_prefix_longer_than_flow (test_prefixes.PrefixConstruction.test_cannot_build_prefix_longer_than_flow) ... ok
+test_causality_future_packets_do_not_change_features (test_prefixes.PrefixConstruction.test_causality_future_packets_do_not_change_features)
+Leakage detector: scrambling every packet after t must not change the t-packet features. ... ok
+test_checkpoint_validation_and_eligible_counts (test_prefixes.PrefixConstruction.test_checkpoint_validation_and_eligible_counts) ... ok
+test_deterministic (test_prefixes.PrefixConstruction.test_deterministic) ... ok
+test_flow_level_totals_are_not_model_features (test_prefixes.PrefixConstruction.test_flow_level_totals_are_not_model_features) ... ok
+test_generate_flow_prefixes_single_flow (test_prefixes.PrefixConstruction.test_generate_flow_prefixes_single_flow) ... ok
+test_hand_computed_features (test_prefixes.PrefixConstruction.test_hand_computed_features) ... ok
+test_prefix_length_feature_equals_checkpoint (test_prefixes.PrefixConstruction.test_prefix_length_feature_equals_checkpoint) ... ok
+test_prefix_table_row_independent_of_flow_tail_and_totals (test_prefixes.PrefixConstruction.test_prefix_table_row_independent_of_flow_tail_and_totals) ... ok
+test_rows_exist_only_where_flow_is_long_enough (test_prefixes.PrefixConstruction.test_rows_exist_only_where_flow_is_long_enough) ... ok
+test_sequence_feature_extraction_shape_dtype_and_causality (test_prefixes.PrefixConstruction.test_sequence_feature_extraction_shape_dtype_and_causality) ... ok
+test_sequence_feature_extraction_short_flow_raises (test_prefixes.PrefixConstruction.test_sequence_feature_extraction_short_flow_raises) ... ok
+test_all_prefixes_of_a_flow_share_the_partition (test_splitting.FlowLevelSplit.test_all_prefixes_of_a_flow_share_the_partition) ... ok
+test_both_classes_in_every_partition (test_splitting.FlowLevelSplit.test_both_classes_in_every_partition) ... ok
+test_capture_group_split_zero_leakage_assertion (test_splitting.FlowLevelSplit.test_capture_group_split_zero_leakage_assertion)
+Strict capture-level test: verify no source capture file appears in multiple partitions. ... ok
+test_create_split_manifest_reports_leakage_check_and_seed (test_splitting.FlowLevelSplit.test_create_split_manifest_reports_leakage_check_and_seed) ... ok
+test_deterministic_and_seed_sensitive (test_splitting.FlowLevelSplit.test_deterministic_and_seed_sensitive) ... ok
+test_duplicate_flow_ids_rejected (test_splitting.FlowLevelSplit.test_duplicate_flow_ids_rejected) ... ok
+test_every_flow_in_exactly_one_partition_and_proportions (test_splitting.FlowLevelSplit.test_every_flow_in_exactly_one_partition_and_proportions) ... ok
+test_group_split_keeps_source_files_together (test_splitting.FlowLevelSplit.test_group_split_keeps_source_files_together) ... ok
+test_missing_column_raises (test_splitting.FlowLevelSplit.test_missing_column_raises) ... ok
+test_no_flow_overlap_between_partitions (test_splitting.FlowLevelSplit.test_no_flow_overlap_between_partitions) ... ok
+test_split_train_calibration_disjoint_and_both_classes (test_splitting.FlowLevelSplit.test_split_train_calibration_disjoint_and_both_classes) ... ok
+test_too_few_groups_raises (test_splitting.FlowLevelSplit.test_too_few_groups_raises) ... ok
+test_fpr_counts_unique_flows_alerting_at_any_checkpoint (test_stopping_rule.SequentialFPR.test_fpr_counts_unique_flows_alerting_at_any_checkpoint) ... ok
+test_not_equal_to_single_checkpoint_fpr (test_stopping_rule.SequentialFPR.test_not_equal_to_single_checkpoint_fpr) ... ok
+test_sweep_matches_bruteforce_policy_runs (test_stopping_rule.SequentialFPR.test_sweep_matches_bruteforce_policy_runs) ... ok
+test_continues_when_threshold_not_reached_then_stops_at_first_crossing (test_stopping_rule.ThresholdCrossing.test_continues_when_threshold_not_reached_then_stops_at_first_crossing) ... ok
+test_decision_ignores_later_checkpoints_once_alerted (test_stopping_rule.ThresholdCrossing.test_decision_ignores_later_checkpoints_once_alerted) ... ok
+test_equality_counts_as_crossing (test_stopping_rule.ThresholdCrossing.test_equality_counts_as_crossing) ... ok
+test_fixed_window_is_single_checkpoint_policy (test_stopping_rule.ThresholdCrossing.test_fixed_window_is_single_checkpoint_policy) ... ok
+test_nondetection_recorded_as_such (test_stopping_rule.ThresholdCrossing.test_nondetection_recorded_as_such) ... ok
+test_run_policy_vectorised (test_stopping_rule.ThresholdCrossing.test_run_policy_vectorised) ... ok
+test_spec_example_alerts_at_20_packets (test_stopping_rule.ThresholdCrossing.test_spec_example_alerts_at_20_packets) ... ok
+test_grid_ends_with_sentinel_above_one (test_stopping_rule.ThresholdSelection.test_grid_ends_with_sentinel_above_one) ... ok
+test_infeasible_target_degrades_to_never_alert_sentinel (test_stopping_rule.ThresholdSelection.test_infeasible_target_degrades_to_never_alert_sentinel) ... ok
+test_resolution_warning_when_too_few_benign_flows (test_stopping_rule.ThresholdSelection.test_resolution_warning_when_too_few_benign_flows) ... ok
+test_selected_threshold_satisfies_alpha_and_is_lowest_feasible (test_stopping_rule.ThresholdSelection.test_selected_threshold_satisfies_alpha_and_is_lowest_feasible) ... ok
+test_selection_uses_only_the_passed_curves (test_stopping_rule.ThresholdSelection.test_selection_uses_only_the_passed_curves) ... ok
+
+----------------------------------------------------------------------
+Ran 113 tests in 28.816s
+
+OK

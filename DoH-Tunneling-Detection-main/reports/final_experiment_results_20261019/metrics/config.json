@@ -1,0 +1,68 @@
+{
+  "raw_dir": "D:\\DoH-Tunneling-Detection-main\\data\\raw",
+  "processed_dir": "D:\\DoH-Tunneling-Detection-main\\data\\processed",
+  "results_dir": "D:\\DoH-Tunneling-Detection-main\\data\\results",
+  "experiment_name": "exp_default",
+  "dataset_name": "ufu_doh_exf",
+  "pcap_label_rules": {
+    "benign": "benign",
+    "exfiltration": "malicious"
+  },
+  "pcap_extensions": [
+    ".pcap",
+    ".pcapng"
+  ],
+  "doh_port": 443,
+  "doh_server_ips": [],
+  "flow_idle_timeout_s": 120.0,
+  "max_stored_packets": 200,
+  "drop_zero_payload_packets": false,
+  "max_packets_per_file": null,
+  "checkpoints": [
+    10,
+    20
+  ],
+  "seed": 42,
+  "group_by": "flow",
+  "model_type": "both",
+  "rf_n_estimators": 200,
+  "rf_min_samples_leaf": 3,
+  "rf_class_weight": "balanced_subsample",
+  "flow_weighting": true,
+  "cnn_conv_channels": 64,
+  "cnn_conv_kernel": 3,
+  "cnn_gru_hidden": 64,
+  "cnn_gru_layers": 2,
+  "cnn_dropout": 0.2,
+  "cnn_epochs": 30,
+  "cnn_patience": 7,
+  "cnn_batch_size": 128,
+  "cnn_lr": 0.001,
+  "cnn_device": "auto",
+  "calibration": "sigmoid",
+  "calibration_per_checkpoint": true,
+  "calibration_folds": 5,
+  "calibration_split_ratio": 0.25,
+  "alpha": 0.01,
+  "threshold_step": 0.001,
+  "prefix_eval_threshold": 0.5,
+  "low_and_slow_factors": [
+    2.0,
+    5.0,
+    10.0
+  ],
+  "jitter_settings": [
+    [
+      0.25,
+      0.0
+    ],
+    [
+      0.5,
+      0.05
+    ],
+    [
+      1.0,
+      0.2
+    ]
+  ]
+}

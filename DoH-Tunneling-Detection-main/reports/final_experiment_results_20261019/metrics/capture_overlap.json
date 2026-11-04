@@ -1,0 +1,29 @@
+{
+  "train_val": [
+    "File01_DoH_Benign.pcapng",
+    "File02_DoH_Benign.pcapng",
+    "File03_DoH_Benign.pcapng",
+    "File04_DoH_Benign.pcapng",
+    "File06_DoH_Exfiltration.pcap",
+    "File07_DoH_Exfiltration.pcap",
+    "File10_DoH_Exfiltration.pcap"
+  ],
+  "train_test": [
+    "File01_DoH_Benign.pcapng",
+    "File02_DoH_Benign.pcapng",
+    "File03_DoH_Benign.pcapng",
+    "File04_DoH_Benign.pcapng",
+    "File06_DoH_Exfiltration.pcap",
+    "File07_DoH_Exfiltration.pcap",
+    "File10_DoH_Exfiltration.pcap"
+  ],
+  "val_test": [
+    "File01_DoH_Benign.pcapng",
+    "File02_DoH_Benign.pcapng",
+    "File03_DoH_Benign.pcapng",
+    "File04_DoH_Benign.pcapng",
+    "File06_DoH_Exfiltration.pcap",
+    "File07_DoH_Exfiltration.pcap",
+    "File10_DoH_Exfiltration.pcap"
+  ]
+}

@@ -1,0 +1,14 @@
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.csv text eol=lf
+*.svg text eol=lf
+*.txt text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+*.png binary
+*.pcap binary
+*.pcapng binary
+# Preserve exact bytes of recorded research artifacts and their checksum manifests
+reports/** -text
