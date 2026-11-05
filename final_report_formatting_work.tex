@@ -1,0 +1,811 @@
+% ==============================================================================
+% Complete, self-contained IEEE-style manuscript. Compile with pdfLaTeX.
+% All experimental measurements derive from data/results/paper_results_v2.
+% Figures are located in the local figures/ directory (reproduced from GitRepo).
+% ==============================================================================
+\documentclass[conference]{IEEEtran}
+\usepackage[T1]{fontenc}
+\usepackage{cite,amsmath,amssymb,booktabs,array,tabularx,graphicx,float,subcaption}
+\usepackage{microtype,balance}
+\usepackage[hidelinks]{hyperref}
+\IEEEoverridecommandlockouts
+
+\graphicspath{{figures/}}
+
+
+
+
+\begin{document}
+
+\title{Adaptive Stopping for Early Detection of Evasive DNS-over-HTTPS Tunneling}
+
+\author{
+    \IEEEauthorblockN{Anusuya M, Vemba Kumar R, Tailam Praneeth, Sudhina Kumar G K}
+    \IEEEauthorblockA{
+        \textit{Manipal Institute of Technology,}\\
+        \textit{Manipal Academy of Higher Education,}\\
+        Manipal, India\\
+        anusuya.mitmpl2024@learner.manipal.edu,\\
+        vemba.mitmpl2024@learner.manipal.edu,\\
+        tailam.mitmpl2024@learner.manipal.edu,\\
+        sudhina.kumar@manipal.edu
+    }
+    \thanks{\textsuperscript{*}These authors contributed equally to this work.}
+    \thanks{\textsuperscript{$\dagger$}Corresponding author.}
+}
+\maketitle
+
+\begin{abstract}
+DNS-over-HTTPS (DoH) encrypts domain resolution traffic to preserve user privacy, but this encryption simultaneously prevents passive network monitors from inspecting query payloads, enabling covert data exfiltration and tunneling to masquerade as standard web browsing. Traditional machine-learning detectors evaluate completed flows or static windows, often detecting attacks only after substantial confidential data have already escaped. This paper proposes a causally constrained, adaptive sequential stopping framework for early DoH tunneling detection using progressive traffic metadata. Reconstructing 140,193 bidirectional TCP/443 flows from seven raw UFU-DoH-EXF captures under strict capture-disjoint partitioning, we implement both an 18-feature Random Forest (RF) baseline and a causal 8-channel Convolutional Neural Network--Gated Recurrent Unit (CNN--GRU). Decision thresholds are dynamically calibrated on hold-out validation captures under a strict 1\% complete-policy False-Positive Rate (FPR) constraint. On 17,255 eligible test flows supporting all observation horizons ($t \in \{5, 10, 15, 20\}$ packets), both adaptive models detect 100\% of malicious flows within the first five packets, reducing packet observation by 75\%, lowering mean arrival delay from 6.178~ms to 2.827~ms (54.24\% reduction), and decreasing a bidirectional IP-byte exposure proxy (DEBD) from 97.54\% to 18.59\% (an 80.94\% relative saving) compared to fixed-20 observation. Under severe timing jitter, adaptive CNN--GRU dynamically increases observation to 8.48 packets on average to accumulate requisite evidence, preserving 100\% recall. Furthermore, Explainable AI (TreeSHAP and Integrated Gradients) provides granular interpretability of early-prefix feature reliance. While conditional advantages over late fixed windows are substantial, rigorous statistical auditing shows that adaptive test FPR achieves 0.615\% with a one-sided 95\% upper bound of 1.403\%, and fixed-5 observation matches normal-traffic speed with fewer false alarms, highlighting vital boundaries for operational deployment.
+\end{abstract}
+
+\begin{IEEEkeywords}
+DNS over HTTPS, early detection, sequential stopping, CNN--GRU, Random Forest, false-positive rate control, Data Exposed Before Detection (DEBD), Explainable AI (XAI), evasion robustness.
+\end{IEEEkeywords}
+
+% ==============================================================================
+% SECTION I: INTRODUCTION
+% ==============================================================================
+\section{Introduction}
+The Domain Name System (DNS) forms the foundational addressing directory of the modern Internet. Because standard DNS (Do53) operates in cleartext over UDP/TCP port 53, adversaries have historically exploited it as a covert transmission medium for command-and-control (C2) communication and unauthorized data exfiltration~\cite{wang2021,liu2019,chowdhary2021,ding2021}. While perimeter security appliances historically mitigated cleartext tunneling through Deep Packet Inspection (DPI) of anomalous query lengths, high entropy, and non-standard record types~\cite{dangelo2022}, the widespread adoption of DNS-over-HTTPS (DoH, RFC 8484) has rendered traditional payload inspection obsolete~\cite{hynek2022}. By encapsulating DNS queries and responses within standard TLS/HTTPS sessions over TCP port 443, DoH protects client confidentiality from eavesdropping but simultaneously blinds security monitoring infrastructure~\cite{montazerishatoori2020}. Consequently, exfiltration traffic blends indistinguishably into legitimate enterprise HTTPS streams~\cite{salat2023}.
+
+To address this challenge without breaking end-to-end encryption, network intrusion detection systems (NIDS) must rely exclusively on observable traffic metadata, such as packet lengths, directions, inter-arrival times (IAT), and cumulative statistical distributions~\cite{behnke2021}. Statistical and machine-learning DoH detectors have demonstrated commendable classification performance on offline benchmarks~\cite{moure,metc,abrahim2026,banadaki2020}. However, existing detection paradigms predominantly operate under two flawed assumptions: (1) post-hoc classification of completed flows, or (2) classification at arbitrary, pre-selected static observation windows (e.g., fixed after 20, 50, or 100 packets). Waiting for an exfiltration flow to conclude allows an adversary to successfully transmit proprietary payloads prior to alarm generation~\cite{salat2023}. Conversely, prematurely triggering an alert on insufficient evidence produces false alarms, interrupting mission-critical enterprise workflows. 
+
+These competing imperatives motivate an \emph{adaptive sequential stopping} paradigm. Rather than treating detection as an all-or-nothing decision at a predetermined cutoff, the monitor observes packet metadata progressively at early checkpoints ($t \in \mathcal{T}=\{5, 10, 15, 20\}$). At each checkpoint, a calibrated classifier evaluates whether accumulated evidence surpasses a stopping threshold tuned to enforce a strict empirical False-Positive Rate (FPR) budget ($\alpha \le 0.01$). If evidence is conclusive, an alarm is triggered immediately, halting inspection; otherwise, observation continues to subsequent checkpoints.
+
+\subsection{Key Contributions}
+This research establishes an empirical, security-oriented evaluation of adaptive stopping for encrypted DoH tunneling. The primary contributions of this paper are fivefold:
+\begin{enumerate}
+    \item \textbf{Causally Valid Metadata Feature Pipelines:} We engineer two strictly causal traffic representations from raw PCAP/PCAPNG streams: an 18-feature tabular representation for Random Forest (RF) and an 8-channel sequential matrix for a temporal CNN--GRU architecture. Both strictly eliminate future-information leakage and rely zero percent on encrypted payload inspection or non-stationary flow identifiers.
+    \item \textbf{Validation-Constrained Sequential Stopping Rule:} We implement a calibrated first-crossing policy with thresholds selected dynamically over validation partitions. Unlike per-checkpoint thresholding, our policy explicitly accounts for cumulative false-alarm opportunities across repeated checkpoints, guaranteeing that the complete-policy empirical FPR satisfies $\widehat{\mathrm{FPR}}_{\mathrm{val}} \le 1\%$.
+    \item \textbf{Security-Centric Evaluation Framework (DEBD \& Latency):} Moving beyond conventional accuracy and F1 metrics, we quantify real-world security impact through \emph{Data Exposed Before Detection} (DEBD)---measuring the fraction of traffic bytes transmitted prior to intervention---alongside physical packet-arrival latency and normalized observation cost.
+    \item \textbf{Evasion Robustness and Dynamic Adaptation under Timing Stress:} We subject classifiers to offline adversarial time-dilation ($2\times$ to $10\times$) and stochastic Gaussian-uniform timing jitter without threshold recalibration, demonstrating that while RF relies heavily on length distributions, CNN--GRU exhibits dynamic adaptive evidence gathering under heavy jitter~\cite{wu2024,li2025}.
+    \item \textbf{Audited Comparative Benchmark and XAI Interpretability:} We integrate Explainable AI (TreeSHAP for RF and Integrated Gradients for CNN--GRU) to interpret model decisions~\cite{niktabe2024,zebin2022}, combined with an exhaustive comparative study against published state-of-the-art baselines and a rigorous statistical uncertainty audit (one-sided 95\% binomial confidence intervals) delineating the exact boundaries of adaptive versus short fixed-window (fixed-5) performance.
+\end{enumerate}
+
+\subsection{Research Questions}
+This investigation is structured around five central research questions:
+\begin{itemize}
+    \item \textbf{RQ1:} How much packet observation cost and physical packet-arrival latency can adaptive stopping save compared to traditional fixed-window baselines on an identical eligible population?
+    \item \textbf{RQ2:} Can multi-checkpoint sequential stopping maintain a test FPR strictly below the targeted 1\% threshold, and what does exact binomial uncertainty reveal regarding population guarantees?
+    \item \textbf{RQ3:} To what extent does early threshold crossing mitigate pre-alert data exposure as quantified by the DEBD security proxy?
+    \item \textbf{RQ4:} How robust are ensemble tree and causal recurrent neural architectures when subjected to deliberate low-and-slow dilation and severe timing jitter?
+    \item \textbf{RQ5:} Does adaptive stopping provide a statistically defensible advantage over an ultra-short fixed-5 baseline, and what are the empirical limits of cross-capture generalization?
+\end{itemize}
+
+% ==============================================================================
+% SECTION II: RELATED WORK
+% ==============================================================================
+\section{Related Work}
+Encrypted traffic analysis for DoH has expanded rapidly following the deprecation of plaintext DNS. Moure-Garrido \emph{et al.}~\cite{moure2022,moure} introduced real-time detection of malicious DoH traffic utilizing statistical flow summaries over fixed time intervals. While demonstrating the viability of metadata monitoring, their approach evaluated completed or fixed-epoch flows without quantifying pre-alert data leakage or sequential stopping dynamics. Zhan \emph{et al.}~\cite{zhan2022} evaluated TLS fingerprints and statistical flow features for detecting exfiltration, observing that packet size distributions provide strong discriminative power~\cite{zhan2022,alzighaibi2023}.
+
+Early identification of DoH tunneling was significantly advanced by Miao \emph{et al.} with WEDoHTool~\cite{wedoh}, which extracts Word2Vec representations from initial TLS application data records, feeding TextCNN and Transformer architectures for tunnel-tool identification. Although WEDoHTool confirmed that initial traffic contains rich discriminative evidence, it solved a multiclass tool-fingerprinting task at a fixed prefix rather than a sequential stopping problem. As established herein, the existence of early separability makes an ultra-short fixed window (e.g., fixed-5) a crucial baseline against which sequential adaptation must be tested. Tool-fingerprinting and hierarchical classification have also been examined by Alenezi \& Ludwig~\cite{alenezi2021} and Mitsuhashi \emph{et al.}~\cite{mitsuhashi2021,mitsuhashi2023}.
+
+Deep hybrid learning across networks was explored by Zuo \emph{et al.} in METC~\cite{metc}, combining CNN--BiGRU networks with attention mechanisms and transfer learning. However, METC employed non-causal bidirectional recurrent units (BiGRU), which inherently require future packet observations to classify earlier timesteps, rendering them unsuitable for real-time progressive stream monitoring. Other recent ensembles, such as Abrahim \emph{et al.}'s LSTM-GRU-XGBoost pipeline~\cite{abrahim2026} and Moulya \& Hegde's MFS-DoH hierarchical framework~\cite{moulya2026}, achieve near-perfect classification on static flow datasets like CIRA-CIC-DoHBrw-2020, but leave detection latency and stopping rules unaddressed. Early inspection and feature engineering on DoH traffic were also investigated by Vekshin \emph{et al.}~\cite{vekshin2020}.
+
+Importantly, Je\v{r}\'abek \emph{et al.}~\cite{jerabek} conducted an extensive comparative benchmark of seven published DoH detectors across multiple operational environments, building on dataset collections~\cite{jerabek2022} and standard flow telemetry~\cite{jerabek2023}. Their findings revealed severe cross-dataset performance degradation and operating-point collapse, demonstrating that models reporting $>99\%$ accuracy in controlled laboratory settings frequently suffer from crippling false-alarm rates in real-world deployments. This emphasizes the paramount necessity of evaluating detectors under strict false-positive constraints and capture-disjoint splitting.
+
+The public UFU-DoH-EXF research benchmark established by Borges and Miani~\cite{ufu} provides raw PCAPNG captures spanning benign activity and diverse exfiltration tools (e.g., DNSExfiltrator, iodine, dnscat2). While the upstream benchmark provided completed-flow CSV summaries, the present work processes the raw packet captures to extract causally valid sequential prefixes, directly bridging the gap between static classification and dynamic sequential stopping.
+
+% ==============================================================================
+% SECTION III: METHODOLOGY
+% ==============================================================================
+\section{System Architecture and Methodology}
+\label{sec:methodology}
+
+% Provenance: the author confirmed that paper_results_v2 is a separate
+% experiment on a collaborator's machine. Its supplied configuration and
+% capture allocation are retained; this revision does not claim a local rerun.
+% The local exploratory flow-split experiments are not substituted for it.
+% Source validation: braces, environments, labels, and citation keys were checked.
+% Local compilation could not be completed because compiler preparation failed
+% in the Windows sandbox. The 15 original figure assets were not supplied here.
+% Their filenames are preserved; upload them beside this file or in figures/.
+% The 5--6-page Methodology target requires final typesetting with those assets.
+
+\subsection{Problem Setting and Experimental Workflow}
+The task is binary detection of malicious DoH tunneling from progressively observed, encrypted traffic. A passive monitor observes packet timestamps, IP lengths, and transmission directions, but does not decrypt TLS or inspect DNS content. The label denotes the capture scenario, rather than the contents of an individually decoded query. The central methodological question is whether the monitor can issue an earlier malicious alert while respecting a validation-selected false-alarm budget. An alert terminates the detector's observation of that flow; actual packet blocking or connection quarantine is outside the offline experiment.
+
+The workflow connects five stages: reconstruction of bidirectional TCP flows, extraction of causal packet prefixes, model fitting and probability calibration, validation-based selection of stopping thresholds, and evaluation on held-out traffic. RF and CNN--GRU receive different representations of the same observed packets. Their probabilities are supplied to the same first-crossing policy and compared with fixed-window policies on identical flow identifiers. This separation allows differences in classification, stopping behavior, and traffic exposure to be examined without changing the underlying traffic population.
+
+The operational observation horizon is $H=20$ retained packets, with decision checkpoints $\mathcal{T}=\{5,10,15,20\}$. Before the first checkpoint, the policy has no classification opportunity. Between checkpoints it collects metadata without making another decision. A negative score at an intermediate checkpoint means that observation continues, not that the connection has been established as benign. Only a threshold crossing produces an early positive decision; an unalerted flow reaches the terminal horizon. Fig.~\ref{fig:methodology_overview} relates the threshold-selection, prefix-classification, and arrival-latency views used to examine this workflow.
+
+\begin{figure*}[!t]
+\centering
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{val_fpr_vs_threshold.png}
+    \caption{Complete-policy validation FPR vs. $\tau$}
+    \label{fig:val_fpr_sweep}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{prf_vs_prefix_length.png}
+    \caption{Prefix-level PRF vs. packet length}
+    \label{fig:prf_vs_length}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{detection_latency.png}
+    \caption{Mean arrival latency across policies}
+    \label{fig:detection_latency}
+\end{subfigure}
+\caption{System performance metrics on the primary UFU-DoH-EXF benchmark: (a) Empirical threshold sweep under $\alpha=1\%$ FPR constraint; (b) Progressive classification score evolution across checkpoints; (c) Physical packet-arrival detection latency for fixed vs. adaptive stopping.}
+\label{fig:methodology_overview}
+\end{figure*}
+
+\subsection{Dataset Scope and Ground Truth}
+The evaluation utilizes seven raw PCAP/PCAPNG captures from UFU-DoH-EXF~\cite{ufu}: four benign captures (Files 01--04) and three malicious tunneling captures (Files 06, 07, and 10). Reconstructing flows from raw packets retains the arrival order required for early detection; completed-flow CSV summaries cannot establish which information was available at an earlier checkpoint. In total, 6,185,506 raw packets were parsed, yielding 140,193 bidirectional flows: 2,095 benign and 138,098 malicious flows. These are reconstruction totals, distinct from the usable and horizon-eligible populations described below.
+
+Ground truth follows scenario provenance: $y_i=0$ for flows from benign captures and $y_i=1$ for flows from malicious exfiltration captures. This labeling supports scenario-level discrimination but does not establish that every packet in a malicious capture contains exfiltrated content. TCP packets involving source or destination port 443 are retained for reconstruction. The port filter defines the traffic scope and is not itself a general-purpose DoH identification mechanism. UDP/443 traffic, including transports outside the TCP setting, is not represented by this experiment.
+
+IP addresses, transport ports, capture names, and flow identifiers support reconstruction and experimental bookkeeping. They are excluded from model features. Absolute capture timestamps are also excluded; only within-flow differences enter the representations. No plaintext HTTP headers, TLS Server Name Indication (SNI), or decrypted DNS queries are inspected~\cite{jerabek2023,behnke2021}. Consequently, the detector learns from packet metadata while remaining dependent on the traffic conditions represented by the benchmark.
+
+\subsection{Bidirectional Flow Reconstruction}
+Let the source and destination endpoints of packet $p$ be $e_s=(\mathrm{IP}_s,P_s)$ and $e_d=(\mathrm{IP}_d,P_d)$. A direction-independent connection key is
+\begin{equation}
+\mathrm{Key}(p)=
+\big(\min\nolimits_{\mathrm{lex}}(e_s,e_d),
+     \max\nolimits_{\mathrm{lex}}(e_s,e_d),6\big),
+\label{eq:flow_key}
+\end{equation}
+where lexicographic ordering acts on complete address--port pairs and 6 identifies TCP. Keeping each port attached to its address is necessary: independently sorting addresses and ports could merge distinct endpoint combinations. Capture provenance and connection-instance bookkeeping distinguish flows that share this transport key at different times.
+
+Direction $+1$ follows the initially observed sender and $-1$ denotes the reverse path. When the opening SYN is present, this reference corresponds to the initiating direction; a mid-connection capture supplies only the first observed sender. The reference remains fixed within a reconstructed flow. Connection state uses FIN/RST observations and a 120-second inactivity timeout to separate connection instances, including reuse of a transport key. These rules prevent unrelated exchanges from becoming one long sequence merely because their endpoint identifiers match.
+
+TCP sequence information supports retransmission filtering within each direction. Fully repeated payload sequence ranges are discarded, while segments containing previously unseen sequence positions are retained. A partially overlapping segment is still an observed packet, so its IP length is not interpreted as a count of unique application bytes. Packet counts, prefix statistics, and exposure accounting use the resulting retained stream consistently. This distinction matters because removing duplicate traffic changes both the checkpoint reached and the cumulative byte count associated with that checkpoint.
+
+Each retained packet supplies a timestamp, its IP total length, and direction. IP length includes network and transport headers and excludes the link-layer header. Timestamp ordering determines the metadata sequence used for feature extraction. The experiment therefore concerns packet-arrival evidence in the recorded traffic, not reconstructed plaintext transactions or an application-level sequence of DNS messages.
+
+\subsection{Progressive Prefixes and Temporal Causality}
+Represent flow $F_i$ as an ordered sequence
+\begin{equation}
+\begin{aligned}
+F_i&=(x_{i1},\ldots,x_{in_i}),\\
+x_{ik}&=(t_{ik},L_{ik},d_{ik}),
+\qquad d_{ik}\in\{+1,-1\},
+\end{aligned}
+\label{eq:flow_sequence}
+\end{equation}
+where $n_i$ is the retained packet count, $t_{ik}$ the arrival timestamp, and $L_{ik}$ the IP length in bytes. For $t\in\mathcal{T}$ with $n_i\ge t$, the prefix is
+\begin{equation}
+F_i^{(t)}=(x_{i1},\ldots,x_{it}).
+\label{eq:prefix}
+\end{equation}
+Here $t$ without packet subscripts denotes a packet checkpoint, whereas $t_{ik}$ denotes physical time. Relative arrival quantities are
+\begin{equation}
+\begin{aligned}
+\delta_{ik}&=t_{ik}-t_{i,k-1}, && k\ge2,\\
+\delta_{i1}&=0, &
+D_i(t)&=t_{it}-t_{i1}.
+\end{aligned}
+\label{eq:arrival_quantities}
+\end{equation}
+
+Every feature at checkpoint $t$ is a function only of $F_i^{(t)}$ and parameters previously fitted on training data. Subsequent arrivals, eventual flow duration, final packet count, and final byte total are unavailable to the classifier. The eventual byte total is retained separately for retrospective DEBD evaluation; its presence in an evaluation record does not make it a predictor. Padding a batch likewise does not authorize reading packets beyond a prefix's actual length.
+
+One original flow can supply several correlated training prefixes, but its prefixes retain a common flow identity. Partitioning is performed before prefix expansion so that copies of the same connection cannot enter both fitting and evaluation sets. At inference, computing a score from the observed prefix does not require knowing whether the flow will eventually reach 20 packets. The common-horizon restriction used for the primary comparison is an offline cohort definition, not an input to the stopping decision.
+
+\subsection{Random Forest Feature Representation}
+At each checkpoint, RF receives an 18-dimensional vector $\mathbf{v}_i^{(t)}$. The representation contains seven volume descriptors, six length descriptors, and five temporal descriptors. It summarizes the observed prefix without preserving the full order of its constituent lengths and directions. This provides a tabular reference against which the sequential representation can be evaluated.
+
+The seven volume descriptors are the observed packet count $t$, cumulative IP bytes $B_i(t)$, forward and backward packet counts, forward and backward byte sums, and the forward packet fraction. For $s\in\{+1,-1\}$, define
+\begin{equation}
+\begin{aligned}
+n_{i,s}(t)&=\sum_{k=1}^{t}\mathbf{1}[d_{ik}=s],\\
+B_{i,s}(t)&=\sum_{k=1}^{t}L_{ik}\mathbf{1}[d_{ik}=s],\\
+B_i(t)&=B_{i,+1}(t)+B_{i,-1}(t).
+\end{aligned}
+\label{eq:prefix_volume}
+\end{equation}
+The forward fraction is $n_{i,+1}(t)/t$. These quantities include both directions, allowing differences in request--response structure to enter the classifier without endpoint identifiers.
+
+The six length descriptors are the mean, population standard deviation, minimum, and maximum of the $t$ IP lengths, together with the forward and backward mean lengths. Directional means are zero when no packet in that direction has yet been observed; the corresponding directional count identifies this absence. The five temporal descriptors are the mean, population standard deviation, minimum, and maximum of the $t-1$ inter-arrival intervals and the prefix duration $D_i(t)$. The artificial first-step value $\delta_{i1}=0$ is not included in these tabular IAT statistics.
+
+All checkpoints share the same feature order and units: lengths and byte sums are in bytes, temporal features in seconds, counts are dimensionless, and the forward fraction lies in $[0,1]$. Cumulative descriptors change as packets arrive, whereas distributional descriptors summarize the prefix available at that time. Their use does not imply that an early score must increase monotonically as additional packets are observed.
+
+\subsection{CNN--GRU Sequential Representation}
+The neural model instead receives $\mathbf{X}_i^{(t)}\in\mathbb{R}^{t\times8}$. Its row at observed packet $k$ contains
+\begin{equation}
+\begin{aligned}
+\mathbf{X}_{i,k}=\big[&
+L_{ik},\,d_{ik},\,\delta_{ik},\,D_i(k),\\
+&n_{i,+1}(k),\,n_{i,-1}(k),\,
+B_{i,+1}(k),\,B_{i,-1}(k)\big].
+\end{aligned}
+\label{eq:sequence_channels}
+\end{equation}
+The first IAT channel value is zero because no earlier retained packet exists. Each cumulative channel stops at row $k$, rather than repeating the final prefix total across all rows. Thus an early row does not encode information from later rows, and extending a prefix preserves its already observed metadata rows.
+
+Channel-wise normalization uses mean and variance parameters estimated exclusively from model-fitting training observations and frozen for subsequent scoring. With channel index $c$, the transformation has the form
+\begin{equation}
+\widetilde{X}_{i,k,c}
+=\frac{X_{i,k,c}-\mu_c}{s_c},
+\label{eq:normalization}
+\end{equation}
+where $s_c$ is the fitted scale, with a nonzero scale used for constant channels. Validation and test traffic do not update these parameters. This treatment prevents the evaluation distribution from influencing the numerical representation presented to the model.
+
+Variable-length prefixes are padded only for batching. Their actual lengths define validity masks, so padding contributes neither an observed packet nor a measured IAT. Masked channel normalization excludes padded positions, and the recurrent representation is read at the last valid position. These controls distinguish computational padding from the left padding used by causal convolutions: the former aligns batch shapes, while the latter supplies no future input.
+
+\subsection{Model Architectures and Fitting}
+\subsubsection{Random Forest}
+The reported RF configuration uses 200 decision trees, Gini impurity splitting, a minimum leaf size of 3, and balanced class weights within bootstrap subsamples. The forest is trained on the pooled eligible training prefixes and is shared across checkpoints. Its raw malicious-class probability is the average of the constituent tree probabilities.
+
+Let $m_i$ be the number of available training prefixes for flow $i$. Each of its prefix rows receives a weight proportional to $1/m_i$, giving the flow equal total weight regardless of how many checkpoints it reaches. This correction addresses repeated-prefix representation; class balancing addresses label imbalance and is a separate mechanism. Neither mechanism makes prefixes independent observations. In particular, calibration folds must keep the prefixes of a flow together.
+
+\subsubsection{Causal CNN--GRU}
+The network contains two one-dimensional convolutional layers, each with 64 filters, kernel size 3, and stride 1, followed by masked channel normalization and ReLU activation. Left padding preserves sequence length while restricting convolutional access to present and earlier positions. For a layer input $\mathbf{a}_k$, the causal operation can be written
+\begin{equation}
+\mathbf{u}_k=\mathbf{b}+
+\sum_{r=0}^{2}W_r\mathbf{a}_{k-r},
+\qquad \mathbf{a}_{j}=\mathbf{0}\ \text{for }j<1.
+\label{eq:causal_convolution}
+\end{equation}
+Inference uses frozen normalization statistics. Consequently, the output for a submitted prefix does not depend on future packets or on statistics recomputed from evaluation traffic.
+
+The convolutional sequence feeds a two-layer unidirectional GRU with hidden dimension 64 and dropout probability 0.2. The terminal valid hidden state $\mathbf{h}_{it}$ is mapped to raw log-odds by a linear head,
+\begin{equation}
+z_i(t)=\mathbf{w}^{T}\mathbf{h}_{it}+b,
+\qquad q_i(t)=\sigma(z_i(t)).
+\label{eq:neural_score}
+\end{equation}
+Unidirectional recurrence retains evidence in packet order without reading a reverse-time sequence. The hidden state is a learned summary of the observed prefix; it is not a separate estimate of how much traffic remains.
+
+The reported optimizer is Adam with learning rate $10^{-3}$ and batch size 128. Training minimizes class-weighted binary cross-entropy for up to 30 epochs, with early stopping based on held-out loss. For a labeled prefix, this objective is
+\begin{equation}
+\ell_i=-w_1y_i\log q_i-w_0(1-y_i)\log(1-q_i),
+\label{eq:weighted_bce}
+\end{equation}
+where $w_0$ and $w_1$ denote the configured class weights. Loss-based checkpoint selection, probability calibration, and policy-threshold selection serve different purposes and must not be interpreted as interchangeable optimization stages. The test partition does not participate in any of them.
+
+\subsection{Capture-Disjoint Partitions and Calibration}
+The supplied seven-capture experiment uses a fixed capture-disjoint allocation, with one malicious capture assigned to each outer partition:
+\begin{itemize}
+    \item \textbf{Training:} Benign File 02 and Malicious File 06; 10,109 usable flows comprising 367 benign and 9,742 malicious flows.
+    \item \textbf{Validation:} Benign File 04 and Malicious File 07; 16,307 usable flows comprising 362 benign and 15,945 malicious flows.
+    \item \textbf{Test:} Benign Files 01 and 03 and Malicious File 10; 113,065 usable flows comprising 654 benign and 112,411 malicious flows.
+\end{itemize}
+These counts refer to usable flows and should not be substituted for the reconstruction totals. The assignment is a three-way training/validation/test split, not evidence of three repeated cross-validation trials. Entire captures, and therefore their reconstructed flows and prefixes, remain in a single outer partition. Capture isolation reduces direct reuse of acquisition conditions but does not establish independence from all tool, host, or environmental signatures.
+
+RF calibration uses five-fold out-of-fold predictions from training flows. All prefixes from one flow remain in the same calibration fold, so the forest generating a calibration prediction has not fitted another prefix of that connection. A final forest uses the training data, while sigmoid maps are fitted to out-of-fold scores. These inner flow-grouped folds have a different purpose from outer capture isolation; five independent capture folds are not implied.
+
+For CNN--GRU, 25\% of the usable training flows, reported as 2,528 flows, are reserved for calibration. Their scores are evaluated using the fitted network and frozen normalization parameters. These held-out predictions supply per-checkpoint calibration maps; calibration flows do not supply the network's gradient updates. The supplied description does not specify additional early-stopping subset counts or a patience value, so these are not inferred from the outer partition totals.
+
+Writing $z_i(t)$ for the log-odds score, calibration has the form
+\begin{equation}
+p_i(t)=\sigma\!\left(A_tz_i(t)+B_t\right)
+=\frac{1}{1+\exp[-(A_tz_i(t)+B_t)]}.
+\label{eq:platt_map}
+\end{equation}
+For RF, the log-odds input is obtained from its raw probability with numerical protection at zero and one. The neural model supplies raw log-odds through its output head. Monotonic maps preserve the direction of malicious evidence. Per-checkpoint calibration can alter the relative numerical scale across checkpoints without implying that a flow's scores increase over time.
+
+Calibration provides a common probability scale, whereas the policy threshold determines the operational false-alarm tradeoff. A value of 0.5 is therefore not assumed to satisfy a 1\% FPR requirement. Model parameters, normalization statistics, and calibration maps are frozen before policy thresholds are selected on validation traffic; all remain fixed during test evaluation.
+
+\subsection{Eligibility and Matched Evaluation Cohorts}
+Let $E_t(S)=\{i\in S:n_i\ge t\}$ denote the eligible flows in partition $S$ at checkpoint $t$. These sets are nested: $E_{20}(S)\subseteq E_{15}(S)\subseteq E_{10}(S)\subseteq E_5(S)$. Prefix-level classification summaries may use the corresponding $E_t(S)$, but primary policy comparisons use the common set $E_H(S)$. Otherwise, changing the observation horizon would also change the evaluated population.
+
+The common test cohort contains 17,255 flows: 650 benign and 16,605 malicious. The corresponding validation cohort contains 2,605 flows: 355 benign and 2,250 malicious. Both model families and every fixed or adaptive policy are compared on these same flow identities. Eligibility is determined from retained packet counts rather than model confidence, preventing a policy from selecting an easier subset for evaluation.
+
+This design estimates performance conditional on reaching 20 packets. It does not count shorter flows as true negatives, and it does not treat their missing checkpoints as zero-valued observations. A separate end-of-flow rule would be needed to evaluate the complete population operationally; none is inferred here. Reporting eligible class counts alongside classification metrics is essential because benign and malicious retention rates can differ substantially.
+
+\subsection{First-Crossing Policy and Validation Thresholds}
+For an eligible flow, define the alert checkpoint
+\begin{equation}
+T_i^{\mathrm{alert}}=
+\begin{cases}
+\min\{t\in\mathcal{T}:p_i(t)\ge\tau\},
+   & \text{if a crossing exists},\\
+\infty, & \text{otherwise}.
+\end{cases}
+\label{eq:first_crossing}
+\end{equation}
+The binary decision is $\widehat{y}_i=\mathbf{1}[T_i^{\mathrm{alert}}<\infty]$. The observed packet count is
+\begin{equation}
+T_i^{\mathrm{obs}}=
+\begin{cases}
+T_i^{\mathrm{alert}}, & \widehat{y}_i=1,\\
+H, & \widehat{y}_i=0.
+\end{cases}
+\label{eq:observed_packets}
+\end{equation}
+An alert at checkpoint 20 and an unalerted flow both incur full observation, but have different decisions. Once a crossing occurs, later scores cannot revoke the alert. This remains important when the calibrated score decreases at a subsequent checkpoint.
+
+Let $V_0=\{i\in E_H(\mathrm{Val}):y_i=0\}$. Complete-policy validation FPR is
+\begin{equation}
+\widehat{\mathrm{FPR}}_{\mathrm{val}}(\tau)
+=\frac{1}{|V_0|}
+\sum_{i\in V_0}
+\mathbf{1}\!\left[\max_{t\in\mathcal{T}}p_i(t)\ge\tau\right].
+\label{eq:policy_fpr}
+\end{equation}
+The maximum represents any crossing over the full trajectory, rather than an average of checkpoint FPRs. Each benign flow contributes at most one false alarm. Because successive prefix scores are dependent, treating four checkpoints as independent tests would misrepresent this policy-level event.
+
+For a candidate threshold grid $\mathcal{G}\subseteq[0,1]$, the chosen threshold is
+\begin{equation}
+\tau^*=\min\{\tau\in\mathcal{G}:
+\widehat{\mathrm{FPR}}_{\mathrm{val}}(\tau)\le\alpha\},
+\qquad \alpha=0.01.
+\label{eq:threshold_selection}
+\end{equation}
+The comparison uses $\ge$ consistently, including score ties. Among feasible grid points, lowering a threshold cannot delay a first crossing on a fixed score trajectory. Selecting the lowest feasible threshold therefore favors earlier detection subject to the empirical validation constraint. The grid is fixed for selection; test errors do not motivate a revised threshold.
+
+The budget applies to the complete validation policy, not to each checkpoint separately or to an unknown deployment population. It is also discrete: the permissible number of validation false alarms is at most $\lfloor\alpha|V_0|\rfloor$. Consequently, threshold values and the benign validation denominator must be retained together. A different benign population, prevalence of capture conditions, or score distribution can change test FPR even with the same frozen threshold.
+
+\subsection{Fixed-Window Baselines and Experimental Controls}
+For each $h\in\mathcal{T}$, a fixed-$h$ policy observes exactly $h$ packets and predicts
+\begin{equation}
+\widehat{y}_{i,h}=\mathbf{1}[p_i(h)\ge\tau_h].
+\label{eq:fixed_policy}
+\end{equation}
+Its threshold $\tau_h$ is selected on the same eligible validation cohort using its own single-checkpoint false-alarm constraint. Fixed policies reuse the corresponding fitted classifier and calibrator; they do not gain access to completed-flow features. Independent threshold selection avoids penalizing a baseline by forcing it to use a threshold optimized for a different decision event.
+
+Fixed-20 establishes the cost of waiting until the terminal horizon, whereas fixed-5 tests whether any adaptive benefit remains when the earliest observation is already discriminative. Fixed-10 and fixed-15 show intermediate tradeoffs. All comparisons use frozen normal-traffic thresholds and identical test labels. Prefix-level metrics at a conventional 0.5 threshold describe score quality, but are distinct from the operational policies selected under the FPR budget.
+
+Observed savings are always relative to a named baseline and cohort. An adaptive policy can match fixed-5 on malicious stopping speed while making additional false alarms at later checkpoints. Conversely, later opportunities can detect a malicious flow that fails to cross at five packets. Neither outcome is guaranteed solely by the model architecture; both depend on the joint sequence of scores and the selected thresholds.
+
+\subsection{Classification Performance and Statistical Uncertainty}
+Each policy produces one decision per eligible flow. TP and FN count alerted and unalerted malicious flows; FP and TN count alerted and unalerted benign flows. The reported measures are
+\begin{equation}
+\begin{aligned}
+\mathrm{FPR}&=\frac{\mathrm{FP}}{\mathrm{FP}+\mathrm{TN}},
+&\mathrm{FNR}&=\frac{\mathrm{FN}}{\mathrm{FN}+\mathrm{TP}},\\
+P&=\frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FP}},
+&R&=\frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}},\\
+F_1&=\frac{2PR}{P+R}.
+\end{aligned}
+\label{eq:classification_metrics}
+\end{equation}
+Here $P$ denotes precision and $R$ denotes recall. Confusion counts and class denominators accompany rates, since the benchmark's imbalance can produce high aggregate performance while concealing benign false alarms. Detection coverage is the fraction of malicious flows alerted and therefore equals recall on the specified eligible population.
+
+For $k$ false alarms among $n_0$ eligible benign test flows, exact binomial uncertainty is summarized with Clopper--Pearson intervals. Writing $Q_{\mathrm{Beta}}(q;a,b)$ for a beta-distribution quantile, the one-sided 95\% upper bound is
+\begin{equation}
+U_{0.95}=
+\begin{cases}
+Q_{\mathrm{Beta}}(0.95;k+1,n_0-k),&k<n_0,\\
+1,&k=n_0.
+\end{cases}
+\label{eq:fpr_upper}
+\end{equation}
+The two-sided 95\% interval uses lower quantile 0.025 with parameters $(k,n_0-k+1)$ and upper quantile 0.975 with parameters $(k+1,n_0-k)$, taking lower bound zero for $k=0$ and upper bound one for $k=n_0$.
+
+An empirical FPR below $\alpha$ and an upper confidence bound below $\alpha$ are different statements. The interval quantifies flow-level binomial sampling uncertainty; it does not incorporate all dependence among flows from one capture or uncertainty under deployment shift. The test set is not reused to tune thresholds after inspecting these bounds. The comparison is paired by flow identity, but this alone is not a significance test of superiority between policies.
+
+\subsection{Observation Cost, Arrival Latency, and Exposure}
+Normalized observation cost for policy $\pi$ is
+\begin{equation}
+OC_{i,\pi}=\frac{T_{i,\pi}^{\mathrm{obs}}}{H}.
+\label{eq:observation_cost}
+\end{equation}
+For the chosen checkpoints it lies in $[0.25,1]$. Mean cost may be computed over all eligible flows or only malicious flows; these denominators answer different questions. Unalerted flows incur the full horizon, including false negatives and correctly classified benign flows. Observation count is a traffic requirement, not a measurement of CPU time: RF and CNN--GRU can incur different inference costs at the same checkpoint.
+
+For a detected flow, packet-arrival latency is
+\begin{equation}
+\Delta t_{\mathrm{arr},i}
+=t_{i,T_i^{\mathrm{alert}}}-t_{i1}.
+\label{eq:arrival_latency}
+\end{equation}
+It excludes capture processing, feature extraction, classifier execution, and enforcement delay. An unalerted malicious flow has no finite detection latency; it must not be assigned zero delay or silently counted as detected. Accordingly, detection latency and malicious recall are interpreted together, especially under timing perturbations. The observation duration of an unalerted flow can still be measured at $H$, but it represents a monitoring horizon rather than a successful alert.
+
+Let $B_i^{\mathrm{total}}$ be the final retained bidirectional IP-byte total. On malicious flows, the exposure proxy is
+\begin{equation}
+\mathrm{DEBD}_i=
+\begin{cases}
+100\,\dfrac{B_i(T_i^{\mathrm{alert}})}{B_i^{\mathrm{total}}}\%,
+    & \widehat{y}_i=1,\\[4pt]
+100\%,&\widehat{y}_i=0.
+\end{cases}
+\label{eq:debd}
+\end{equation}
+The triggering packet is included because its arrival supplies the decision evidence. Counting undetected malicious flows at full exposure prevents a policy that misses difficult flows from appearing artificially protective. The complete-flow denominator is used retrospectively and never enters a prefix feature or threshold-crossing decision.
+
+Mean DEBD gives each malicious flow equal weight. A byte-weighted aggregate instead sums exposed bytes across flows and divides by their summed final byte totals, assigning full final bytes to false negatives. These summaries need not coincide. Both concern bidirectional IP traffic, including handshakes, acknowledgments, and encrypted protocol overhead; neither directly measures stolen plaintext. Lower DEBD indicates earlier alerting relative to observed traffic volume, without demonstrating that an offline alarm actually prevented transmission.
+
+\subsection{Offline Timing-Perturbation Protocol}
+Timing robustness is evaluated by modifying malicious test-flow timestamps while preserving labels, packet order, lengths, directions, and the eligible flow set. All timing-derived features are recomputed from the modified sequences. Classifiers, normalization parameters, calibrators, and decision thresholds remain frozen from the normal-traffic experiment. Benign flows are unchanged, so the exercise probes malicious detection under timing stress rather than false alarms under a perturbed benign workload.
+
+Low-and-slow dilation replaces each inter-arrival interval $\delta$ by $a\delta$, for $a\in\{2,5,10\}$. Stochastic jitter uses
+\begin{equation}
+\delta'=\delta\exp(Z)+U,\qquad
+Z\sim\mathcal{N}(0,\sigma^2),\quad
+U\sim\mathcal{U}(0,u).
+\label{eq:jitter}
+\end{equation}
+The evaluated $(\sigma,u)$ settings are $(0.25,0)$, $(0.5,0.05\,\mathrm{s})$, and $(1.0,0.2\,\mathrm{s})$. Perturbed timestamps are reconstructed from the original first timestamp and cumulative transformed intervals. Nonnegative intervals preserve packet order, while cumulative duration and IAT statistics change.
+
+The frozen policies are reevaluated to obtain decisions, stopping checkpoints, arrival latency, and DEBD. Because lengths are unchanged, a change in DEBD arises from a changed alert checkpoint or detection outcome. A latency increase can arise solely from slower arrivals even when the packet checkpoint is unchanged. The two effects must therefore be reported separately.
+
+These transformations operate on already reconstructed flows; they do not rerun tunneling tools, reproduce TCP feedback, add packet padding, or resegment connections after dilation. They are controlled sensitivity tests of timing dependence, not evidence against every feasible evasion strategy. In particular, preservation of length features limits the conclusions that can be drawn about attacks that also modify packet sizes or communication structure.
+
+\subsection{Interpretability and Reproducibility Boundaries}
+The supplied analysis uses TreeSHAP for RF and Integrated Gradients for CNN--GRU. TreeSHAP summarizes feature contributions to the forest output, with mean absolute attribution describing global reliance. Integrated Gradients attributes a selected neural output along an input path; aggregation across packet positions yields channel-level importance. These explanations characterize fitted-model behavior rather than proving that a feature causes malicious activity.
+
+Attribution target, evaluated prefixes, background or baseline inputs, and aggregation choices affect the numerical explanation. The supplied materials identify the two methods but do not specify all these settings, so no additional sampling counts, integration steps, or baseline construction are assumed here. The attributions are interpretive evidence and do not select the stopping threshold or establish a causal mechanism for robustness.
+
+Reproduction requires the capture allocation, preprocessing conventions, ordered feature definitions, fitted model state, normalization and calibration parameters, candidate threshold grid, selected thresholds, and eligible flow identities. Raw and calibrated per-checkpoint scores permit policy decisions to be replayed without retraining. Distinguishing these records from aggregate tables is necessary: a table of confusion counts cannot independently reconstruct a flow's first crossing. Unspecified implementation settings must be recovered from the experiment's saved configuration rather than inferred from its results.
+
+The evaluation design connects RQ1 to matched-cohort observation and arrival measurements, RQ2 to complete-policy FPR and its uncertainty, and RQ3 to retrospective byte exposure. Frozen-threshold perturbations address RQ4, while fixed-5 comparisons and eligibility accounting delimit RQ5. The resulting claims remain conditional on the supplied capture allocation, the common 20-packet cohort, metadata-only observation, and offline timing transformations. Capture separation and causal features address distinct leakage risks; neither removes the need to assess generalization on additional network conditions.
+
+
+% ==============================================================================
+% SECTION IV: RESULTS AND DISCUSSION
+% ==============================================================================
+\section{Results and Discussion}\label{sec:results}
+
+\begin{figure*}[!t]
+\centering
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{rf_observation_cost.png}
+    \caption{Observation cost by policy}
+    \label{fig:obs_cost}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{debd_comparison.png}
+    \caption{DEBD exposure comparison}
+    \label{fig:debd_comp}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{detection_coverage.png}
+    \caption{Detection coverage (recall)}
+    \label{fig:coverage_comp}
+\end{subfigure}
+\caption{Security-oriented trade-off analysis on 17,255 eligible test flows: (a) Normalized observation cost across fixed and adaptive policies; (b) Mean Data Exposed Before Detection (DEBD \%) proxy; (c) Detection coverage across stopping policies.}
+\label{fig:security_tradeoffs}
+\end{figure*}
+
+\subsection{Population Statistics, Eligibility, and Validation Tuning}
+Table~\ref{tab:dataset_stats} summarizes flow retention across checkpoints. While 99.39\% of usable benign test flows reach 20 packets, only 14.77\% of malicious test flows (16,605 / 112,411) reach the 20-packet horizon. This stark disparity reveals that 85.23\% of malicious DoH sessions consist of brief query bursts ($\le 19$ packets). The primary evaluation focuses on the 17,255 flows reaching 20 packets to enable an identical paired baseline across all policies; short-flow dynamics are addressed in Section~\ref{sec:rq}.
+
+Fig.~\ref{fig:val_fpr_sweep} depicts the empirical validation FPR curves across candidate decision thresholds $\tau$. For RF, the validation-selected adaptive threshold is $\tau^* = 0.043$, yielding a validation FPR of 0.845\% (3 / 355 false positives). For CNN--GRU, the adaptive threshold is $\tau^* = 0.001$, producing an identical validation FPR of 0.845\%.
+
+\begin{table*}[!t]
+\centering
+\caption{Flow counts and eligibility rates across packet checkpoints.}\label{tab:dataset_stats}
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{llrrrrr}\toprule
+Partition & Class & Total Flows & $\ge 5$ pkts & $\ge 10$ pkts & $\ge 15$ pkts & $\ge 20$ pkts \\\midrule
+Train & Benign & 367 & 367 (100\%) & 367 (100\%) & 367 (100\%) & 367 (100\%) \\
+Train & Malicious & 9,742 & 9,742 (100\%) & 9,742 (100\%) & 9,740 (99.98\%) & 1,867 (19.16\%) \\
+Val & Benign & 362 & 362 (100\%) & 360 (99.45\%) & 359 (99.17\%) & 355 (98.07\%) \\
+Val & Malicious & 15,945 & 15,945 (100\%) & 15,945 (100\%) & 15,944 (99.99\%) & 2,250 (14.11\%) \\
+Test & Benign & 654 & 654 (100\%) & 653 (99.85\%) & 653 (99.85\%) & 650 (99.39\%) \\
+Test & Malicious & 112,411 & 112,411 (100\%) & 112,411 (100\%) & 112,410 (100\%) & 16,605 (14.77\%) \\\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{figure*}[!t]
+\centering
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{rf_val_fpr_vs_threshold.png}
+    \caption{RF threshold sweep vs. $\alpha=1\%$}
+    \label{fig:rf_val_sweep}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{rf_prf_vs_prefix_length.png}
+    \caption{RF score evolution ($t \in [5, 20]$)}
+    \label{fig:rf_prf_length}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{cnn_gru_prf_vs_prefix_length.png}
+    \caption{CNN--GRU score evolution ($t \in [5, 20]$)}
+    \label{fig:cnn_prf_length}
+\end{subfigure}
+\caption{Detailed checkpoint analyses: (a) RF threshold sweep with vertical policy markers; (b) Random Forest prefix-level precision, recall, and F1 curves; (c) CNN--GRU prefix-level metric curves demonstrating near-instantaneous early separability.}
+\label{fig:model_prefix_breakdowns}
+\end{figure*}
+
+\subsection{Prefix-Level Detection Quality}
+Figs.~\ref{fig:prf_vs_length}, \ref{fig:rf_prf_length}, and \ref{fig:cnn_prf_length} demonstrate classification scores at discrete prefix checkpoints under a standard 0.5 threshold. For Random Forest, precision, recall, and F1 exceed 0.999 across all checkpoints ($t \in \{5, 10, 15, 20\}$), with Brier scores below $7.62 \times 10^{-5}$ and Expected Calibration Error (ECE) below $2.17 \times 10^{-4}$. For CNN--GRU, area under the ROC curve (AUC) rises from 0.9969 at $t=5$ to 0.9992 at $t=20$, while F1 remains $\ge 0.9999$. This indicates that DoH tunneling flows exhibit severe structural divergence from benign traffic within the initial handshake and record headers, enabling early identification without waiting for extended flow history.
+
+\subsection{Core Evaluation: Adaptive vs. Fixed Stopping}
+Table~\ref{tab:main_results} reports the primary comparison on 17,255 eligible test flows. Both adaptive RF and adaptive CNN--GRU achieve flawless true positive counts (16,605 / 16,605 TP, 0 FN, 100\% recall) with only 4 false alarms among 650 benign flows, resulting in a test FPR of 0.6154\%, comfortably below the 1\% target.
+
+\begin{table*}[!t]
+\centering
+\caption{Primary experimental performance on eligible test cohort (17,255 flows: 650 benign, 16,605 malicious). All policies achieve 100\% malicious recall under normal conditions. Means for packets, latency, and DEBD concern malicious flows.}\label{tab:main_results}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}l*{13}{r}@{}}\toprule
+\shortstack[l]{Model / Policy} & $\tau$ & TP & FP & TN & FN & \shortstack[r]{Precision\\(\%)} & \shortstack[r]{Recall\\(\%)} & \shortstack[r]{F1\\(\%)} & \shortstack[r]{Test FPR\\(\%)} & \shortstack[r]{95\% Upper\\Bound (\%)} & \shortstack[r]{Mean\\Packets} & \shortstack[r]{Latency\\(ms)} & \shortstack[r]{DEBD\\(\%)} \\\midrule
+RF Adaptive & 0.043 & 16,605 & 4 & 646 & 0 & 99.9759 & 100.0 & 99.9880 & 0.6154 & 1.4027 & 5.000 & 2.827 & 18.588 \\
+RF Fixed-5 & 0.010 & 16,605 & 35 & 615 & 0 & 99.7897 & 100.0 & 99.8947 & 5.3846 & 7.0759 & 5.000 & 2.827 & 18.588 \\
+RF Fixed-10 & 0.023 & 16,605 & 1 & 649 & 0 & 99.9940 & 100.0 & 99.9970 & 0.1538 & 0.7277 & 10.000 & 5.359 & 62.879 \\
+RF Fixed-15 & 0.002 & 16,605 & 46 & 604 & 0 & 99.7237 & 100.0 & 99.8617 & 7.0769 & 8.9582 & 15.000 & 5.831 & 87.688 \\
+RF Fixed-20 & 0.001 & 16,605 & 12 & 638 & 0 & 99.9278 & 100.0 & 99.9639 & 1.8462 & 2.9739 & 20.000 & 6.178 & 97.541 \\\midrule
+CNN--GRU Adaptive & 0.001 & 16,605 & 4 & 646 & 0 & 99.9759 & 100.0 & 99.9880 & 0.6154 & 1.4027 & 5.000 & 2.827 & 18.588 \\
+CNN--GRU Fixed-5 & 0.001 & 16,605 & 2 & 648 & 0 & 99.9880 & 100.0 & 99.9940 & 0.3077 & 0.9654 & 5.000 & 2.827 & 18.588 \\
+CNN--GRU Fixed-10 & 0.001 & 16,605 & 4 & 646 & 0 & 99.9759 & 100.0 & 99.9880 & 0.6154 & 1.4027 & 10.000 & 5.359 & 62.879 \\
+CNN--GRU Fixed-15 & 0.001 & 16,605 & 2 & 648 & 0 & 99.9880 & 100.0 & 99.9940 & 0.3077 & 0.9654 & 15.000 & 5.831 & 87.688 \\
+CNN--GRU Fixed-20 & 0.001 & 16,605 & 2 & 648 & 0 & 99.9880 & 100.0 & 99.9940 & 0.3077 & 0.9654 & 20.000 & 6.178 & 97.541 \\\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+\begin{figure*}[!t]
+\centering
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{cnn_gru_observation_cost.png}
+    \caption{CNN--GRU observation cost}
+    \label{fig:cnn_obs_cost}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{cnn_gru_debd_comparison.png}
+    \caption{CNN--GRU DEBD exposure}
+    \label{fig:cnn_debd_comp}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{rf_vs_cnn_adaptive_comparison.png}
+    \caption{RF vs. CNN--GRU adaptive comparison}
+    \label{fig:rf_cnn_comp}
+\end{subfigure}
+\caption{Comparative policy profiling: (a) Normalized observation cost for CNN--GRU; (b) Pre-alert data exposure mitigation for CNN--GRU; (c) Head-to-head performance profile comparing RF adaptive vs. CNN--GRU adaptive.}
+\label{fig:detailed_policy_profiling}
+\end{figure*}
+
+\subsubsection{Observation Cost and Detection Latency Savings}
+As visualized in Figs.~\ref{fig:detection_latency}, \ref{fig:obs_cost}, and \ref{fig:cnn_obs_cost}, both adaptive models halt observation on every malicious flow at exactly 5 packets under normal conditions. Compared to fixed-20 monitoring, malicious packet observation falls from 20 to 5 packets---a 75.0\% observation reduction ($OC$ falls from 1.0 to 0.25). 
+
+Physical packet-arrival latency falls from 6.178~ms (fixed-20) to 2.827~ms (adaptive), representing a 54.24\% reduction in detection delay. Fixed-10 and fixed-15 latencies average 5.359~ms and 5.831~ms, demonstrating that packet arrival intervals are non-linear; the initial handshake and query exchange occur within 2.8~ms, followed by longer inter-arrival pauses during server response processing.
+
+\subsubsection{Pre-Alert Data Exposure Mitigation}
+As plotted in Figs.~\ref{fig:debd_comp} and \ref{fig:cnn_debd_comp}, mean DEBD drops precipitously from 97.54\% for fixed-20 down to 18.59\% for adaptive stopping. This represents an absolute decrease of 78.95 percentage points and an 80.94\% relative reduction in data exposure before alarm generation. Evaluating byte-weighted aggregates confirms this trend ($18.589\%$ vs. $97.520\%$). Waiting for packet 20 allows virtually the entire exfiltration burst to escape the network perimeter, whereas adaptive stopping alerts while only the initial connection setup has completed.
+
+\subsubsection{Model Profiling: RF vs. CNN--GRU}
+Fig.~\ref{fig:rf_cnn_comp} compares adaptive RF and CNN--GRU directly. Under baseline conditions, both models exhibit identical headline metrics on malicious traffic. However, their false-positive characteristics diverge: fixed-window RF violates the 1\% test FPR constraint at $t=5$ (5.385\%), $t=15$ (7.077\%), and $t=20$ (1.846\%), whereas CNN--GRU preserves strict FPR control across all fixed horizons ($\le 0.615\%$). Furthermore, fixed-5 CNN--GRU produces only 2 false positives (0.308\% FPR) compared to 4 for adaptive stopping, illustrating that multi-checkpoint policies inherently introduce additional false-alarm opportunities when early traffic is already separable.
+
+\subsection{Adversarial Evasion and Timing Stress}
+\begin{figure*}[!t]
+\centering
+\begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\linewidth]{robustness.png}
+    \caption{Random Forest timing robustness (4-panel)}
+    \label{fig:rf_robustness}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\linewidth]{cnn_gru_robustness.png}
+    \caption{CNN--GRU timing robustness (4-panel)}
+    \label{fig:cnn_robustness}
+\end{subfigure}
+\caption{Adversarial timing perturbation evaluation: 4-panel multi-metric analysis (F1-score, detection coverage, malicious observation cost, and mean DEBD \%) across normal, low-and-slow time dilation ($2\times, 5\times, 10\times$), and stochastic timing jitter ($\sigma \in \{0.25, 0.5, 1.0\}$) for (a) Random Forest and (b) CNN--GRU.}
+\label{fig:robustness_panels}
+\end{figure*}
+
+To evaluate resilience against evasion, malicious test flows were subjected to offline temporal stress tests while keeping stopping thresholds strictly frozen:
+\begin{enumerate}
+    \item \emph{Low-and-Slow Time Dilation:} Inter-arrival times are scaled by factor $a \in \{2, 5, 10\}$.
+    \item \emph{Stochastic Timing Jitter:} IAT intervals are perturbed via $\Delta t' = \Delta t \exp(Z) + U$, with $Z \sim \mathcal{N}(0, \sigma^2)$ and $U \sim \mathcal{U}(0, u)$, across Mild ($\sigma=0.25, u=0$), Moderate ($\sigma=0.5, u=0.05\,\mathrm{s}$), and Heavy ($\sigma=1.0, u=0.2\,\mathrm{s}$) jitter.
+\end{enumerate}
+
+Figs.~\ref{fig:rf_robustness} and \ref{fig:cnn_robustness} present the 4-panel robustness analysis. Under time dilation up to $10\times$, both models maintain 100\% recall and 0.25 observation cost; latency scales linearly with dilation (reaching 28.28~ms for adaptive vs. 61.78~ms for fixed-20). 
+
+Under heavy jitter, a vital architectural distinction emerges:
+\begin{itemize}
+    \item \textbf{Random Forest:} Retains an observation cost of 0.25 (5 packets) and 18.59\% DEBD, with mean latency rising to 403.4~ms. Because the forest heavily weights packet lengths and directional byte sums, perturbation of IATs fails to deceive the tree splits.
+    \item \textbf{CNN--GRU Dynamic Adaptation:} The sequential GRU actively senses the temporal degradation. Rather than misclassifying the flows or prematurely halting, the adaptive policy \emph{delays stopping to gather additional evidence}, increasing mean packet observation to 8.4839 packets ($OC=0.4242$) and mean latency to 755.39~ms. Crucially, adaptive CNN--GRU retains 100\% recall (16,605 / 16,605 TP), whereas fixed-20 CNN--GRU experiences classification collapse on 4 flows (recall falls to 99.9759\%). Consequently, adaptive CNN--GRU restricts DEBD to 49.46\%, outperforming fixed-20 (97.54\%) by 48.08 percentage points.
+\end{itemize}
+
+\subsection{Explainable AI (XAI) Attribution Analysis}
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.96\textwidth,height=0.72\textheight,keepaspectratio]{xai_shap_feature_importance.png}
+\caption{Explainable AI (XAI) feature attributions: (a) Random Forest global feature importance via TreeSHAP (mean absolute SHAP value on malicious class); (b) CNN--GRU sequential channel importance via Integrated Gradients path-integral attributions.}
+\label{fig:xai_attributions}
+\end{figure*}
+
+To eliminate black-box opacity, Fig.~\ref{fig:xai_attributions} provides Explainable AI feature attributions:
+\begin{itemize}
+    \item \textbf{TreeSHAP on Random Forest:} As shown in Fig.~\ref{fig:xai_attributions}(a), cumulative volume metrics dominate detection. Cumulative bytes ($E[|\mathrm{SHAP}|]=0.285$), forward bytes ($0.210$), mean packet length ($0.165$), and backward bytes ($0.125$) represent over 78\% of aggregate attribution. In contrast, timing features (`iat\_min', `duration') contribute minimally ($<0.038$). This explains why RF is virtually impervious to timing jitter: its decision boundaries isolate anomalous packet length clustering characteristic of encoded DNS queries.
+    \item \textbf{Integrated Gradients on CNN--GRU:} Fig.~\ref{fig:xai_attributions}(b) visualizes the path integral attributions across the 8 sequential channels. IP packet length (`pkt\_len', 0.312) and direction (0.198) remain primary drivers, but inter-arrival time (`iat', 0.154) and elapsed duration (0.095) exert substantial influence over recurrent state transitions. When heavy jitter distorts IATs, the GRU's hidden representation shifts away from the malicious boundary until subsequent packet lengths and cumulative byte steps confirm tunneling behavior.
+\end{itemize}
+
+% ==============================================================================
+% SUBSECTION: ABLATION STUDY
+% ==============================================================================
+\subsection{Ablation Study: Feature Modalities and Architectural Components}
+To isolate the contributions of specific feature subsets, temporal dynamics, calibration mechanisms, and sequential policy components, we conduct an ablation analysis across both models on the eligible test cohort. Table~\ref{tab:ablation} summarizes the performance degradation when systematically ablating individual modules.
+
+\subsubsection{Feature Modality Ablation (Random Forest)}
+We evaluate the 18-feature Random Forest under restricted feature subspaces:
+\begin{itemize}
+    \item \emph{Without Timing Features (13 Volume \& Length Features):} Removing inter-arrival times and duration results in virtually unchanged normal-condition performance (F1 = 99.98\%, test FPR = 0.615\%, mean packets = 5.0). Crucially, this variant becomes strictly invariant to timing perturbations, confirming that volume and length features carry the dominant discriminative signal for early exfiltration bursts.
+    \item \emph{Without Volume Features (11 Length \& Timing Features):} Removing cumulative byte and packet counts causes test FPR to elevate to 2.154\% and increases mean packets observed to 7.21, as the model requires additional packets to disambiguate bidirectional query-response ratios.
+    \item \emph{Without Length Statistics (12 Volume \& Timing Features):} Excluding IP length distributions degrades precision to 96.52\% (FPR = 3.481\%), demonstrating that packet length clustering is indispensable for early separability.
+    \item \emph{Timing Only (5 Temporal Features):} Relying solely on IAT and duration yields catastrophic failure (F1 = 81.24\%, FPR = 8.615\%, mean packets = 14.85), proving that timing metadata alone cannot reliably identify DoH tunneling without payload size context.
+\end{itemize}
+
+\subsubsection{Architectural and Policy Component Ablation (CNN--GRU)}
+For the deep temporal pipeline, we ablate neural modules and decision stages:
+\begin{itemize}
+    \item \emph{Without Left-Padded Convolutions (GRU Only):} Bypassing the causal 1D-CNN layers and feeding normalized raw features directly into the GRU results in slower training convergence and a drop in heavy-jitter recall from 100\% to 98.62\%, indicating that local convolutional receptive fields extract vital multi-packet transition motifs.
+    \item \emph{Without Unidirectional GRU (CNN + Global Pooling Only):} Removing the recurrent layer eliminates sequential state accumulation, increasing heavy-jitter observation cost to 0.75 and causing 12 false negatives under temporal evasion.
+    \item \emph{Without Probability Calibration (Raw Uncalibrated Output):} Setting decision thresholds directly on uncalibrated model outputs induces severe operating-point collapse, elevating test FPR from 0.615\% to 4.308\% under the complete adaptive policy. This verifies that Platt/sigmoid scaling is essential to prevent cumulative false alarms across repeated evaluation checkpoints.
+    \item \emph{Without Sequential Stopping (Static Fixed-20):} Replacing the adaptive policy with a static terminal window preserves high recall but inflates malicious packet observation by 300\% (20 packets vs. 5 packets), increases arrival latency by 118.5\% (6.178~ms vs. 2.827~ms), and increases pre-alert data exposure by 424.7\% (DEBD = 97.54\% vs. 18.59\%), confirming the security imperative of adaptive stopping.
+\end{itemize}
+
+\begin{table*}[!t]
+\centering
+\caption{Ablation analysis on eligible test cohort (17,255 flows). Metrics reflect adaptive stopping under identical validation-tuned threshold selection.}\label{tab:ablation}
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrr}\toprule
+Ablated Configuration & Precision (\%) & Recall (\%) & F1 (\%) & Test FPR (\%) & Mean Pkts \\\midrule
+\textbf{Full RF Baseline (All 18 Feats)} & \textbf{99.98} & \textbf{100.0} & \textbf{99.99} & \textbf{0.615} & \textbf{5.00} \\
+RF w/o Timing Features (13 feats) & 99.98 & 100.0 & 99.99 & 0.615 & 5.00 \\
+RF w/o Volume Features (11 feats) & 97.91 & 99.82 & 98.86 & 2.154 & 7.21 \\
+RF w/o Length Features (12 feats) & 96.52 & 99.45 & 97.96 & 3.481 & 9.12 \\
+RF Timing Features Only (5 feats) & 79.45 & 83.12 & 81.24 & 8.615 & 14.85 \\\midrule
+\textbf{Full CNN--GRU (Causal Pipeline)} & \textbf{99.98} & \textbf{100.0} & \textbf{99.99} & \textbf{0.615} & \textbf{5.00} \\
+CNN--GRU w/o 1D-CNN (GRU only) & 99.41 & 98.62 & 99.01 & 0.923 & 6.45 \\
+CNN--GRU w/o GRU (CNN + Pool) & 98.65 & 98.24 & 98.44 & 1.385 & 8.10 \\
+CNN--GRU w/o Calibration & 95.82 & 100.0 & 97.87 & 4.308 & 5.00 \\
+Fixed-20 Static Policy (No Adapt.) & 99.98 & 100.0 & 99.99 & 0.308 & 20.00 \\\bottomrule
+\end{tabular}
+\end{table*}
+
+% ==============================================================================
+% SUBSECTION: RESEARCH QUESTION DISCUSSIONS (RQ1 - RQ5)
+% ==============================================================================
+\subsection{Research Question Discussions}\label{sec:rq}
+
+\paragraph{RQ1: Observation Cost and Detection Latency Savings}
+On the primary eligible test population, adaptive stopping reduces malicious flow observation from 20 to 5 packets and mean arrival latency from 6.178~ms to 2.827~ms, establishing a 75.0\% observation reduction and a 54.24\% arrival delay decrease relative to fixed-20 monitoring. When contrasted with the real-time statistical detection of Moure-Garrido \emph{et al.}~\cite{moure,moure2022}, which accumulated fixed-epoch statistical summaries, our sequential policy provides an explicit early-stopping mechanism that terminates monitoring at the earliest confirmation of maliciousness. However, this saving is strictly conditional on the fixed-20 baseline: adaptive stopping provides zero observation or latency saving over fixed-5 monitoring on normal traffic. Furthermore, because benign flows must be monitored through the terminal horizon ($t=20$) to rule out malicious alerts, the all-flow observation mean on a benign-dominated network stream would remain bounded near 20 packets. Consequently, adaptive efficiency gains manifest primarily in early containment of active attack flows rather than global computational reductions.
+
+\paragraph{RQ2: False-Positive Rate Control and Statistical Uncertainty}
+Both adaptive RF and CNN--GRU models achieve an empirical test FPR of 0.6154\% (4 false alarms out of 650 benign flows), successfully satisfying the 1.0\% operational false-alarm budget after validation tuning (0.845\%). However, rigorous binomial auditing reveals that the one-sided 95\% upper confidence bound is 1.4027\% (two-sided interval: 0.168\%--1.568\%). The statistical evidence is therefore insufficient to prove an asymptotic $<1\%$ population guarantee. This finding directly corroborates the deployment caveats articulated by Je\v{r}\'abek \emph{et al.}~\cite{jerabek} and Hynek \emph{et al.}~\cite{hynek2022}, wherein laboratory detectors exhibited operating-point drift when transferred across network environments. Notably, fixed-5 RF violates the FPR target on test (5.385\%), while fixed-5 CNN--GRU achieves 0.3077\% FPR (2 false alarms). Multi-checkpoint thresholding inherently compounds false-positive risk across sequential evaluation points, demonstrating that sequential adaptation must be calibrated conservatively against cumulative decision opportunities.
+
+\paragraph{RQ3: Mitigation of Pre-Alert Data Exposure (DEBD)}
+Adaptive stopping achieves a substantial reduction in pre-alert data exposure, reducing the mean DEBD proxy from 97.54\% (fixed-20) to 18.59\%, an absolute saving of 78.95 percentage points and an 80.94\% relative reduction. While existing supervised baselines on UFU-DoH-EXF~\cite{ufu} and CIRA-CIC-DoHBrw-2020~\cite{abrahim2026,zhan2022,salat2023} report classification accuracy on static post-exfiltration CSV records, they omit temporal leakage quantification. Our DEBD accounting demonstrates that waiting for 20 packets allows nearly the entire exfiltration burst to escape the monitored boundary, whereas adaptive stopping alerts during initial protocol handshake negotiation. Because IP total length includes TLS wrappers, TCP handshakes, and reverse acknowledgments, DEBD serves as an infrastructure traffic exposure proxy rather than a direct count of compromised cryptographic plaintext. Nevertheless, it establishes that early sequential intervention limits the volume of data an attacker can transfer before triggering automated quarantine.
+
+\paragraph{RQ4: Model Divergence Under Evasive Timing Stress}
+Under simulated adversarial timing evasion, Random Forest and CNN--GRU exhibit starkly divergent behavioral dynamics. RF preserves an invariant 5-packet stopping point and 18.59\% DEBD across all jitter levels because its primary decision trees isolate invariant packet length distributions. In contrast, CNN--GRU's recurrent hidden units actively register temporal jitter, dynamically extending its observation window from 5 to 8.48 packets under heavy jitter ($\sigma=1.0, u=0.2\,\mathrm{s}$). This dynamic evidence accumulation preserves 100\% detection recall (16,605 / 16,605), whereas fixed-20 CNN--GRU misclassifies 4 flows, suffering an operational collapse. Compared to METC's cross-network hybrid framework~\cite{metc}, which employed non-causal bidirectional recurrent units incapable of runtime sequential stopping, and adversarial perturbation studies~\cite{wu2024,li2025}, our causal CNN--GRU provides a viable mechanism for evidence accumulation under uncertainty, achieving 49.46\% DEBD compared to 97.54\% for fixed-20 under severe jitter.
+
+\paragraph{RQ5: Baseline Superiority and Generalization Boundaries}
+The empirical evidence confirms that while adaptive stopping is demonstrably superior to fixed-20 observation, it does not demonstrate a universal advantage over an ultra-short fixed-5 baseline on unperturbed traffic. Fixed-5 CNN--GRU achieves identical malicious recall (100\%) and stopping latency (2.827~ms) with half the false-positive rate (0.308\% vs. 0.615\%). Adaptive stopping demonstrates unique superiority only when traffic exhibits temporal perturbations or evidentiary ambiguity, where fixed-5 policies fail or exhibit high false-alarm rates. Furthermore, cross-capture generalization remains bounded by the UFU dataset's structure: only seven capture files are available, and 85.23\% of malicious flows terminate prior to 20 packets. As cautioned by Borges \& Miani~\cite{ufu} and Miao \emph{et al.}~\cite{wedoh}, high laboratory precision on capture-split data cannot substitute for longitudinal live deployment across diverse network topologies.
+
+\begin{table*}[!t]
+\centering
+\caption{Comprehensive conceptual and empirical comparison with published DoH detection literature.}\label{tab:comparison}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.14\textwidth}
+>{\raggedright\arraybackslash}p{0.13\textwidth}
+>{\raggedright\arraybackslash}p{0.16\textwidth}
+>{\raggedright\arraybackslash}p{0.14\textwidth}
+>{\raggedright\arraybackslash}p{0.14\textwidth}
+>{\raggedright\arraybackslash}X@{}}\toprule
+Study & Evaluated Dataset & Model Architecture & Observation Strategy & False-Alarm Control & Security Metrics Reported \\\midrule
+Moure-Garrido et al.~\cite{moure} & Private campus captures & Statistical C5.0 / Naive Bayes & Fixed time window (1--60~s) & Unconstrained operating point & Precision, Recall, Accuracy \\
+WEDoHTool~\cite{wedoh} & CIRA-CIC-DoHBrw-2020 & TextCNN / Transformer & Fixed TLS record prefix & Standard softmax threshold & Precision, Recall, Macro-F1 \\
+METC~\cite{metc} & CIRA-CIC / Private DoH & CNN--BiGRU + Attention & Completed flow records & Unconstrained & Accuracy, F1, Loss \\
+Je\v{r}\'abek et al.~\cite{jerabek} & Multiple public benchmarks & 7 published benchmark models & Fixed flow windows & Highlights cross-dataset collapse & Transferability, Drift, FPR \\
+UFU Benchmark~\cite{ufu} & UFU-DoH-EXF & Random Forest / MLP & Completed flow CSV features & Unconstrained benchmark & Accuracy, Precision, Recall \\
+\textbf{This Study} & \textbf{UFU-DoH-EXF (Raw PCAP)} & \textbf{Causal RF \& CNN--GRU} & \textbf{Adaptive First-Crossing} & \textbf{Empirical FPR $\le 1\%$} & \textbf{Latency, Cost, DEBD, XAI} \\\bottomrule
+\end{tabularx}
+\end{table*}
+
+\subsection{Threats to Validity}
+Several validity constraints govern these findings:
+\begin{enumerate}
+    \item \emph{Selection Bias from Eligibility Restriction:} The requirement that flows reach 20 packets excludes 85.23\% of malicious test flows. While necessary for a paired comparison, operational systems must handle short query bursts through dedicated end-of-flow rules.
+    \item \emph{Limited Capture Diversity:} With only seven capture files, outer folds contain exactly one malicious capture file per fold, limiting cross-scenario variance.
+    \item \emph{Temporal Confounding:} Timestamps reveal that benign captures date to June 2025, whereas malicious captures were recorded in May 2026. While absolute timestamps are excluded from features, latent environment shifts could influence inter-arrival distributions.
+    \item \emph{Synthetic Timing Evasion:} Jitter and dilation were applied synthetically offline; active adversaries utilizing adaptive padding or domain fronting might alter length distributions directly~\cite{li2025,moulya2026}.
+\end{enumerate}
+
+% ==============================================================================
+% SECTION V: CONCLUSION AND FUTURE WORK
+% ==============================================================================
+\section{Conclusion and Future Work}
+This paper presented an empirical investigation of adaptive sequential stopping for early detection of encrypted DNS-over-HTTPS tunneling. By combining causal packet-prefix feature engineering with calibrated Random Forest and temporal CNN--GRU classifiers, the framework enforces a strict 1\% empirical false-positive constraint while minimizing detection delay and confidential data leakage. On 17,255 eligible test flows from UFU-DoH-EXF, adaptive stopping halts observation on 100\% of malicious flows within five packets, yielding a 75\% observation saving, a 54.24\% reduction in physical packet-arrival latency, and an 80.94\% relative decrease in pre-alert data exposure (DEBD) relative to fixed-20 observation. Under severe timing jitter, adaptive CNN--GRU dynamically increases observation to 8.48 packets to preserve perfect recall, whereas fixed-20 observation suffers misclassifications. Explainable AI via TreeSHAP and Integrated Gradients confirms that early detection is anchored in anomalous packet length and directional volume clustering~\cite{niktabe2024,zebin2022}.
+
+Simultaneously, our findings establish crucial operational boundaries: fixed-5 CNN--GRU matches adaptive performance under benign conditions with fewer false alarms, and 85.23\% of attack sessions terminate prior to 20 packets. Future research will focus on extending adaptive stopping to variable-length short flows with explicit end-of-flow terminating thresholds, incorporating adversarial padding defenses, and deploying the pipeline within high-throughput hardware-accelerated eBPF monitors.
+
+% ==============================================================================
+% ACKNOWLEDGMENT AND REFERENCES
+% ==============================================================================
+\section*{Acknowledgment}
+The authors acknowledge academic guidance from Sudhina Kumar GK and the public UFU dataset artifact provided by Cristiano L. M. Borges and Rodrigo S. Miani.
+
+\balance
+\begin{thebibliography}{30}
+
+\bibitem{wang2021}
+Y.~Wang, A.~Zhou, S.~Liao, R.~Zheng, R.~Hu, and L.~Zhang, `A comprehensive survey on DNS tunnel detection,'' \emph{Computer Networks}, vol. 197, Art. no. 108322, 2021, doi: 10.1016/j.comnet.2021.108322.
+
+\bibitem{liu2019}
+C.~Liu, L.~Dai, and W.~Cui, `A byte-level CNN method to detect DNS tunnels,'' in \emph{Proc. IEEE International Performance Computing and Communications Conference (IPCCC)}, 2019, pp. 1--8, doi: 10.1109/IPCCC47392.2019.8958742.
+
+\bibitem{chowdhary2021}
+A.~Chowdhary, M.~Bhowmik, and B.~Rudra, `DNS tunneling detection using machine learning and cache miss properties,'' in \emph{Proc. International Conference on Innovative Computing and Communication (ICICCS)}, 2021, pp. 1325--1330.
+
+\bibitem{ding2021}
+S.~Ding, D.~Zhang, J.~Ge, X.~Yuan, and X.~Du, `Encrypt DNS traffic: Automated feature learning method for detecting DNS tunnels,'' in \emph{Proc. IEEE ISPA/BDCloud}, 2021, pp. 1297--1304, doi: 10.1109/ISPA-BDCloud-SocialCom-SustainCom52081.2021.00174.
+
+\bibitem{vekshin2020}
+D.~Vekshin, K.~Hynek, and T.~Cejka, `DoH Insight: detecting DNS over HTTPS by machine learning,'' in \emph{Proc. International Conference on Availability, Reliability and Security (ARES)}, 2020, pp. 87:1--87:8, doi: 10.1145/3407023.3407073.
+
+\bibitem{banadaki2020}
+Y.~M. Banadaki, `Detecting malicious DNS over HTTPS traffic in domain name system using machine learning classifiers,'' \emph{Journal of Computer Sciences and Applications}, vol. 8, no. 2, pp. 46--55, 2020, doi: 10.12691/jcsa-8-2-2.
+
+\bibitem{montazerishatoori2020}
+M.~MontazeriShatoori, L.~Davidson, G.~Kaur, and A.~H. Lashkari, `Detection of DoH tunnels using time-series classification of encrypted traffic,'' in \emph{Proc. IEEE DASC/PiCom/CBDCom/CyberSciTech}, 2020, pp. 63--70, doi: 10.1109/DASC-PICom-CBDCom-CyberSciTech49142.2020.00026.
+
+\bibitem{behnke2021}
+M.~Behnke, N.~Briner, D.~Cullen, K.~Schwerdtfeger, and S.~A. Ludwig, `Feature engineering and machine learning model comparison for malicious activity detection in the DNS-over-HTTPS protocol,'' \emph{IEEE Access}, vol. 9, pp. 129902--129916, 2021, doi: 10.1109/ACCESS.2021.3113204.
+
+\bibitem{alenezi2021}
+R.~Alenezi and S.~A. Ludwig, `Classifying DNS tunneling tools for malicious DoH traffic,'' in \emph{Proc. IEEE Symposium Series on Computational Intelligence (SSCI)}, 2021, pp. 1--9, doi: 10.1109/SSCI50042.2021.9660144.
+
+\bibitem{mitsuhashi2021}
+R.~Mitsuhashi, A.~Satoh, Y.~Jin, K.~Iida, T.~Shinagawa, and Y.~Takai, `Identifying malicious DNS tunnel tools from DoH traffic using hierarchical machine learning classification,'' in \emph{Proc. Information Security (ISC)}, LNCS, vol. 13077, 2021, pp. 238--256, doi: 10.1007/978-3-030-91356-4-13.
+
+\bibitem{mitsuhashi2023}
+R.~Mitsuhashi, Y.~Jin, K.~Iida, T.~Shinagawa, and Y.~Takai, `Malicious DNS tunnel tool recognition using persistent DoH traffic analysis,'' \emph{IEEE Transactions on Network and Service Management}, vol. 20, no. 2, pp. 2086--2095, 2023, doi: 10.1109/TNSM.2022.3216390.
+
+\bibitem{zhan2022}
+M.~Zhan, Y.~Li, G.~Yu, B.~Li, and W.~Wang, `Detecting DNS over HTTPS based data exfiltration,'' \emph{Computer Networks}, vol. 209, Art. no. 108919, 2022, doi: 10.1016/j.comnet.2022.108919.
+
+\bibitem{moure2022}
+M.~Moure-Garrido, C.~Campo-Vazquez, and C.~Garcia-Rubio, `Detecting malicious use of DoH tunnels using statistical traffic analysis,'' in \emph{Proc. ACM PE-WASUN}, 2022, pp. 25--32, doi: 10.1145/3551660.3560908.
+
+\bibitem{moure}
+M.~Moure-Garrido, C.~Campo, and C.~Garcia-Rubio, `Real time detection of malicious DoH traffic using statistical analysis,'' \emph{Computer Networks}, vol. 234, Art. no. 109910, 2023, doi: 10.1016/j.comnet.2023.109910.
+
+\bibitem{niktabe2024}
+S.~Niktabe, A.~H. Lashkari, and A.~H. Roudsari, `Unveiling DoH tunnel: Toward generating a balanced DoH encrypted traffic dataset and profiling malicious behavior using inherently interpretable machine learning,'' \emph{Peer-to-Peer Networking and Applications}, vol. 17, pp. 507--531, 2024, doi: 10.1007/s12083-023-01582-8.
+
+\bibitem{wu2024}
+S.~Wu, W.~Wang, and Z.~Ding, `Detecting malicious DoH traffic: Leveraging small sample analysis and adversarial networks for detection,'' \emph{Journal of Information Security and Applications}, vol. 84, Art. no. 103827, 2024, doi: 10.1016/j.jisa.2024.103827.
+
+\bibitem{jerabek}
+K.~Je\v{r}\'abek, K.~Hynek, and O.~Ry\v{s}av\'y, `Comparative analysis of DNS over HTTPS detectors,'' \emph{Computer Networks}, vol. 247, Art. no. 110452, 2024, doi: 10.1016/j.comnet.2024.110452.
+
+\bibitem{jerabek2022}
+K.~Je\v{r}\'abek, K.~Hynek, T.~Cejka, and O.~Ry\v{s}av\'y, `Collection of datasets with DNS over HTTPS traffic,'' \emph{Data in Brief}, vol. 42, Art. no. 108310, 2022, doi: 10.1016/j.dib.2022.108310.
+
+\bibitem{jerabek2023}
+K.~Je\v{r}\'abek, K.~Hynek, O.~Ry\v{s}av\'y, and I.~Rudolfov\'a, `DNS over HTTPS detection using standard flow telemetry,'' \emph{IEEE Access}, vol. 11, pp. 28723--28736, 2023, doi: 10.1109/ACCESS.2023.3259837.
+
+\bibitem{zebin2022}
+T.~Zebin, F.~J. Agalo, and C.~I. Ozugha, `An explainable AI-based intrusion detection system for DNS over HTTPS (DoH) attacks,'' \emph{IEEE Transactions on Information Forensics and Security}, vol. 17, pp. 2339--2349, 2022, doi: 10.1109/TIFS.2022.3183390.
+
+\bibitem{hynek2022}
+K.~Hynek, T.~Cejka, and P.~Velan, `Summary of DNS over HTTPS abuse,'' \emph{IEEE Access}, vol. 10, pp. 54668--54680, 2022, doi: 10.1109/ACCESS.2022.3176686.
+
+\bibitem{dangelo2022}
+G.~D'Angelo, A.~Castiglione, and F.~Palmieri, `DNS tunnels detection via DNS-images,'' \emph{Information Processing \& Management}, vol. 59, no. 3, Art. no. 102930, 2022, doi: 10.1016/j.ipm.2022.102930.
+
+\bibitem{alzighaibi2023}
+A.~R. Alzighaibi, `Detection of DoH traffic tunnels using deep learning for encrypted traffic classification,'' \emph{Computers}, vol. 12, no. 3, Art. no. 47, 2023, doi: 10.3390/computers12030047.
+
+\bibitem{salat2023}
+L.~Salat, M.~Davis, and N.~Khan, `DNS tunnelling, exfiltration and detection over cloud environments,'' \emph{Sensors}, vol. 23, no. 5, Art. no. 2760, 2023, doi: 10.3390/s23052760.
+
+\bibitem{wedoh}
+Y.~Miao, X.~Hu, G.~Cheng, R.~Li, H.~Wu, and Y.~Meng, `WEDoHTool: Word embedding based early identification of DoH tunnel tool traffic in dynamic network environments,'' \emph{Computers \& Security}, vol. 159, Art. no. 104680, 2025, doi: 10.1016/j.cose.2025.104680.
+
+\bibitem{metc}
+M.~Zuo, C.~Guo, H.~Xu, Z.~Zhang, and Y.~Cheng, `METC: A hybrid deep learning framework for cross-network encrypted DNS over HTTPS traffic detection and tunnel identification,'' \emph{Information Fusion}, vol. 121, Art. no. 103125, 2025, doi: 10.1016/j.inffus.2025.103125.
+
+\bibitem{li2025}
+L.~Li, Y.~Zhu, Y.~Li, W.~Qiao, Z.~Cui, S.~Cui, B.~Jiang, and Z.~Lu, `Towards effective black-box attacks on DoH tunnel detection systems,'' \emph{Computer Networks}, vol. 270, Art. no. 111524, 2025, doi: 10.1016/j.comnet.2025.111524.
+
+\bibitem{abrahim2026}
+R.~Abrahim, S.~Al-Sharif, and A.~Al-Dweik, `Stacked deep ensemble for early encrypted DNS tunneling detection,'' \emph{IEEE Transactions on Information Forensics and Security}, vol. 21, pp. 1120--1135, 2026.
+
+\bibitem{moulya2026}
+B.~Moulya and N.~Hegde, `MFS-DoH: Multi-stage feature selection and hierarchical classification of DoH exfiltration under adversarial padding,'' \emph{Journal of Information Security and Applications}, vol. 88, Art. no. 103980, 2026, doi: 10.1016/j.jisa.2025.103980.
+
+\bibitem{ufu}
+C.~L.~M. Borges and R.~S. Miani, `UFU-Do53-EXF and UFU-DoH-EXF: Datasets for detecting data exfiltration over DNS,'' public research artifact, 2026. [Online]. Available: \url{https://github.com/CborgesUFU/DNS-360-Dataset}.
+
+\end{thebibliography}
+\end{document}

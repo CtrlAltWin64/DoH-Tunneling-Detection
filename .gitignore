@@ -31,6 +31,22 @@ data/results/*
 # Independent local checkout, not a submodule
 /DoH-Tunneling-Detection/
 
+# Frontend & Node dependencies and build artifacts
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+.vite/
+frontend/.vite/
+package-lock.json
+frontend/package-lock.json
+
+# Temporary scratch and render files
+tmp/
+temp/
+*.tmp
+*.log
+
 # Keep report scripts, aggregate evidence and figures; large bundles stay local
 /reports/final_experiment_results_*/processed/
 /reports/final_experiment_results_*/predictions/
