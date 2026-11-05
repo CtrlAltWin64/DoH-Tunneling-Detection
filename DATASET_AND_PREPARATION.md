@@ -18,7 +18,23 @@ This document describes the actual 19 October 2026 experiment, superseding the
 older preparation notes. Earlier assertions about independence, attack tools,
 publication dates and licensing have not been independently authenticated.
 
-## Inputs
+## Inputs and Upstream Dataset Sources
+
+### Official Source & Provenance
+- **Dataset Initiative:** DNS-360 Dataset (UFU-DoH-EXF)
+- **Official GitHub Repository:** [https://github.com/CborgesUFU/DNS-360-Dataset](https://github.com/CborgesUFU/DNS-360-Dataset)
+- **Authors:** Cristiano L. M. Borges and Prof. Rodrigo S. Miani (Faculty of Computing, Federal University of Uberlândia – UFU, Minas Gerais, Brazil).
+- **Publication:** *Anais do XXVI Simpósio Brasileiro de Cibersegurança (SBSeg 2026)*.
+- **License:** Creative Commons Attribution-NonCommercial 4.0 International (**CC BY-NC 4.0**).
+- **Upstream Capture Archives:**
+  - Raw PCAP/PCAPNG Traces: [`data/PCAP/UFU-DoH-EXF/`](https://github.com/CborgesUFU/DNS-360-Dataset/tree/main/data/PCAP/UFU-DoH-EXF)
+  - Pre-extracted Normalized CSVs: [`data/CSV/UFU-DoH-EXF/`](https://github.com/CborgesUFU/DNS-360-Dataset/tree/main/data/CSV/UFU-DoH-EXF)
+
+### Supplementary Benchmark Sources
+- **CIRA-CIC-DoHBrw-2020 Dataset:** Canadian Institute for Cybersecurity (UNB) DoH browsing and tunneling benchmark: [https://www.unb.ca/cic/datasets/dohbrw-2020.html](https://www.unb.ca/cic/datasets/dohbrw-2020.html)
+- **DoH-Tunnel-Traffic-HKD:** Multi-hour DNS-over-HTTPS exfiltration captures covering `dnstt`, `tcp-over-dns`, and `tuns` tunnels.
+
+### Capture Layout and Manifests
 
 The archived study read seven captures directly inside its workspace's `data/`.
 That is not the current five-capture recursive `data/raw/` layout. See the

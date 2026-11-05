@@ -24,7 +24,9 @@ describe that local dataset. Existing completed experiments are under
 
 The separate seven-capture archived report also used
 `File02_DoH_Benign.pcapng` (287,519,176 bytes) and
-`File03_DoH_Benign.pcapng` (267,662,572 bytes). **Both are absent here**.
+`File03_DoH_Benign.pcapng` (267,662,572 bytes). **Both are absent in this local checkout**.
+Upstream PCAP/PCAPNG captures can be obtained from the official dataset repository:
+[https://github.com/CborgesUFU/DNS-360-Dataset](https://github.com/CborgesUFU/DNS-360-Dataset) (under `data/PCAP/UFU-DoH-EXF/`).
 That study's harness expects all seven directly under its workspace's `data/`.
 Its processed data and models are also absent; the five-capture data cannot replace them.
 

@@ -71,6 +71,17 @@ This trains small models on generated flows and checks evaluation, persistence a
 plotting. **Its metrics are software evidence only.** Results go to
 `data/results/<run>/`; existing nonempty directories are refused by default.
 
+## Dataset & Upstream Sources
+
+The primary experimental evaluation uses the **UFU-DoH-EXF** dataset (part of the DNS-360 initiative):
+- **Official GitHub Repository:** [https://github.com/CborgesUFU/DNS-360-Dataset](https://github.com/CborgesUFU/DNS-360-Dataset)
+- **Raw PCAP Traces:** [https://github.com/CborgesUFU/DNS-360-Dataset/tree/main/data/PCAP/UFU-DoH-EXF](https://github.com/CborgesUFU/DNS-360-Dataset/tree/main/data/PCAP/UFU-DoH-EXF)
+- **Normalized Flow CSVs:** [https://github.com/CborgesUFU/DNS-360-Dataset/tree/main/data/CSV/UFU-DoH-EXF](https://github.com/CborgesUFU/DNS-360-Dataset/tree/main/data/CSV/UFU-DoH-EXF)
+- **Authors:** Cristiano L. M. Borges and Prof. Rodrigo S. Miani (Faculty of Computing, Federal University of Uberlândia – UFU, Brazil), published in *SBSeg 2026* under CC BY-NC 4.0.
+- **Supplementary Benchmarks:** [CIRA-CIC-DoHBrw-2020](https://www.unb.ca/cic/datasets/dohbrw-2020.html) and DoH Tunnel Traffic (HKD multi-hour captures).
+
+See [DATASET_AND_PREPARATION.md](DATASET_AND_PREPARATION.md) and [data/README.md](data/README.md) for full extraction protocols, capture manifests, and eligibility constraints.
+
 ## Inspect, build and train on captures
 
 Review [data/README.md](data/README.md) for the current five-capture layout.
